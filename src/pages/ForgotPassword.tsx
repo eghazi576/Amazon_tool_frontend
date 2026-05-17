@@ -6,18 +6,22 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const schema = z.object({
   email: z.string().trim().email({ message: "Enter a valid email" }).max(255),
 });
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | undefined>();
+  const { toast }          = useToast();
+  const { forgotPassword } = useAuth();
+  const [email, setEmail]   = useState("");
+  const [error, setError]   = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sent, setSent]       = useState(false);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse({ email });
     if (!result.success) {
@@ -26,10 +30,14 @@ const ForgotPassword = () => {
     }
     setError(undefined);
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await forgotPassword(email.trim());
       setSent(true);
-    }, 800);
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message ?? "Something went wrong.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,7 +45,7 @@ const ForgotPassword = () => {
       title={sent ? "Check your email" : "Forgot your password?"}
       subtitle={
         sent
-          ? "We've sent a password reset link to your email"
+          ? "If that email is registered, a reset link has been sent"
           : "Enter your email and we'll send you a reset link"
       }
       footer={
@@ -56,15 +64,15 @@ const ForgotPassword = () => {
             <CheckCircle2 className="h-7 w-7 text-primary" />
           </div>
           <p className="text-sm text-muted-foreground">
-            A reset link was sent to{" "}
-            <span className="font-medium text-foreground">{email}</span>. Check your
-            inbox and spam folder.
+            We've sent a reset link to{" "}
+            <span className="font-medium text-foreground">{email}</span>.
+            Check your inbox and follow the instructions.
           </p>
           <Button
             type="button"
-            variant="glass"
-            className="w-full"
-            onClick={() => setSent(false)}
+            variant="ghost"
+            className="w-full text-muted-foreground"
+            onClick={() => { setSent(false); setEmail(""); }}
           >
             Use a different email
           </Button>

@@ -389,7 +389,6 @@ const ProductResearch = () => {
     };
     const result = scoreProduct(metrics, flags);
     setScore(result);
-    // Save to DB (Supabase) via backend — includes all Keepa metrics
     addHistory({
       asin:                 data.asin,
       title:                data.title,
@@ -401,10 +400,10 @@ const ProductResearch = () => {
       maxTotal:             result.maxTotal,
       pct:                  result.pct,
       sellingPrice:         result.sellingPrice,
+      medianPrice:          data.pricing.medianBuyBox,
       profit:               result.profit,
       roi:                  result.roi,
       rejectionReasons:     result.rejectionReasons,
-      // Keepa snapshot
       currentRank:          data.metrics.currentRank,
       avgRank90:            data.metrics.avgRank90,
       rating:               data.metrics.currentRating,
@@ -461,7 +460,7 @@ const ProductResearch = () => {
             />
             <Button onClick={() => fetchData()} disabled={loading} variant="hero" className="w-44 shrink-0">
               {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Search className="h-4 w-4 mr-1" />}
-              {loading ? "Fetching..." : "Fetch from Keepa"}
+              {loading ? "Loading..." : "Submit"}
             </Button>
           </div>
         </CardContent>

@@ -14,24 +14,26 @@ import {
   SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/AuthContext";
 
 const items = [
-  { title: "Overview", url: "/dashboard", icon: LayoutDashboard, end: true },
-  { title: "Product Research", url: "/dashboard/research", icon: Search },
-  { title: "Search History", url: "/dashboard/history", icon: History },
-  { title: "Brand Intelligence", url: "/dashboard/brand", icon: Boxes },
-  { title: "AI Insights", url: "/dashboard/ai", icon: Sparkles },
-  { title: "Reports", url: "/dashboard/reports", icon: BarChart3 },
-  { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  { title: "Overview",          url: "/dashboard",          icon: LayoutDashboard, end: true },
+  { title: "Product Research",  url: "/dashboard/research", icon: Search },
+  { title: "Search History",    url: "/dashboard/history",  icon: History },
+  { title: "Brand Intelligence",url: "/dashboard/brand",    icon: Boxes },
+  { title: "AI Insights",       url: "/dashboard/ai",       icon: Sparkles },
+  { title: "Reports",           url: "/dashboard/reports",  icon: BarChart3 },
+  { title: "Settings",          url: "/dashboard/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+  const { logout } = useAuth();
 
-  const handleSignOut = () => {
-    localStorage.removeItem("demo_authed");
+  const handleSignOut = async () => {
+    await logout();
     navigate("/sign-in");
   };
 

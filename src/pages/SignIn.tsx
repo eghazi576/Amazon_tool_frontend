@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const schema = z.object({
   email:    z.string().trim().email({ message: "Enter a valid email" }).max(255),
@@ -17,8 +17,9 @@ const schema = z.object({
 });
 
 const SignIn = () => {
-  const { toast } = useToast();
-  const navigate  = useNavigate();
+  const { toast }  = useToast();
+  const navigate   = useNavigate();
+  const { login }  = useAuth();
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd]   = useState(false);
@@ -37,8 +38,7 @@ const SignIn = () => {
     setErrors({});
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-      if (error) throw error;
+      await login(email.trim(), password);
       toast({ title: "Welcome back!", description: "Signed in successfully." });
       navigate("/dashboard");
     } catch (err: any) {

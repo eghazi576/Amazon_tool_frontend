@@ -83,15 +83,19 @@ export async function fetchKeepaProduct(
   asin: string,
   domain: number = 1,
   cogs: number = 0,
-  manualWeightG: number = 0,        // user-entered weight in grams
-  manualReferralRate: number | null = null  // from category dropdown (e.g. 15 for 15%)
+  manualWeightG: number = 0,
+  manualReferralRate: number | null = null
 ): Promise<KeepaProductResponse> {
+  const token = localStorage.getItem("auth_token");
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
   const resp = await fetch(`${BACKEND_URL}/api/keepa/product`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({ asin, domain, cogs, manualWeightG, manualReferralRate }),
   });
-  const data = await resp.json();
-  if (!resp.ok) throw new Error(data?.error || `HTTP ${resp.status}`);
-  return data as KeepaProductResponse;
+  const json = await resp.json();
+  if (!resp.ok) throw new Error(json?.error || `HTTP ${resp.status}`);
+  return json.data as KeepaProductResponse;
 }
