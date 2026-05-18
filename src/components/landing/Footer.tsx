@@ -94,12 +94,6 @@ const Footer = () => {
               <li><a href="#" className="transition-colors hover:text-foreground">Cookie Policy</a></li>
             </ul>
 
-            <div className="mt-8 rounded-xl border border-border/60 bg-muted/30 p-4">
-              <p className="text-xs font-medium text-foreground">Data powered by</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Keepa API — real-time Amazon price & rank history
-              </p>
-            </div>
           </div>
         </div>
       </div>
