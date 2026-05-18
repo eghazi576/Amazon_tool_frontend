@@ -10,22 +10,23 @@ import Footer from "@/components/landing/Footer";
 const Index = () => (
   <div className="relative min-h-screen bg-background font-sans text-foreground overflow-x-hidden">
 
-    {/* ── Global background — absolute, z-0, behind all content ── */}
-    <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+    {/* ── Global background — absolute, z-0, GPU accelerated ── */}
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{ zIndex: 0, willChange: "transform", transform: "translateZ(0)" }}
+    >
 
       <div className="absolute inset-0 grid-pattern" />
-      <div className="absolute inset-0 dot-grid opacity-20" />
 
-      {/* Aurora */}
-      <div className="absolute left-1/2 top-0 h-[700px] w-[1000px] -translate-x-1/2 -translate-y-1/3 aurora opacity-50" />
+      {/* Aurora — opacity reduced to cut repaint cost */}
+      <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/3 aurora opacity-35" />
 
-      {/* Orbs spread across full page */}
-      <div className="absolute left-[5%]   top-[8%]  h-72 w-72 rounded-full bg-primary/10   blur-3xl animate-orb" />
-      <div className="absolute right-[4%]  top-[22%] h-56 w-56 rounded-full bg-secondary/10 blur-3xl animate-orb"       style={{ animationDelay: "-6s" }} />
-      <div className="absolute left-[18%] top-[42%]  h-40 w-40 rounded-full bg-accent/8    blur-2xl animate-float-slow" style={{ animationDelay: "-3s" }} />
-      <div className="absolute right-[15%] top-[58%] h-48 w-48 rounded-full bg-primary/8   blur-2xl animate-float"      style={{ animationDelay: "-5s" }} />
-      <div className="absolute left-[40%] top-[72%]  h-32 w-32 rounded-full bg-secondary/8 blur-2xl animate-orb"        style={{ animationDelay: "-9s" }} />
-      <div className="absolute right-[30%] top-[85%] h-36 w-36 rounded-full bg-accent/6    blur-2xl animate-float-slow" style={{ animationDelay: "-7s" }} />
+      {/* Orbs — fewer, lower opacity, GPU layers */}
+      <div className="absolute left-[5%]   top-[8%]  h-64 w-64 rounded-full bg-primary/8   blur-3xl animate-orb" style={{ willChange: "transform" }} />
+      <div className="absolute right-[4%]  top-[25%] h-52 w-52 rounded-full bg-secondary/8 blur-3xl animate-orb" style={{ animationDelay: "-6s", willChange: "transform" }} />
+      <div className="absolute left-[18%] top-[50%]  h-40 w-40 rounded-full bg-accent/6    blur-2xl animate-float-slow" style={{ animationDelay: "-3s", willChange: "transform" }} />
+      <div className="absolute right-[15%] top-[70%] h-44 w-44 rounded-full bg-primary/6   blur-2xl animate-float"      style={{ animationDelay: "-5s", willChange: "transform" }} />
+      <div className="absolute left-[40%] top-[85%]  h-32 w-32 rounded-full bg-secondary/6 blur-2xl animate-orb"        style={{ animationDelay: "-9s", willChange: "transform" }} />
 
       {/* SVG lines */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
@@ -58,22 +59,18 @@ const Index = () => (
         <line x1="30%"  y1="0" x2="85%"  y2="100%" stroke="url(#bgBeam1)" strokeWidth="35" opacity="0.5" />
         <line x1="70%"  y1="0" x2="15%"  y2="100%" stroke="url(#bgBeam2)" strokeWidth="25" opacity="0.4" />
 
-        {/* Horizontal scan lines across full height */}
-        {[12, 25, 38, 52, 65, 78, 91].map((y, i) => (
+        {/* Horizontal scan lines — fewer, slower, less repaints */}
+        {[15, 42, 70].map((y, i) => (
           <line key={`h${i}`}
             x1="0" y1={`${y}%`} x2="100%" y2={`${y}%`}
             stroke="url(#bgHScan)"
-            strokeWidth={i % 2 === 0 ? "1" : "0.5"}
-            strokeDasharray={i % 2 === 0 ? "10 8" : "6 12"}
-            opacity={i % 2 === 0 ? "0.45" : "0.2"}
+            strokeWidth="1"
+            strokeDasharray="12 10"
+            opacity="0.3"
           >
             <animate attributeName="stroke-dashoffset"
-              from={i % 2 === 0 ? "0" : "-36"}
-              to={i % 2 === 0 ? "-36" : "0"}
-              dur={`${4 + i * 0.6}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity"
-              values={i % 2 === 0 ? "0.25;0.55;0.25" : "0.1;0.25;0.1"}
-              dur={`${5 + i}s`} repeatCount="indefinite" />
+              from="0" to="-44"
+              dur={`${8 + i * 2}s`} repeatCount="indefinite" />
           </line>
         ))}
 
