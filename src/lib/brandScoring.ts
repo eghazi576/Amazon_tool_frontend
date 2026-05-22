@@ -32,6 +32,40 @@
  * Decision: APPROVED if all hard checks pass AND score ≥ 70% of max points.
  */
 
+// ─── Brand Scoring Config (admin-configurable) ───────────────────────────────
+
+export type BrandScoringConfig = {
+  approvalPct:     number;   // default 70 — min % to APPROVE
+  minFbaSellers:   number;   // default 3
+  maxFbaSellers:   number;   // default 5
+  minMonthlySales: number;   // default 100
+  maxIpComplaints: number;   // default 1
+  weights: {
+    website:            number; // 10
+    registeredBusiness: number; // 10
+    noHazmat:           number; // 10
+    noAdultRisk:        number; // 10
+    noTakedowns:        number; // 10
+    brandActive:        number; // 10
+    noIPComplaints:     number; // 10
+    noCounterfeit:      number; // 5
+    fbaSellers:         number; // 5
+    salesVelocity:      number; // 5
+    noSuppressions:     number; // 5
+  };
+};
+
+export const DEFAULT_BRAND_CONFIG: BrandScoringConfig = {
+  approvalPct: 70, minFbaSellers: 3, maxFbaSellers: 5,
+  minMonthlySales: 100, maxIpComplaints: 1,
+  weights: {
+    website: 10, registeredBusiness: 10, noHazmat: 10,
+    noAdultRisk: 10, noTakedowns: 10, brandActive: 10,
+    noIPComplaints: 10, noCounterfeit: 5, fbaSellers: 5,
+    salesVelocity: 5, noSuppressions: 5,
+  },
+};
+
 export type BrandInput = {
   // User input fields (Table A)
   asin: string;
@@ -81,123 +115,82 @@ export type BrandScoreResult = {
 const HIGH   = 10;
 const MEDIUM = 5;
 
-export function scoreBrand(input: BrandInput): BrandScoreResult {
+export function scoreBrand(
+  input: BrandInput,
+  cfg: BrandScoringConfig = DEFAULT_BRAND_CONFIG
+): BrandScoreResult {
+  const W = cfg.weights;
   const hasWebsite = !!input.brandWebsite.trim();
 
-  // Build all criteria exactly as per spec Table B
   const raw: Omit<BrandCriterion, "earned">[] = [
-    // ── HARD REJECT (High weight, Fail = Reject) ──────────────────────────
+    // ── HARD REJECT ────────────────────────────────────────────────────────
     {
-      key: "website",
-      label: "Has official website",
-      criteriaNum: 1,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: true,
+      key: "website",          criteriaNum: 1,  tier: "high",   weight: W.website,
+      label: "Has official website",             rejectIfFail: true,
       passCondition: "Brand website URL is provided",
       passed: hasWebsite,
     },
     {
-      key: "registeredBusiness",
-      label: "Has registered business details",
-      criteriaNum: 2,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: true,
+      key: "registeredBusiness", criteriaNum: 2, tier: "high",  weight: W.registeredBusiness,
+      label: "Has registered business details",  rejectIfFail: true,
       passCondition: "Business registration provided (any country)",
       passed: input.hasRegisteredBusiness,
     },
     {
-      key: "noHazmat",
-      label: "No hazmat-heavy catalog (< 10%)",
-      criteriaNum: 9,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: true,
+      key: "noHazmat",         criteriaNum: 9,  tier: "high",   weight: W.noHazmat,
+      label: "No hazmat-heavy catalog (< 10%)", rejectIfFail: true,
       passCondition: "Less than 10% of catalog classified as hazmat",
       passed: !input.hazmatHeavyCatalog,
     },
     {
-      key: "noAdultRisk",
-      label: "No adult / high-risk category",
-      criteriaNum: 10,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: true,
+      key: "noAdultRisk",      criteriaNum: 10, tier: "high",   weight: W.noAdultRisk,
+      label: "No adult / high-risk category",   rejectIfFail: true,
       passCondition: "Not adult, gambling, weapons, or other high-risk",
       passed: !input.adultOrHighRisk,
     },
     {
-      key: "noTakedowns",
-      label: "No history of mass account takedowns",
-      criteriaNum: 12,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: true,
+      key: "noTakedowns",      criteriaNum: 12, tier: "high",   weight: W.noTakedowns,
+      label: "No history of mass account takedowns", rejectIfFail: true,
       passCondition: "No history of mass seller account takedowns",
       passed: !input.massAccountTakedowns,
     },
 
-    // ── HIGH weight (non-reject) ───────────────────────────────────────────
+    // ── HIGH weight (non-reject) ────────────────────────────────────────
     {
-      key: "brandActive",
-      label: "Brand is active (sale within 30 days)",
-      criteriaNum: 3,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: false,
+      key: "brandActive",      criteriaNum: 3,  tier: "high",   weight: W.brandActive,
+      label: "Brand is active (sale within 30 days)", rejectIfFail: false,
       passCondition: "Last sale recorded within 30 days",
       passed: input.lastSaleWithin30Days,
     },
     {
-      key: "noIPComplaints",
-      label: "0–1 IP complaints in last 12 months",
-      criteriaNum: 5,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: false,
-      passCondition: "0 or 1 IP complaints in last 12 months (from ip-alert.com)",
-      passed: input.ipComplaintsLast12Mo <= 1,
+      key: "noIPComplaints",   criteriaNum: 5,  tier: "high",   weight: W.noIPComplaints,
+      label: `≤${cfg.maxIpComplaints} IP complaints in last 12 months`, rejectIfFail: false,
+      passCondition: `0–${cfg.maxIpComplaints} IP complaints in last 12 months`,
+      passed: input.ipComplaintsLast12Mo <= cfg.maxIpComplaints,
     },
 
-    // ── MEDIUM weight ──────────────────────────────────────────────────────
+    // ── MEDIUM weight ───────────────────────────────────────────────────
     {
-      key: "noCounterfeit",
-      label: "No counterfeit risks (IP-Alert)",
-      criteriaNum: 6,
-      weight: MEDIUM,
-      tier: "medium",
-      rejectIfFail: false,
-      passCondition: "No red flags on IP-Alert.com for counterfeit risks",
+      key: "noCounterfeit",    criteriaNum: 6,  tier: "medium", weight: W.noCounterfeit,
+      label: "No counterfeit risks (IP-Alert)",  rejectIfFail: false,
+      passCondition: "No red flags on IP-Alert.com",
       passed: !input.ipAlertRedFlags,
     },
     {
-      key: "fbaSellers",
-      label: "FBA sellers per ASIN: 3–5",
-      criteriaNum: 7,
-      weight: MEDIUM,
-      tier: "medium",
-      rejectIfFail: false,
-      passCondition: "FBA seller count per ASIN is between 3 and 5 (ideal)",
-      passed: input.fbaSellersPerAsin >= 3 && input.fbaSellersPerAsin <= 5,
+      key: "fbaSellers",       criteriaNum: 7,  tier: "medium", weight: W.fbaSellers,
+      label: `FBA sellers per ASIN: ${cfg.minFbaSellers}–${cfg.maxFbaSellers}`, rejectIfFail: false,
+      passCondition: `FBA seller count ${cfg.minFbaSellers}–${cfg.maxFbaSellers} (ideal)`,
+      passed: input.fbaSellersPerAsin >= cfg.minFbaSellers && input.fbaSellersPerAsin <= cfg.maxFbaSellers,
     },
     {
-      key: "salesVelocity",
-      label: "Sales velocity > 100 units/month",
-      criteriaNum: 8,
-      weight: MEDIUM,
-      tier: "medium",
-      rejectIfFail: false,
-      passCondition: "Monthly sales estimate per top ASIN > 100 units",
-      passed: input.monthlySalesPerAsin > 100,
+      key: "salesVelocity",    criteriaNum: 8,  tier: "medium", weight: W.salesVelocity,
+      label: `Sales velocity > ${cfg.minMonthlySales} units/month`, rejectIfFail: false,
+      passCondition: `Monthly sales > ${cfg.minMonthlySales} units per top ASIN`,
+      passed: input.monthlySalesPerAsin > cfg.minMonthlySales,
     },
     {
-      key: "noSuppressions",
-      label: "No frequent listing suppressions",
-      criteriaNum: 11,
-      weight: MEDIUM,
-      tier: "medium",
-      rejectIfFail: false,
+      key: "noSuppressions",   criteriaNum: 11, tier: "medium", weight: W.noSuppressions,
+      label: "No frequent listing suppressions", rejectIfFail: false,
       passCondition: "Brand has not faced frequent listing suppressions",
       passed: !input.listingSuppressions,
     },
@@ -229,8 +222,7 @@ export function scoreBrand(input: BrandInput): BrandScoreResult {
     };
   }
 
-  // Pass threshold: ≥ 70% of max points
-  const approved = pct >= 70;
+  const approved = pct >= cfg.approvalPct;
   const decision: "APPROVED" | "REJECTED" = approved ? "APPROVED" : "REJECTED";
   const explanation = approved
     ? `APPROVED — All hard checks passed. Score ${total}/${maxTotal} (${pct}%). Good to do business.`

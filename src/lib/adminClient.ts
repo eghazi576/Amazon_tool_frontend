@@ -1,4 +1,5 @@
 import { type ScoringConfig } from "./scoring";
+import { type BrandScoringConfig } from "./brandScoring";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
@@ -67,4 +68,19 @@ export function saveScoringConfig(config: ScoringConfig): Promise<ScoringConfig>
 
 export function resetScoringConfig(): Promise<ScoringConfig> {
   return adminFetch("/scoring-config/reset", { method: "POST" });
+}
+
+export function getBrandScoringConfig(): Promise<BrandScoringConfig> {
+  return adminFetch("/brand-scoring-config");
+}
+
+export function saveBrandScoringConfig(config: BrandScoringConfig): Promise<BrandScoringConfig> {
+  return adminFetch("/brand-scoring-config", {
+    method: "PUT",
+    body: JSON.stringify(config),
+  });
+}
+
+export function resetBrandScoringConfig(): Promise<BrandScoringConfig> {
+  return adminFetch("/brand-scoring-config/reset", { method: "POST" });
 }

@@ -27,12 +27,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const storedToken = getToken();
-    const storedUser  = getStoredUser();
-    if (storedToken && storedUser) {
-      setTokenState(storedToken);
-      setUser(storedUser);
-    }
-    setIsLoading(false);
+    if (!storedToken) { setIsLoading(false); return; }
+
+    // Always fetch fresh user from backend so isAdmin stays up-to-date
+    fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"}/api/auth/me`, {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.data?.user) {
+          setStoredUser(json.data.user);
+          setUser(json.data.user);
+          setTokenState(storedToken);
+        } else {
+          clearAuth();
+        }
+      })
+      .catch(() => {
+        // Offline fallback — use stored user
+        const storedUser = getStoredUser();
+        if (storedUser) { setUser(storedUser); setTokenState(storedToken); }
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const login = async (email: string, password: string) => {

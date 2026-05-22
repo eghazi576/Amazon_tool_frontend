@@ -13,11 +13,13 @@ import {
   Save, Loader2, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import {
-  getAdminStats, getAdminSearches, getScoringConfig,
-  saveScoringConfig, resetScoringConfig,
+  getAdminStats, getAdminSearches,
+  getScoringConfig, saveScoringConfig, resetScoringConfig,
+  getBrandScoringConfig, saveBrandScoringConfig, resetBrandScoringConfig,
   type AdminStats, type AdminSearch,
 } from "@/lib/adminClient";
 import { type ScoringConfig, DEFAULT_SCORING_CONFIG } from "@/lib/scoring";
+import { type BrandScoringConfig, DEFAULT_BRAND_CONFIG } from "@/lib/brandScoring";
 import { useToast } from "@/hooks/use-toast";
 
 const decisionColor: Record<string, string> = {
@@ -61,7 +63,18 @@ export default function AdminDashboard() {
           <SearchesTab />
         </TabsContent>
         <TabsContent value="scoring" className="mt-6">
-          <ScoringTab toast={toast} />
+          <Tabs defaultValue="product">
+            <TabsList className="mb-6">
+              <TabsTrigger value="product">Product Research</TabsTrigger>
+              <TabsTrigger value="brand">Brand Intelligence</TabsTrigger>
+            </TabsList>
+            <TabsContent value="product">
+              <ScoringTab toast={toast} />
+            </TabsContent>
+            <TabsContent value="brand">
+              <BrandScoringTab toast={toast} />
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </div>
@@ -350,6 +363,141 @@ function ScoringTab({ toast }: { toast: any }) {
       </Card>
 
       {/* Actions */}
+      <div className="flex gap-3">
+        <Button onClick={save} disabled={saving} variant="hero" className="gap-2">
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          Save Changes
+        </Button>
+        <Button onClick={reset} disabled={saving} variant="outline" className="gap-2">
+          <RotateCcw className="h-4 w-4" /> Reset to Defaults
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Brand Scoring Tab ────────────────────────────────────────────────────────
+
+function BrandScoringTab({ toast }: { toast: any }) {
+  const [config, setConfig] = useState<BrandScoringConfig | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving]   = useState(false);
+
+  useEffect(() => {
+    getBrandScoringConfig()
+      .then(setConfig)
+      .catch(() => setConfig(DEFAULT_BRAND_CONFIG))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const setField = (path: string[], value: number) => {
+    setConfig((prev) => {
+      if (!prev) return prev;
+      const next = structuredClone(prev);
+      let obj: any = next;
+      for (let i = 0; i < path.length - 1; i++) obj = obj[path[i]];
+      obj[path[path.length - 1]] = value;
+      return next;
+    });
+  };
+
+  const save = async () => {
+    if (!config) return;
+    setSaving(true);
+    try {
+      await saveBrandScoringConfig(config);
+      toast({ title: "Saved", description: "Brand scoring config updated." });
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+    } finally { setSaving(false); }
+  };
+
+  const reset = async () => {
+    setSaving(true);
+    try {
+      const def = await resetBrandScoringConfig();
+      setConfig(def);
+      toast({ title: "Reset", description: "Brand scoring config reset to defaults." });
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+    } finally { setSaving(false); }
+  };
+
+  if (loading || !config) return (
+    <div className="flex justify-center py-12">
+      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+    </div>
+  );
+
+  return (
+    <div className="space-y-6 max-w-3xl">
+
+      {/* Thresholds */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm">Brand Rejection Thresholds</CardTitle>
+          <CardDescription className="text-xs">Configurable limits for brand evaluation criteria</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <NumInput label="Approval threshold (%)"        value={config.approvalPct}     onChange={(v) => setField(["approvalPct"], v)}     max={100} badge="emerald" />
+            <NumInput label="Max IP Complaints (last 12mo)" value={config.maxIpComplaints}  onChange={(v) => setField(["maxIpComplaints"], v)} />
+            <NumInput label="Min FBA Sellers per ASIN"      value={config.minFbaSellers}    onChange={(v) => setField(["minFbaSellers"], v)} />
+            <NumInput label="Max FBA Sellers per ASIN"      value={config.maxFbaSellers}    onChange={(v) => setField(["maxFbaSellers"], v)} />
+            <NumInput label="Min Monthly Sales (units)"     value={config.minMonthlySales}  onChange={(v) => setField(["minMonthlySales"], v)} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Weights */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm">Criterion Weights (points)</CardTitle>
+          <CardDescription className="text-xs">Points awarded per criterion when passed</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Hard Reject Criteria</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {([
+              ["website",            "Has official website (#1)"],
+              ["registeredBusiness", "Has registered business (#2)"],
+              ["noHazmat",           "No hazmat catalog ≥10% (#9)"],
+              ["noAdultRisk",        "No adult/high-risk category (#10)"],
+              ["noTakedowns",        "No mass account takedowns (#12)"],
+            ] as [keyof typeof config.weights, string][]).map(([key, label]) => (
+              <NumInput key={key} label={label} value={config.weights[key]}
+                onChange={(v) => setField(["weights", key], v)} max={50} />
+            ))}
+          </div>
+
+          <Separator />
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">High Weight (Non-Reject)</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {([
+              ["brandActive",    "Brand active — sale within 30d (#3)"],
+              ["noIPComplaints", "IP complaints ≤ threshold (#5)"],
+            ] as [keyof typeof config.weights, string][]).map(([key, label]) => (
+              <NumInput key={key} label={label} value={config.weights[key]}
+                onChange={(v) => setField(["weights", key], v)} max={50} />
+            ))}
+          </div>
+
+          <Separator />
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Medium Weight</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {([
+              ["noCounterfeit", "No counterfeit risks / IP-Alert (#6)"],
+              ["fbaSellers",    "FBA sellers in ideal range (#7)"],
+              ["salesVelocity", "Sales velocity > threshold (#8)"],
+              ["noSuppressions","No listing suppressions (#11)"],
+            ] as [keyof typeof config.weights, string][]).map(([key, label]) => (
+              <NumInput key={key} label={label} value={config.weights[key]}
+                onChange={(v) => setField(["weights", key], v)} max={50} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="flex gap-3">
         <Button onClick={save} disabled={saving} variant="hero" className="gap-2">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
