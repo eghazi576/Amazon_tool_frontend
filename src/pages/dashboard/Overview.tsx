@@ -25,7 +25,7 @@ const Overview = () => {
           to="/dashboard/research"
           icon={Search}
           title="Product Research"
-          desc="Enter an ASIN, fetch live Keepa data, score viability."
+          desc="Enter an ASIN, fetch live market data, score viability."
           cta="Analyze a product"
         />
         <ActionCard

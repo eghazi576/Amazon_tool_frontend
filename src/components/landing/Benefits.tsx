@@ -2,14 +2,14 @@ import { Clock, Database, Target, Trophy, CheckCircle2 } from "lucide-react";
 
 const benefits = [
   { icon: Clock,    title: "Save hours on research",       text: "What takes hours manually takes seconds — automated ASIN lookup, scoring, and profit calc." },
-  { icon: Database, title: "Live data, not guesswork",     text: "Every number comes from real Keepa API data. 90-day history, not a snapshot." },
+  { icon: Database, title: "Live data, not guesswork",     text: "Every number comes from real live market data. 90-day history, not a snapshot." },
   { icon: Target,   title: "Identify profitable products", text: "Spot products with BSR < 50k, ROI ≥ 20%, and no Amazon competition before sourcing." },
   { icon: Trophy,   title: "Score brands intelligently",   text: "12-point brand vetting: IP complaints, hazmat, MAP sensitivity, seller count — all in one tool." },
 ];
 
 const metrics = [
   { value: "15",    label: "Scoring Criteria" },
-  { value: "90d",   label: "Keepa Data Window" },
+  { value: "90d",   label: "Data Window" },
   { value: "< 3s",  label: "Per Lookup" },
   { value: "100%",  label: "Live API Data" },
 ];
@@ -18,7 +18,7 @@ const checks = [
   "Referral fee auto-detected by category",
   "FBA fee from weight & dimensions",
   "Monthly sales estimate from BSR",
-  "Hazmat auto-flagged from Keepa",
+  "Hazmat auto-flagged from product data",
   "Buy Box & Amazon seller detection",
   "Rank spike anomaly detection",
 ];

@@ -7,7 +7,7 @@
  *  #1  BSR ≥ 50,000
  *  #14 IP Complaint = Yes
  *  #15 Authenticity Complaint = Yes
- *  #16 Hazmat = Yes  (auto-detected from Keepa)
+ *  #16 Hazmat = Yes  (auto-detected)
  *  #17 Listing Active = No
  *  #18 Buy Box Exists = No
  *  #22 Gated = Yes
@@ -150,7 +150,7 @@ export function scoreProduct(
   if (rankToCheck >= 50_000)       rejectionReasons.push(`BSR ≥ 50,000 (90d avg: ${rankToCheck.toLocaleString()})`);
   if (flags.ipComplaint)           rejectionReasons.push("IP Complaint on record (#14)");
   if (flags.authenticityComplaint) rejectionReasons.push("Authenticity complaint history (#15)");
-  if (metrics.isHazmat)            rejectionReasons.push("Hazmat product — auto-detected from Keepa (#16)");
+  if (metrics.isHazmat)            rejectionReasons.push("Hazmat product — auto-detected (#16)");
   if (!flags.listingActive)        rejectionReasons.push("Listing is not active (#17)");
   if (!flags.buyBoxExists)         rejectionReasons.push("No active Buy Box (#18)");
   if (flags.gated)                 rejectionReasons.push("Category/brand is gated (#22)");

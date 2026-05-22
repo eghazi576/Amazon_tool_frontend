@@ -4,7 +4,7 @@ const features = [
   {
     icon: ScanBarcode,
     title: "ASIN Lookup & Analysis",
-    description: "Paste any Amazon ASIN and get live 90-day Keepa data — price history, BSR, FBA sellers, ratings, and more.",
+    description: "Paste any Amazon ASIN and get live 90-day market data — price history, BSR, FBA sellers, ratings, and more.",
     accent: "from-primary/20 to-secondary/10",
     iconColor: "text-primary",
   },

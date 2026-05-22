@@ -51,7 +51,7 @@ const FinalCTA = () => (
             </div>
 
             <p className="mt-4 text-xs text-muted-foreground">
-              No credit card required · Keepa API powered · Real-time data
+              No credit card required · Real-time market data · Live insights
             </p>
           </div>
         </div>

@@ -6,7 +6,7 @@ import DashboardMockup from "./DashboardMockup";
 const stats = [
   { icon: Zap,        value: "< 3s",  label: "per lookup"       },
   { icon: TrendingUp, value: "15",    label: "scoring criteria" },
-  { icon: Shield,     value: "100%",  label: "Keepa live data"  },
+  { icon: Shield,     value: "100%",  label: "Live market data"  },
 ];
 
 // Headline words with stagger
@@ -101,7 +101,7 @@ const Hero = () => (
           className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
           style={{ animationDelay: "0.65s" }}
         >
-          Paste an Amazon ASIN, get live Keepa data, a full profit analysis,
+          Paste an Amazon ASIN, get live market data, a full profit analysis,
           and a clear buy&nbsp;/&nbsp;no-buy verdict — all in seconds.
         </p>
 

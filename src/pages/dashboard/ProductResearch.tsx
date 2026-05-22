@@ -438,7 +438,7 @@ const ProductResearch = () => {
       <div>
         <h1 className="font-display text-2xl sm:text-3xl font-bold">Product Research</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Enter an Amazon ASIN to fetch 90-day Keepa data and score FBA viability using the Product Hunting Tool criteria.
+          Enter an Amazon ASIN to fetch 90-day market data and score FBA viability using the Product Hunting Tool criteria.
         </p>
       </div>
 
@@ -541,7 +541,7 @@ const ProductResearch = () => {
                     )}
                     {data.model && <span>Model: {data.model}</span>}
                     {data.tokensLeft != null && (
-                      <span className="ml-auto opacity-50">Keepa tokens: {fmtNum(data.tokensLeft)}</span>
+                      <span className="ml-auto opacity-50">API tokens: {fmtNum(data.tokensLeft)}</span>
                     )}
                   </div>
                 </div>
@@ -641,7 +641,7 @@ const ProductResearch = () => {
                 {/* Manual weight if Keepa missing */}
                 <div>
                   <Label className={`text-xs ${data.profitAnalysis.weightMissing ? "text-amber-400" : ""}`}>
-                    {data.profitAnalysis.weightMissing ? "⚠ Weight (lb) — not in Keepa" : `Weight: ${data.packageWeightG ? (data.packageWeightG / 453.592).toFixed(2) + " lb (auto)" : "—"}`}
+                    {data.profitAnalysis.weightMissing ? "⚠ Weight (lb) — not available" : `Weight: ${data.packageWeightG ? (data.packageWeightG / 453.592).toFixed(2) + " lb (auto)" : "—"}`}
                   </Label>
                   {data.profitAnalysis.weightMissing ? (
                     <Input
@@ -652,7 +652,7 @@ const ProductResearch = () => {
                     />
                   ) : (
                     <div className="mt-1 h-9 rounded-md border border-border/40 bg-muted/20 px-3 flex items-center text-xs text-muted-foreground">
-                      {data.packageWeightG ? `${(data.packageWeightG / 453.592).toFixed(2)} lb — from Keepa` : "No weight data"}
+                      {data.packageWeightG ? `${(data.packageWeightG / 453.592).toFixed(2)} lb — auto-detected` : "No weight data"}
                     </div>
                   )}
                 </div>
@@ -793,7 +793,7 @@ const ProductResearch = () => {
                 <Badge variant="outline" className="text-[10px]">User-entered</Badge>
               </CardTitle>
               <CardDescription>
-                These fields cannot be auto-fetched from Keepa. Verify each manually before scoring.
+                These fields cannot be auto-fetched. Verify each manually before scoring.
                 Hazmat is auto-detected and shown as a badge above.
               </CardDescription>
             </CardHeader>
@@ -802,7 +802,7 @@ const ProductResearch = () => {
               {data.isHazmat && (
                 <div className="flex items-center gap-2 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm">
                   <ShieldAlert className="h-4 w-4 text-destructive shrink-0" />
-                  <span><strong className="text-destructive">Hazmat detected by Keepa.</strong> This product will be automatically rejected — no manual override needed.</span>
+                  <span><strong className="text-destructive">Hazmat auto-detected.</strong> This product will be automatically rejected — no manual override needed.</span>
                 </div>
               )}
 

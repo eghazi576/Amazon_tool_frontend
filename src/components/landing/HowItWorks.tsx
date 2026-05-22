@@ -5,7 +5,7 @@ const steps = [
     icon: ScanBarcode,
     title: "Enter an Amazon ASIN",
     description:
-      "Paste any 10-character Amazon product ID. We fetch live price history, BSR, ratings, FBA sellers, and more from Keepa — instantly.",
+      "Paste any 10-character Amazon product ID. We fetch live price history, BSR, ratings, FBA sellers, and more — instantly.",
     color: "from-primary/30 to-primary/5",
     glow: "bg-primary/20",
     ring: "border-primary/40",
