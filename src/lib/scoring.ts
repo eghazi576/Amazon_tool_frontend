@@ -38,6 +38,53 @@
  * Thresholds: ≥80% = EXCELLENT | ≥60% = GOOD | ≥40% = AVERAGE | <40% = BAD
  */
 
+// ─── Scoring Config (admin-configurable) ─────────────────────────────────────
+
+export type ScoringConfig = {
+  maxBsr:          number;
+  minMonthlySales: number;
+  minRoi:          number;
+  minFbaSellers:   number;
+  maxFbaSellers:   number;
+  minRating:       number;
+  minReviews:      number;
+  minPrice:        number;
+  excellentPct:    number;
+  goodPct:         number;
+  averagePct:      number;
+  weights: {
+    notSeasonal:    number;
+    sales:          number;
+    noRankSpikes:   number;
+    roi:            number;
+    profit:         number;
+    bbRotates:      number;
+    noAmazon:       number;
+    storageFee:     number;
+    mapAllows:      number;
+    fbaCount:       number;
+    noRepricers:    number;
+    sellerRotation: number;
+    rating:         number;
+    reviews:        number;
+    minPrice:       number;
+  };
+};
+
+export const DEFAULT_SCORING_CONFIG: ScoringConfig = {
+  maxBsr: 50000, minMonthlySales: 100, minRoi: 20,
+  minFbaSellers: 3, maxFbaSellers: 15,
+  minRating: 4.3, minReviews: 100, minPrice: 8,
+  excellentPct: 80, goodPct: 60, averagePct: 40,
+  weights: {
+    notSeasonal: 10, sales: 10, noRankSpikes: 10, roi: 10,
+    profit: 10, bbRotates: 10, noAmazon: 10,
+    storageFee: 5, mapAllows: 5, fbaCount: 5,
+    noRepricers: 5, sellerRotation: 5, rating: 5,
+    reviews: 2, minPrice: 2,
+  },
+};
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type ManualFlags = {
@@ -126,8 +173,10 @@ export type ScoreResult = {
 
 export function scoreProduct(
   metrics: KeepaMetrics,
-  flags: ManualFlags
+  flags: ManualFlags,
+  cfg: ScoringConfig = DEFAULT_SCORING_CONFIG
 ): ScoreResult {
+  const W = cfg.weights;
   const sellingPrice = metrics.sellingPrice ?? metrics.currentBuyBox ?? metrics.currentPrice ?? 0;
   const cogs         = flags.estCogs ?? 0;
 
@@ -147,7 +196,7 @@ export function scoreProduct(
 
   // #1 BSR — use 90d avg for stability
   const rankToCheck = metrics.avgRank90 ?? metrics.currentRank ?? Infinity;
-  if (rankToCheck >= 50_000)       rejectionReasons.push(`BSR ≥ 50,000 (90d avg: ${rankToCheck.toLocaleString()})`);
+  if (rankToCheck >= cfg.maxBsr)   rejectionReasons.push(`BSR ≥ ${cfg.maxBsr.toLocaleString()} (90d avg: ${rankToCheck.toLocaleString()})`);
   if (flags.ipComplaint)           rejectionReasons.push("IP Complaint on record (#14)");
   if (flags.authenticityComplaint) rejectionReasons.push("Authenticity complaint history (#15)");
   if (metrics.isHazmat)            rejectionReasons.push("Hazmat product — auto-detected (#16)");
@@ -172,102 +221,102 @@ export function scoreProduct(
   // ── SCORING ─────────────────────────────────────────────────────────────────
   const fbaSellers = metrics.currentFbaCount ?? metrics.currentOfferCount ?? 0;
   const mapOk      = !flags.mapPrice || flags.mapPrice <= 0 || sellingPrice >= flags.mapPrice;
-  const roiPasses  = roi != null ? roi >= 20 : false;
+  const roiPasses  = roi != null ? roi >= cfg.minRoi : false;
   const profitPass = profit != null ? profit > 0 : false;
 
   const raw: Omit<ScoreCriterion, "earned">[] = [
     // ── HIGH (10 pts each) ────────────────────────────────────────────────
     {
-      key: "notSeasonal",    criteriaNum: 2,  tier: "high",   weight: 10, source: "manual",
+      key: "notSeasonal",    criteriaNum: 2,  tier: "high",   weight: W.notSeasonal,   source: "manual",
       label: "Not seasonal",
       passCondition: "Seasonal Only = No",
       passed: !flags.seasonal,
     },
     {
-      key: "sales",          criteriaNum: 3,  tier: "high",   weight: 10, source: "auto",
-      label: "Sales > 100 units/month",
-      passCondition: "Monthly sales > 100 units",
-      passed: (metrics.monthlySales ?? 0) > 100,
+      key: "sales",          criteriaNum: 3,  tier: "high",   weight: W.sales,         source: "auto",
+      label: `Sales > ${cfg.minMonthlySales} units/month`,
+      passCondition: `Monthly sales > ${cfg.minMonthlySales} units`,
+      passed: (metrics.monthlySales ?? 0) > cfg.minMonthlySales,
     },
     {
-      key: "noRankSpikes",   criteriaNum: 4,  tier: "high",   weight: 10, source: "auto",
+      key: "noRankSpikes",   criteriaNum: 4,  tier: "high",   weight: W.noRankSpikes,  source: "auto",
       label: "No sudden rank spikes",
       passCondition: "No unnatural BSR spikes in last 30 days",
       passed: !metrics.rankSpike,
     },
     {
-      key: "roi",            criteriaNum: 5,  tier: "high",   weight: 10, source: "auto",
-      label: "ROI ≥ 20%",
-      passCondition: "ROI ≥ 20–25%",
+      key: "roi",            criteriaNum: 5,  tier: "high",   weight: W.roi,           source: "auto",
+      label: `ROI ≥ ${cfg.minRoi}%`,
+      passCondition: `ROI ≥ ${cfg.minRoi}%`,
       passed: roiPasses,
     },
     {
-      key: "profit",         criteriaNum: 6,  tier: "high",   weight: 10, source: "auto",
+      key: "profit",         criteriaNum: 6,  tier: "high",   weight: W.profit,        source: "auto",
       label: "Profit per unit > $0",
       passCondition: "Estimated profit after all fees and COGS > $0",
       passed: profitPass,
     },
     {
-      key: "bbRotates",      criteriaNum: 10, tier: "high",   weight: 10, source: "manual",
+      key: "bbRotates",      criteriaNum: 10, tier: "high",   weight: W.bbRotates,     source: "manual",
       label: "Buy Box rotates (no lock)",
       passCondition: "Buy Box rotation = Yes (not brand-locked)",
       passed: flags.buyBoxRotates,
     },
     {
-      key: "noAmazon",       criteriaNum: 11, tier: "high",   weight: 10, source: "auto",
+      key: "noAmazon",       criteriaNum: 11, tier: "high",   weight: W.noAmazon,      source: "auto",
       label: "Amazon is NOT a seller",
       passCondition: "Amazon as Seller = No",
       passed: !metrics.amazonIsSeller,
     },
-    // ── MEDIUM (5 pts each) ───────────────────────────────────────────────
+    // ── MEDIUM ───────────────────────────────────────────────────────────
     {
-      key: "storageFee",     criteriaNum: 7,  tier: "medium", weight: 5,  source: "manual",
+      key: "storageFee",     criteriaNum: 7,  tier: "medium", weight: W.storageFee,    source: "manual",
       label: "Storage fee = Low or Medium",
       passCondition: "Storage fee impact = Low or Medium",
       passed: flags.storageFeeLowOrMedium,
     },
     {
-      key: "mapAllows",      criteriaNum: 8,  tier: "medium", weight: 5,  source: "manual",
+      key: "mapAllows",      criteriaNum: 8,  tier: "medium", weight: W.mapAllows,     source: "manual",
       label: "Selling price ≥ MAP (or no MAP)",
       passCondition: "Selling price ≥ MAP (or MAP not enforced)",
       passed: mapOk,
     },
     {
-      key: "fbaCount",       criteriaNum: 9,  tier: "medium", weight: 5,  source: "auto",
-      label: "FBA sellers 3–15",
-      passCondition: "FBA Sellers ≥ 3 and ≤ 15",
-      passed: fbaSellers >= 3 && fbaSellers <= 15,
+      key: "fbaCount",       criteriaNum: 9,  tier: "medium", weight: W.fbaCount,      source: "auto",
+      label: `FBA sellers ${cfg.minFbaSellers}–${cfg.maxFbaSellers}`,
+      passCondition: `FBA Sellers ≥ ${cfg.minFbaSellers} and ≤ ${cfg.maxFbaSellers}`,
+      passed: fbaSellers >= cfg.minFbaSellers && fbaSellers <= cfg.maxFbaSellers,
     },
     {
-      key: "noRepricers",    criteriaNum: 12, tier: "medium", weight: 5,  source: "manual",
+      key: "noRepricers",    criteriaNum: 12, tier: "medium", weight: W.noRepricers,   source: "manual",
       label: "No aggressive repricers",
       passCondition: "Aggressive Repricers Present = No",
       passed: flags.noAggressiveRepricers,
     },
     {
-      key: "sellerRotation", criteriaNum: 13, tier: "medium", weight: 5,  source: "manual",
+      key: "sellerRotation", criteriaNum: 13, tier: "medium", weight: W.sellerRotation,source: "manual",
       label: "Seller rotation = Stable",
       passCondition: "Seller Rotation Frequency = Stable",
       passed: flags.sellerRotationStable,
     },
     {
-      key: "rating",         criteriaNum: 19, tier: "medium", weight: 5,  source: "auto",
-      label: "Rating ≥ 4.3 stars",
-      passCondition: "Ratings ≥ 4.3 stars",
-      passed: (metrics.currentRating ?? 0) >= 4.3,
+      key: "rating",         criteriaNum: 19, tier: "medium", weight: W.rating,        source: "auto",
+      label: `Rating ≥ ${cfg.minRating} stars`,
+      passCondition: `Ratings ≥ ${cfg.minRating} stars`,
+      passed: (metrics.currentRating ?? 0) >= cfg.minRating,
     },
-    // ── LOW (2 pts each) ─────────────────────────────────────────────────
+    // ── LOW ──────────────────────────────────────────────────────────────
     {
-      key: "reviews",        criteriaNum: 20, tier: "low",    weight: 2,  source: "auto",
-      label: "Reviews ≥ 100",
-      passCondition: "Total reviews ≥ 100",
-      passed: (metrics.currentReviewCount ?? 0) >= 100,
+      key: "reviews",        criteriaNum: 20, tier: "low",    weight: W.reviews,       source: "auto",
+      label: `Reviews ≥ ${cfg.minReviews}`,
+      passCondition: `Total reviews ≥ ${cfg.minReviews}`,
+      passed: (metrics.currentReviewCount ?? 0) >= cfg.minReviews,
     },
     {
-      key: "minPrice",       criteriaNum: 21, tier: "low",    weight: 2,  source: "auto",
-      label: "Selling price ≥ $8",
-      passCondition: "Selling Price ≥ $8 USD",
-      passed: sellingPrice >= 8,
+      key: "minPrice",       criteriaNum: 21, tier: "low",    weight: W.minPrice,      source: "auto",
+      label: `Selling price ≥ $${cfg.minPrice}`,
+      passCondition: `Selling Price ≥ $${cfg.minPrice} USD`,
+      passed: sellingPrice >= cfg.minPrice,
     },
   ];
 
@@ -277,10 +326,10 @@ export function scoreProduct(
   const pct      = parseFloat(((total / maxTotal) * 100).toFixed(1));
 
   let decision: ScoreResult["decision"];
-  if (pct >= 80)      decision = "EXCELLENT";
-  else if (pct >= 60) decision = "GOOD";
-  else if (pct >= 40) decision = "AVERAGE";
-  else                decision = "BAD";
+  if (pct >= cfg.excellentPct)      decision = "EXCELLENT";
+  else if (pct >= cfg.goodPct)      decision = "GOOD";
+  else if (pct >= cfg.averagePct)   decision = "AVERAGE";
+  else                              decision = "BAD";
 
   const passedHigh = criteria.filter((c) => c.tier === "high" && c.passed).length;
 

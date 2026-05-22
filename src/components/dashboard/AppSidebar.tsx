@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Search, Sparkles, BarChart3, Settings, LogOut, Boxes, History } from "lucide-react";
+import { LayoutDashboard, Search, Sparkles, BarChart3, Settings, LogOut, Boxes, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -30,7 +30,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate  = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const handleSignOut = async () => {
     await logout();
@@ -82,7 +82,22 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border/60 p-2">
+      <SidebarFooter className="border-t border-border/60 p-2 space-y-1">
+        {user?.isAdmin && (
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              `flex items-center gap-2 rounded-md px-2 py-2 text-sm w-full transition-smooth ${
+                isActive
+                  ? "bg-primary/10 text-primary font-medium"
+                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              }`
+            }
+          >
+            <Shield className="h-4 w-4 shrink-0" />
+            {!collapsed && <span>Admin</span>}
+          </NavLink>
+        )}
         <Button
           variant="ghost"
           size="sm"

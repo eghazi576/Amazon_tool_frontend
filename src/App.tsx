@@ -19,6 +19,7 @@ import HistoryPage from "./pages/dashboard/History.tsx";
 import ReportsPage from "./pages/dashboard/Reports.tsx";
 import BrandIntelligence from "./pages/dashboard/BrandIntelligence.tsx";
 import { AIInsights, Settings } from "./pages/dashboard/Stubs.tsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="reports"     element={<ReportsPage />} />
               <Route path="settings"    element={<Settings />} />
             </Route>
+            <Route path="/admin" element={<RequireAuth><AdminDashboard /></RequireAuth>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

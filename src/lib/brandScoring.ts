@@ -15,7 +15,6 @@
  *  HARD REJECT (Fail = Reject):
  *   1. Has official website
  *   2. Has registered business details
- *   4. Brand already listed on Amazon
  *   9. No hazmat-heavy catalog (≥10% = reject)
  *   10. No adult / high-risk category
  *   12. No history of mass account takedowns
@@ -53,7 +52,6 @@ export type BrandInput = {
   mapViolationSensitive: boolean; // brand aggressively enforces MAP
   adultOrHighRisk: boolean;      // adult/gambling/weapons etc. → REJECT
   massAccountTakedowns: boolean; // history of mass takedowns → REJECT
-  listedOnAmazon: boolean;       // brand already on Amazon → REJECT if false
   lastSaleWithin30Days: boolean; // brand is active
 };
 
@@ -108,16 +106,6 @@ export function scoreBrand(input: BrandInput): BrandScoreResult {
       rejectIfFail: true,
       passCondition: "Business registration provided (any country)",
       passed: input.hasRegisteredBusiness,
-    },
-    {
-      key: "listedOnAmazon",
-      label: "Brand already listed on Amazon",
-      criteriaNum: 4,
-      weight: HIGH,
-      tier: "high",
-      rejectIfFail: true,
-      passCondition: "Brand has active listings on Amazon",
-      passed: input.listedOnAmazon,
     },
     {
       key: "noHazmat",

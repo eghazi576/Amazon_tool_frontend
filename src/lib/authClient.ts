@@ -7,6 +7,7 @@ export type AuthUser = {
   id:        string;
   email:     string;
   createdAt: string;
+  isAdmin?:  boolean;
 };
 
 // ─── Token storage ─────────────────────────────────────────────────────────
