@@ -489,7 +489,6 @@ function BrandScoringTab({ toast }: { toast: any }) {
               ["noCounterfeit", "No counterfeit risks / IP-Alert (#6)"],
               ["fbaSellers",    "FBA sellers in ideal range (#7)"],
               ["salesVelocity", "Sales velocity > threshold (#8)"],
-              ["noSuppressions","No listing suppressions (#11)"],
             ] as [keyof typeof config.weights, string][]).map(([key, label]) => (
               <NumInput key={key} label={label} value={config.weights[key]}
                 onChange={(v) => setField(["weights", key], v)} max={50} />

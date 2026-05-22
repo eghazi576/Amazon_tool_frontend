@@ -28,7 +28,6 @@ const defaultInput: BrandInput = {
   ipComplaintsLast12Mo: 0,
   ipAlertRedFlags: false,
   hazmatHeavyCatalog: false,
-  listingSuppressions: false,
   mapViolationSensitive: false,
   adultOrHighRisk: false,
   massAccountTakedowns: false,
@@ -340,7 +339,7 @@ export default function BrandIntelligence() {
               </CardTitle>
               <CardDescription className="text-xs">
                 <span className="text-primary font-medium">Auto-detected:</span> Hazmat · Adult/High-Risk · MAP enforcement &nbsp;|&nbsp;
-                <span className="text-muted-foreground">Manual check required:</span> IP-Alert · Listing Suppressions · Mass Takedowns
+                <span className="text-muted-foreground">Manual check required:</span> IP-Alert · Mass Takedowns
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -360,13 +359,6 @@ export default function BrandIntelligence() {
                   danger={input.hazmatHeavyCatalog}
                   rejectIfYes
                   isAuto={autoFilled.has("hazmatHeavyCatalog")}
-                />
-                <ToggleField
-                  label="Listing Suppressions History"
-                  hint="Frequent listing suppressions? (Yes = lose 5 pts)"
-                  checked={input.listingSuppressions}
-                  onChange={(v) => set("listingSuppressions", v)}
-                  danger={input.listingSuppressions}
                 />
                 <ToggleField
                   label="MAP Violation Sensitivity"
@@ -509,7 +501,7 @@ export default function BrandIntelligence() {
             <CardContent className="text-xs text-muted-foreground space-y-1.5">
               <p><span className="font-semibold text-destructive">Hard Reject (5):</span> Website · Registration · No hazmat ≥10% · No adult/high-risk · No mass takedowns</p>
               <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · ≤1 IP complaint</p>
-              <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> No IP-Alert flags · FBA sellers 3–5 · Sales &gt;100/mo · No suppressions</p>
+              <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> No IP-Alert flags · FBA sellers 3–5 · Sales &gt;100/mo</p>
               <p className="pt-1 border-t border-border/40">Pass = all hard checks + ≥70% weighted points</p>
             </CardContent>
           </Card>

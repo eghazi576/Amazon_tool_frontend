@@ -51,7 +51,6 @@ export type BrandScoringConfig = {
     noCounterfeit:      number; // 5
     fbaSellers:         number; // 5
     salesVelocity:      number; // 5
-    noSuppressions:     number; // 5
   };
 };
 
@@ -62,7 +61,7 @@ export const DEFAULT_BRAND_CONFIG: BrandScoringConfig = {
     website: 10, registeredBusiness: 10, noHazmat: 10,
     noAdultRisk: 10, noTakedowns: 10, brandActive: 10,
     noIPComplaints: 10, noCounterfeit: 5, fbaSellers: 5,
-    salesVelocity: 5, noSuppressions: 5,
+    salesVelocity: 5,
   },
 };
 
@@ -82,7 +81,6 @@ export type BrandInput = {
   ipComplaintsLast12Mo: number;  // from ip-alert.com — 0/1 = OK, ≥2 = fail
   ipAlertRedFlags: boolean;      // counterfeit / IP red flags on IP-Alert
   hazmatHeavyCatalog: boolean;   // ≥10% of catalog is hazmat → REJECT
-  listingSuppressions: boolean;  // frequent suppression history
   mapViolationSensitive: boolean; // brand aggressively enforces MAP
   adultOrHighRisk: boolean;      // adult/gambling/weapons etc. → REJECT
   massAccountTakedowns: boolean; // history of mass takedowns → REJECT
@@ -187,12 +185,6 @@ export function scoreBrand(
       label: `Sales velocity > ${cfg.minMonthlySales} units/month`, rejectIfFail: false,
       passCondition: `Monthly sales > ${cfg.minMonthlySales} units per top ASIN`,
       passed: input.monthlySalesPerAsin > cfg.minMonthlySales,
-    },
-    {
-      key: "noSuppressions",   criteriaNum: 11, tier: "medium", weight: W.noSuppressions,
-      label: "No frequent listing suppressions", rejectIfFail: false,
-      passCondition: "Brand has not faced frequent listing suppressions",
-      passed: !input.listingSuppressions,
     },
   ];
 
