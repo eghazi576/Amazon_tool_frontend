@@ -85,6 +85,11 @@ export default function BrandIntelligence() {
         updates.adultOrHighRisk = true;
         filled.add("adultOrHighRisk");
       }
+      // MAP price exists → brand likely enforces MAP policy
+      if (data.pricing?.mapPrice && data.pricing.mapPrice > 0) {
+        updates.mapViolationSensitive = true;
+        filled.add("mapViolationSensitive");
+      }
       if (data.metrics.currentRating && data.metrics.currentRating > 0) {
         updates.avgRating = parseFloat(data.metrics.currentRating.toFixed(1));
         filled.add("avgRating");
@@ -334,7 +339,8 @@ export default function BrandIntelligence() {
                 <ShieldAlert className="h-4 w-4 text-destructive" /> Section 3 — Risk Flags
               </CardTitle>
               <CardDescription className="text-xs">
-                Hazmat and Adult flags are auto-detected from the sample ASIN where available.
+                <span className="text-primary font-medium">Auto-detected:</span> Hazmat · Adult/High-Risk · MAP enforcement &nbsp;|&nbsp;
+                <span className="text-muted-foreground">Manual check required:</span> IP-Alert · Listing Suppressions · Mass Takedowns
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -368,6 +374,7 @@ export default function BrandIntelligence() {
                   checked={input.mapViolationSensitive}
                   onChange={(v) => set("mapViolationSensitive", v)}
                   danger={input.mapViolationSensitive}
+                  isAuto={autoFilled.has("mapViolationSensitive")}
                 />
                 <ToggleField
                   label="Adult / High-Risk Category"
