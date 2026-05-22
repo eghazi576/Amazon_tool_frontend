@@ -474,7 +474,7 @@ export default function BrandIntelligence() {
                               <span className="text-muted-foreground mr-1">#{c.criteriaNum}</span>
                               {c.label}
                             </span>
-                            {c.rejectIfFail && (
+                            {c.rejectIfFail && !c.passed && (
                               <Badge variant="outline" className="text-[9px] py-0 h-4 px-1 shrink-0 text-destructive border-destructive/30">REJECT</Badge>
                             )}
                           </div>
