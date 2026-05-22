@@ -4,6 +4,7 @@ import { AppSidebar } from "./AppSidebar";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const DashboardLayout = () => {
   const { user } = useAuth();
@@ -22,6 +23,7 @@ const DashboardLayout = () => {
               </span>
             </div>
             <div className="flex items-center gap-2">
+              <ThemeToggle />
               <Button variant="ghost" size="icon" aria-label="Notifications">
                 <Bell className="h-4 w-4" />
               </Button>
