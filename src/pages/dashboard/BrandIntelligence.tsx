@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { scoreBrand, type BrandInput, type BrandScoreResult } from "@/lib/brandScoring";
 import { fetchKeepaProduct } from "@/lib/keepaService";
+import { saveBrandSearch } from "@/lib/brandHistoryClient";
 
 const defaultInput: BrandInput = {
   asin: "",
@@ -48,7 +49,12 @@ export default function BrandIntelligence() {
   const set = <K extends keyof BrandInput>(k: K, v: BrandInput[K]) =>
     setInput((p) => ({ ...p, [k]: v }));
 
-  const evaluate = () => setResult(scoreBrand(input));
+  const evaluate = () => {
+    const scored = scoreBrand(input);
+    setResult(scored);
+    // Save to history (fire-and-forget — don't block UI on save errors)
+    saveBrandSearch(input, scored).catch(() => {});
+  };
   const reset = () => {
     setInput(defaultInput);
     setResult(null);
@@ -171,7 +177,7 @@ export default function BrandIntelligence() {
                 />
                 <Button onClick={fetchFromAsin} disabled={fetching || input.asin.length !== 10} className="shrink-0 gap-1.5">
                   {fetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                  {fetching ? "Fetching…" : "Fetch Data"}
+                  {fetching ? "Loading..." : "Submit"}
                 </Button>
               </div>
               {fetchError && <p className="text-xs text-destructive">{fetchError}</p>}

@@ -10,14 +10,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import {
   Shield, Users, Search, TrendingUp, RotateCcw,
-  Save, Loader2, ChevronLeft, ChevronRight,
+  Save, Loader2, ChevronLeft, ChevronRight, X, Filter,
 } from "lucide-react";
 import {
-  getAdminStats, getAdminSearches,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { CheckCircle2, XCircle, Boxes } from "lucide-react";
+import {
+  getAdminStats, getAdminSearches, getAdminBrandSearches,
   getScoringConfig, saveScoringConfig, resetScoringConfig,
   getBrandScoringConfig, saveBrandScoringConfig, resetBrandScoringConfig,
-  type AdminStats, type AdminSearch,
+  type AdminStats, type AdminSearch, type SearchFilters,
 } from "@/lib/adminClient";
+import { type BrandHistoryEntry } from "@/lib/brandHistoryClient";
 import { type ScoringConfig, DEFAULT_SCORING_CONFIG } from "@/lib/scoring";
 import { type BrandScoringConfig, DEFAULT_BRAND_CONFIG } from "@/lib/brandScoring";
 import { useToast } from "@/hooks/use-toast";
@@ -50,9 +55,10 @@ export default function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="overview">
-        <TabsList className="grid w-full grid-cols-3 max-w-md">
+        <TabsList className="grid w-full grid-cols-4 max-w-xl">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="searches">All Searches</TabsTrigger>
+          <TabsTrigger value="searches">Product Searches</TabsTrigger>
+          <TabsTrigger value="brand-searches">Brand Searches</TabsTrigger>
           <TabsTrigger value="scoring">Scoring Config</TabsTrigger>
         </TabsList>
 
@@ -61,6 +67,9 @@ export default function AdminDashboard() {
         </TabsContent>
         <TabsContent value="searches" className="mt-6">
           <SearchesTab />
+        </TabsContent>
+        <TabsContent value="brand-searches" className="mt-6">
+          <BrandSearchesTab />
         </TabsContent>
         <TabsContent value="scoring" className="mt-6">
           <Tabs defaultValue="product">
@@ -124,46 +133,175 @@ function OverviewTab() {
 
 // ─── Searches Tab ─────────────────────────────────────────────────────────────
 
+const DECISIONS = ["EXCELLENT", "GOOD", "AVERAGE", "BAD", "REJECT"] as const;
+
 function SearchesTab() {
-  const [data, setData]     = useState<{ entries: AdminSearch[]; total: number } | null>(null);
+  const [data, setData]       = useState<{ entries: AdminSearch[]; total: number } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [page, setPage]     = useState(0);
+  const [page, setPage]       = useState(0);
+
+  // Filters
+  const [searchText, setSearchText] = useState("");
+  const [decision, setDecision]     = useState<string>("");
+  const [dateFrom, setDateFrom]     = useState("");
+  const [dateTo, setDateTo]         = useState("");
+
   const limit = 20;
 
-  const load = useCallback((p: number) => {
+  const activeFilters = [searchText, decision, dateFrom, dateTo].filter(Boolean);
+  const hasFilters    = activeFilters.length > 0;
+
+  const clearFilters = () => {
+    setSearchText(""); setDecision(""); setDateFrom(""); setDateTo("");
+    setPage(0);
+  };
+
+  const load = useCallback((p: number, filters: SearchFilters) => {
     setLoading(true);
-    getAdminSearches(limit, p * limit)
+    getAdminSearches(limit, p * limit, filters)
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => { load(page); }, [page, load]);
+  // Debounce searchText so we don't fire on every keystroke
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPage(0);
+      load(0, { search: searchText || undefined, decision: decision || undefined, dateFrom: dateFrom || undefined, dateTo: dateTo || undefined });
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  // Instant reload for selects / dates
+  useEffect(() => {
+    setPage(0);
+    load(0, { search: searchText || undefined, decision: decision || undefined, dateFrom: dateFrom || undefined, dateTo: dateTo || undefined });
+  }, [decision, dateFrom, dateTo]);
+
+  // Reload when page changes
+  useEffect(() => {
+    load(page, { search: searchText || undefined, decision: decision || undefined, dateFrom: dateFrom || undefined, dateTo: dateTo || undefined });
+  }, [page]);
 
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
 
   return (
     <div className="space-y-4">
+
+      {/* ── Filter bar ─────────────────────────────────────────────────── */}
+      <div className="rounded-xl border border-border/60 bg-muted/20 p-3 space-y-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Text search */}
+          <div className="relative flex-1 min-w-[180px]">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search ASIN, title or user email…"
+              className="pl-8 h-8 text-xs"
+            />
+            {searchText && (
+              <button onClick={() => setSearchText("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+
+          {/* Decision filter */}
+          <Select value={decision} onValueChange={(v) => setDecision(v === "all" ? "" : v)}>
+            <SelectTrigger className="h-8 text-xs w-[130px]">
+              <Filter className="h-3 w-3 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="Decision" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All decisions</SelectItem>
+              {DECISIONS.map((d) => (
+                <SelectItem key={d} value={d}>
+                  <span className={`font-semibold text-[10px] uppercase ${decisionColor[d]?.split(" ")[1] ?? ""}`}>{d}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Date from */}
+          <div className="flex items-center gap-1">
+            <Label className="text-[10px] text-muted-foreground whitespace-nowrap">From</Label>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="h-8 text-xs w-[130px]"
+            />
+          </div>
+
+          {/* Date to */}
+          <div className="flex items-center gap-1">
+            <Label className="text-[10px] text-muted-foreground whitespace-nowrap">To</Label>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="h-8 text-xs w-[130px]"
+            />
+          </div>
+
+          {/* Clear */}
+          {hasFilters && (
+            <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8 gap-1.5 text-xs text-muted-foreground">
+              <X className="h-3.5 w-3.5" /> Clear
+            </Button>
+          )}
+        </div>
+
+        {/* Active filter pills */}
+        {hasFilters && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] text-muted-foreground">Filters:</span>
+            {searchText && <FilterPill label={`"${searchText}"`} onRemove={() => setSearchText("")} />}
+            {decision    && <FilterPill label={decision} onRemove={() => setDecision("")} />}
+            {dateFrom    && <FilterPill label={`From ${dateFrom}`} onRemove={() => setDateFrom("")} />}
+            {dateTo      && <FilterPill label={`To ${dateTo}`} onRemove={() => setDateTo("")} />}
+          </div>
+        )}
+      </div>
+
+      {/* ── Count + Pagination ──────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {data ? `${data.total.toLocaleString()} total searches across all users` : "Loading…"}
+          {loading ? "Loading…" : data
+            ? hasFilters
+              ? `${data.total.toLocaleString()} results (filtered)`
+              : `${data.total.toLocaleString()} total searches`
+            : ""}
         </p>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
+          <Button variant="outline" size="sm" disabled={page === 0 || loading} onClick={() => setPage(p => p - 1)}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground min-w-[60px] text-center">
             {page + 1} / {totalPages || 1}
           </span>
-          <Button variant="outline" size="sm" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>
+          <Button variant="outline" size="sm" disabled={page >= totalPages - 1 || loading} onClick={() => setPage(p => p + 1)}>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
+      {/* ── Table ──────────────────────────────────────────────────────── */}
       {loading ? (
         <div className="flex justify-center py-12">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : !data?.entries.length ? (
+        <div className="flex flex-col items-center py-16 text-muted-foreground gap-2">
+          <Search className="h-8 w-8 opacity-30" />
+          <p className="text-sm">No searches match your filters.</p>
+          {hasFilters && (
+            <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-1.5 text-xs">
+              <X className="h-3 w-3" /> Clear filters
+            </Button>
+          )}
         </div>
       ) : (
         <div className="rounded-xl border border-border overflow-hidden">
@@ -179,7 +317,7 @@ function SearchesTab() {
                 </tr>
               </thead>
               <tbody>
-                {data?.entries.map((s, i) => (
+                {data.entries.map((s, i) => (
                   <tr key={s.id} className={`border-b border-border/50 hover:bg-muted/20 transition-colors ${i % 2 === 0 ? "" : "bg-muted/10"}`}>
                     <td className="px-3 py-2 font-mono text-[10px] text-muted-foreground max-w-[120px] truncate">
                       {s.user.email}
@@ -199,6 +337,179 @@ function SearchesTab() {
                       {s.profitPerUnit != null ? `$${s.profitPerUnit.toFixed(2)}` : "—"}
                     </td>
                     <td className="px-3 py-2 font-mono">{s.roiPct != null ? `${s.roiPct}%` : "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
+                      {new Date(s.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-md border border-primary/25 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+      {label}
+      <button onClick={onRemove} className="hover:text-foreground ml-0.5">
+        <X className="h-2.5 w-2.5" />
+      </button>
+    </span>
+  );
+}
+
+// ─── Brand Searches Tab ───────────────────────────────────────────────────────
+
+function BrandSearchesTab() {
+  const [data, setData]       = useState<{ entries: any[]; total: number } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage]       = useState(0);
+  const [searchText, setSearchText] = useState("");
+  const [decision, setDecision]     = useState("");
+  const limit = 20;
+
+  const hasFilters = !!(searchText || decision);
+
+  const load = useCallback((p: number, s: string, d: string) => {
+    setLoading(true);
+    getAdminBrandSearches(limit, p * limit, {
+      search:   s || undefined,
+      decision: d || undefined,
+    })
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => { setPage(0); load(0, searchText, decision); }, 350);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  useEffect(() => { setPage(0); load(0, searchText, decision); }, [decision]);
+  useEffect(() => { load(page, searchText, decision); }, [page]);
+
+  const totalPages = data ? Math.ceil(data.total / limit) : 0;
+
+  const clearFilters = () => { setSearchText(""); setDecision(""); setPage(0); };
+
+  return (
+    <div className="space-y-4">
+      {/* Filter bar */}
+      <div className="rounded-xl border border-border/60 bg-muted/20 p-3 space-y-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="relative flex-1 min-w-[180px]">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input value={searchText} onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search ASIN, brand name or user email…" className="pl-8 h-8 text-xs" />
+            {searchText && (
+              <button onClick={() => setSearchText("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+          <Select value={decision} onValueChange={(v) => setDecision(v === "all" ? "" : v)}>
+            <SelectTrigger className="h-8 text-xs w-[140px]">
+              <Filter className="h-3 w-3 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="Decision" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All decisions</SelectItem>
+              <SelectItem value="APPROVED">APPROVED</SelectItem>
+              <SelectItem value="REJECTED">REJECTED</SelectItem>
+            </SelectContent>
+          </Select>
+          {hasFilters && (
+            <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8 gap-1.5 text-xs text-muted-foreground">
+              <X className="h-3.5 w-3.5" /> Clear
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Count + Pagination */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {loading ? "Loading…" : data
+            ? hasFilters ? `${data.total.toLocaleString()} results (filtered)` : `${data.total.toLocaleString()} total brand evaluations`
+            : ""}
+        </p>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" disabled={page === 0 || loading} onClick={() => setPage(p => p - 1)}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-xs text-muted-foreground min-w-[60px] text-center">
+            {page + 1} / {totalPages || 1}
+          </span>
+          <Button variant="outline" size="sm" disabled={page >= totalPages - 1 || loading} onClick={() => setPage(p => p + 1)}>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Table */}
+      {loading ? (
+        <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+      ) : !data?.entries.length ? (
+        <div className="flex flex-col items-center py-16 text-muted-foreground gap-2">
+          <Boxes className="h-8 w-8 opacity-30" />
+          <p className="text-sm">No brand evaluations found.</p>
+        </div>
+      ) : (
+        <div className="rounded-xl border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-border bg-muted/30">
+                  {["User", "ASIN", "Brand", "Category", "Decision", "Score", "IP Complaints", "Flags", "Date"].map((h) => (
+                    <th key={h} className="px-3 py-2.5 text-left text-[10px] uppercase tracking-wide text-muted-foreground font-medium whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.entries.map((s: any, i: number) => (
+                  <tr key={s.id} className={`border-b border-border/50 hover:bg-muted/20 transition-colors ${i % 2 === 0 ? "" : "bg-muted/10"}`}>
+                    <td className="px-3 py-2 font-mono text-[10px] text-muted-foreground max-w-[120px] truncate">
+                      {s.user?.email ?? "—"}
+                    </td>
+                    <td className="px-3 py-2 font-mono font-semibold">{s.asin}</td>
+                    <td className="px-3 py-2 font-medium max-w-[140px] truncate">{s.brandName}</td>
+                    <td className="px-3 py-2 text-muted-foreground max-w-[120px] truncate">{s.category ?? "—"}</td>
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-1">
+                        {s.decision === "APPROVED"
+                          ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                          : <XCircle className="h-3.5 w-3.5 text-destructive shrink-0" />}
+                        <span className={`font-semibold text-[10px] uppercase ${s.decision === "APPROVED" ? "text-emerald-400" : "text-destructive"}`}>
+                          {s.decision}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-3 py-2 font-mono">
+                      {s.score}/{s.maxScore}
+                      <span className="text-muted-foreground ml-1">({s.scorePct}%)</span>
+                    </td>
+                    <td className="px-3 py-2 font-mono text-center">
+                      <span className={s.ipComplaintsLast12Mo >= 2 ? "text-destructive font-semibold" : ""}>
+                        {s.ipComplaintsLast12Mo}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2">
+                      <div className="flex flex-wrap gap-0.5">
+                        {s.hazmatHeavyCatalog   && <span className="text-[9px] bg-destructive/10 text-destructive border border-destructive/25 rounded px-1">Hazmat</span>}
+                        {s.adultOrHighRisk       && <span className="text-[9px] bg-destructive/10 text-destructive border border-destructive/25 rounded px-1">Adult</span>}
+                        {s.massAccountTakedowns  && <span className="text-[9px] bg-destructive/10 text-destructive border border-destructive/25 rounded px-1">Takedowns</span>}
+                        {s.ipAlertRedFlags       && <span className="text-[9px] bg-destructive/10 text-destructive border border-destructive/25 rounded px-1">IP Flags</span>}
+                        {!s.hazmatHeavyCatalog && !s.adultOrHighRisk && !s.massAccountTakedowns && !s.ipAlertRedFlags
+                          && <span className="text-[9px] text-emerald-400">Clean</span>}
+                      </div>
+                    </td>
                     <td className="px-3 py-2 text-muted-foreground whitespace-nowrap">
                       {new Date(s.createdAt).toLocaleDateString()}
                     </td>

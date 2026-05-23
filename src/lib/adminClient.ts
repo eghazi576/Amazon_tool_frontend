@@ -46,13 +46,24 @@ export function getAdminStats(): Promise<AdminStats> {
   return adminFetch("/stats");
 }
 
-export function getAdminSearches(limit = 50, offset = 0): Promise<{
-  entries: AdminSearch[];
-  total: number;
-  limit: number;
-  offset: number;
-}> {
-  return adminFetch(`/searches?limit=${limit}&offset=${offset}`);
+export type SearchFilters = {
+  search?:   string;
+  decision?: string;
+  dateFrom?: string;
+  dateTo?:   string;
+};
+
+export function getAdminSearches(
+  limit = 50,
+  offset = 0,
+  filters: SearchFilters = {}
+): Promise<{ entries: AdminSearch[]; total: number; limit: number; offset: number }> {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (filters.search)   params.set("search",   filters.search);
+  if (filters.decision) params.set("decision", filters.decision);
+  if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
+  if (filters.dateTo)   params.set("dateTo",   filters.dateTo);
+  return adminFetch(`/searches?${params.toString()}`);
 }
 
 export function getScoringConfig(): Promise<ScoringConfig> {
@@ -83,4 +94,15 @@ export function saveBrandScoringConfig(config: BrandScoringConfig): Promise<Bran
 
 export function resetBrandScoringConfig(): Promise<BrandScoringConfig> {
   return adminFetch("/brand-scoring-config/reset", { method: "POST" });
+}
+
+export function getAdminBrandSearches(
+  limit = 50,
+  offset = 0,
+  filters: { search?: string; decision?: string } = {}
+): Promise<{ entries: any[]; total: number; limit: number; offset: number }> {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (filters.search)   params.set("search",   filters.search);
+  if (filters.decision) params.set("decision", filters.decision);
+  return adminFetch(`/brand-searches?${params.toString()}`);
 }
