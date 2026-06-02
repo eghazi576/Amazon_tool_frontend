@@ -322,13 +322,16 @@ export default function BrandIntelligence() {
                   placeholder="e.g. 30"
                   isAuto={autoFilled.has("amazonBuyboxSharePct")}
                 />
-                <NumField
-                  label="IP Complaints (last 12 months)"
-                  hint="0–1 = OK | ≥2 = lose 10 pts. Check ip-alert.com"
-                  value={input.ipComplaintsLast12Mo}
-                  onChange={(v) => set("ipComplaintsLast12Mo", v)}
-                  placeholder="e.g. 0"
-                />
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium">IP Complaints (last 12 months)</Label>
+                  <p className="text-[10px] text-muted-foreground -mt-1">0–1 = OK | ≥2 = lose 10 pts. Check{" "}
+                    <a href="https://www.ip-alert.com/" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:opacity-80">
+                      ip-alert.com
+                    </a>
+                  </p>
+                  <Input type="number" step={1} min={0} value={input.ipComplaintsLast12Mo || ""}
+                    placeholder="e.g. 0" onChange={(e) => set("ipComplaintsLast12Mo", parseFloat(e.target.value) || 0)} />
+                </div>
               </div>
             </CardContent>
           </Card>
