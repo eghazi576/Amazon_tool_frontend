@@ -78,8 +78,8 @@ export default function BrandIntelligence() {
         updates.brandName = data.brand;
         filled.add("brandName");
       }
-      if (data.category || data.rootCategory) {
-        updates.category = data.category || data.rootCategory || "";
+      if (data.rootCategory || data.category) {
+        updates.category = data.rootCategory || data.category || "";
         filled.add("category");
       }
       if (data.isHazmat) {
@@ -111,10 +111,7 @@ export default function BrandIntelligence() {
         updates.monthlySalesPerAsin = data.metrics.monthlySalesEstimate;
         filled.add("monthlySalesPerAsin");
       }
-      if (data.metrics.amazonIsSeller) {
-        updates.amazonBuyboxSharePct = 100;
-        filled.add("amazonBuyboxSharePct");
-      }
+      // BuyBox share % is not provided by Keepa — leave as manual entry
 
       setInput((p) => ({ ...p, ...updates }));
       setAutoFilled(filled);
