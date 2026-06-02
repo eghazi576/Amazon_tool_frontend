@@ -821,8 +821,8 @@ const ProductResearch = () => {
                     rejectIf
                   />
                   <ToggleRow
-                    label="Authenticity complaint history"
-                    sub="Any past authenticity complaint?"
+                    label="Recent Authenticity Complaint"
+                    sub="Any recent authenticity complaint on record?"
                     value={flags.authenticityComplaint}
                     onChange={(v) => updateFlag("authenticityComplaint", v)}
                     danger={flags.authenticityComplaint}

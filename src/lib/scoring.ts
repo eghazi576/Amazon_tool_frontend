@@ -202,7 +202,7 @@ export function scoreProduct(
   const rankToCheck = metrics.avgRank90 ?? metrics.currentRank ?? Infinity;
   if (rankToCheck >= cfg.maxBsr)   rejectionReasons.push(`BSR ≥ ${cfg.maxBsr.toLocaleString()} (90d avg: ${rankToCheck.toLocaleString()})`);
   if (flags.ipComplaint)           rejectionReasons.push("IP Complaint on record (#14)");
-  if (flags.authenticityComplaint) rejectionReasons.push("Authenticity complaint history (#15)");
+  if (flags.authenticityComplaint) rejectionReasons.push("Recent Authenticity Complaint (#15)");
   if (metrics.isHazmat)            rejectionReasons.push("Hazmat product — auto-detected (#16)");
 
   const MAX_TOTAL = 104; // 7×10 + 6×5 + 2×2
