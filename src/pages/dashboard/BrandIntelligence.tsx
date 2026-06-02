@@ -324,9 +324,9 @@ export default function BrandIntelligence() {
                 />
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium">IP Complaints (last 12 months)</Label>
-                  <p className="text-[10px] text-muted-foreground -mt-1">0–1 = OK | ≥2 = lose 10 pts. Check{" "}
+                  <p className="text-[10px] text-muted-foreground -mt-1">0–1 = OK | ≥2 = lose 10 pts.{" "}
                     <a href="https://www.ip-alert.com/" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:opacity-80">
-                      ip-alert.com
+                      Check IP Complaint History
                     </a>
                   </p>
                   <Input type="number" step={1} min={0} value={input.ipComplaintsLast12Mo || ""}
