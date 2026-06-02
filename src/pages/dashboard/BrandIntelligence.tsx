@@ -259,10 +259,9 @@ export default function BrandIntelligence() {
               <div className="grid sm:grid-cols-2 gap-3">
                 <ToggleField
                   label="Has registered business details"
-                  hint="Is any registration date/number verifiable? (No = REJECT)"
+                  hint="Is any registration date/number verifiable? (informational only)"
                   checked={input.hasRegisteredBusiness}
                   onChange={(v) => set("hasRegisteredBusiness", v)}
-                  rejectIfNo
                 />
                 <ToggleField
                   label="Brand is active (sale within last 30 days)"
@@ -503,7 +502,7 @@ export default function BrandIntelligence() {
               <CardTitle className="text-xs text-muted-foreground uppercase tracking-wide">Scoring Reference</CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground space-y-1.5">
-              <p><span className="font-semibold text-destructive">Hard Reject (3):</span> Website · Registration · No mass takedowns</p>
+              <p><span className="font-semibold text-destructive">Hard Reject (2):</span> Website · No mass takedowns</p>
               <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · ≤1 IP complaint · No hazmat ≥10% · No adult/high-risk</p>
               <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> No IP-Alert flags · FBA sellers 3–5 · Sales &gt;100/mo</p>
               <p className="pt-1 border-t border-border/40">Pass = all hard checks + ≥70% weighted points</p>

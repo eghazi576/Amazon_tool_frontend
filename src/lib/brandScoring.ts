@@ -58,7 +58,7 @@ export const DEFAULT_BRAND_CONFIG: BrandScoringConfig = {
   approvalPct: 70, minFbaSellers: 3, maxFbaSellers: 5,
   minMonthlySales: 100, maxIpComplaints: 1,
   weights: {
-    website: 10, registeredBusiness: 10, noHazmat: 10,
+    website: 10, registeredBusiness: 0, noHazmat: 10,
     noAdultRisk: 10, noTakedowns: 10, brandActive: 10,
     noIPComplaints: 10, noCounterfeit: 5, fbaSellers: 5,
     salesVelocity: 5,
@@ -130,7 +130,7 @@ export function scoreBrand(
     },
     {
       key: "registeredBusiness", criteriaNum: 2, tier: "high",  weight: W.registeredBusiness,
-      label: "Has registered business details",  rejectIfFail: true,
+      label: "Has registered business details",  rejectIfFail: false,
       passCondition: "Business registration provided (any country)",
       passed: input.hasRegisteredBusiness,
     },
