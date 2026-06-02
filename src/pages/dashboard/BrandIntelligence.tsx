@@ -244,13 +244,18 @@ export default function BrandIntelligence() {
                   )}
                 </Field>
 
-                <Field label="Business Registration Date *" hint="Any country — no registration = REJECT">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium">Business Registration Date *</Label>
                   <Input
                     type="date"
                     value={input.businessRegistrationDate}
                     onChange={(e) => set("businessRegistrationDate", e.target.value)}
                   />
-                </Field>
+                  <a href="https://who.is/" target="_blank" rel="noopener noreferrer"
+                    className="inline-block text-[10px] text-primary underline underline-offset-2 hover:opacity-80">
+                    Verify Domain &amp; Business Registration
+                  </a>
+                </div>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-3">
