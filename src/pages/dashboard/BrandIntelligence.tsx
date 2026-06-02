@@ -366,7 +366,7 @@ export default function BrandIntelligence() {
                   isAuto={autoFilled.has("hazmatHeavyCatalog")}
                 />
                 <ToggleField
-                  label="MAP Violation Sensitivity"
+                  label="Minimum Advertised Price (MAP)"
                   hint="Does brand aggressively enforce MAP policy?"
                   checked={input.mapViolationSensitive}
                   onChange={(v) => set("mapViolationSensitive", v)}
