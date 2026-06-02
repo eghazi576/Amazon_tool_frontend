@@ -636,6 +636,9 @@ function ScoringTab({ toast }: { toast: any }) {
                 ["profit",       "Profit > $0 (#6)"],
                 ["bbRotates",    "Buy Box rotates (#10)"],
                 ["noAmazon",     "Amazon not seller (#11)"],
+                ["notGated",     "Not gated — category/brand (#22)"],
+                ["listingActive","Listing is active (#17)"],
+                ["buyBoxExists", "Buy Box exists (#18)"],
               ] as [keyof typeof config.weights, string][]).map(([key, label]) => (
                 <NumInput key={key} label={label} value={config.weights[key]}
                   onChange={(v) => setField(["weights", key], v)} max={50} />

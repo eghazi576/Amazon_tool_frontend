@@ -68,6 +68,9 @@ export type ScoringConfig = {
     rating:         number;
     reviews:        number;
     minPrice:       number;
+    notGated:       number;
+    listingActive:  number;
+    buyBoxExists:   number;
   };
 };
 
@@ -82,6 +85,7 @@ export const DEFAULT_SCORING_CONFIG: ScoringConfig = {
     storageFee: 5, mapAllows: 5, fbaCount: 5,
     noRepricers: 5, sellerRotation: 5, rating: 5,
     reviews: 2, minPrice: 2,
+    notGated: 10, listingActive: 10, buyBoxExists: 10,
   },
 };
 
@@ -200,9 +204,6 @@ export function scoreProduct(
   if (flags.ipComplaint)           rejectionReasons.push("IP Complaint on record (#14)");
   if (flags.authenticityComplaint) rejectionReasons.push("Authenticity complaint history (#15)");
   if (metrics.isHazmat)            rejectionReasons.push("Hazmat product — auto-detected (#16)");
-  if (!flags.listingActive)        rejectionReasons.push("Listing is not active (#17)");
-  if (!flags.buyBoxExists)         rejectionReasons.push("No active Buy Box (#18)");
-  if (flags.gated)                 rejectionReasons.push("Category/brand is gated (#22)");
 
   const MAX_TOTAL = 104; // 7×10 + 6×5 + 2×2
 
@@ -304,6 +305,25 @@ export function scoreProduct(
       label: `Rating ≥ ${cfg.minRating} stars`,
       passCondition: `Ratings ≥ ${cfg.minRating} stars`,
       passed: (metrics.currentRating ?? 0) >= cfg.minRating,
+    },
+    // ── HIGH — previously hard-reject, now scored ─────────────────────
+    {
+      key: "notGated",       criteriaNum: 22, tier: "high",   weight: W.notGated,      source: "manual",
+      label: "Not gated (category / brand)",
+      passCondition: "Category or brand is not gated on Amazon",
+      passed: !flags.gated,
+    },
+    {
+      key: "listingActive",  criteriaNum: 17, tier: "high",   weight: W.listingActive, source: "manual",
+      label: "Listing is active",
+      passCondition: "Listing is currently live and active on Amazon",
+      passed: flags.listingActive,
+    },
+    {
+      key: "buyBoxExists",   criteriaNum: 18, tier: "high",   weight: W.buyBoxExists,  source: "auto",
+      label: "Buy Box exists",
+      passCondition: "An active Buy Box is present on the listing",
+      passed: flags.buyBoxExists,
     },
     // ── LOW ──────────────────────────────────────────────────────────────
     {
