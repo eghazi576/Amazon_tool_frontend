@@ -259,8 +259,8 @@ export function scoreProduct(
     },
     {
       key: "bbRotates",      criteriaNum: 10, tier: "high",   weight: W.bbRotates,     source: "manual",
-      label: "Buy Box rotates (no lock)",
-      passCondition: "Buy Box rotation = Yes (not brand-locked)",
+      label: "Stable Buy Box Rotation",
+      passCondition: "Buy Box rotates among sellers (not brand-locked)",
       passed: flags.buyBoxRotates,
     },
     {

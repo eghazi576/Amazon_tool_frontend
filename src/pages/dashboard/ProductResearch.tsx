@@ -873,7 +873,7 @@ const ProductResearch = () => {
                     danger={flags.seasonal}
                   />
                   <ToggleRow
-                    label="Buy Box rotates"
+                    label="Stable Buy Box Rotation"
                     sub="Does Buy Box rotate among multiple sellers?"
                     value={flags.buyBoxRotates}
                     onChange={(v) => updateFlag("buyBoxRotates", v)}
@@ -886,14 +886,6 @@ const ProductResearch = () => {
                     value={flags.noAggressiveRepricers}
                     onChange={(v) => updateFlag("noAggressiveRepricers", v)}
                     danger={!flags.noAggressiveRepricers}
-                    invertLogic
-                  />
-                  <ToggleRow
-                    label="Seller rotation is stable"
-                    sub="How often do sellers change? (unstable = lose 5 pts)"
-                    value={flags.sellerRotationStable}
-                    onChange={(v) => updateFlag("sellerRotationStable", v)}
-                    danger={!flags.sellerRotationStable}
                     invertLogic
                   />
                   <ToggleRow
