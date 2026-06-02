@@ -190,7 +190,7 @@ export default function BrandIntelligence() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-primary" /> Section 1 — Brand Identity
+                <Building2 className="h-4 w-4 text-primary" /> Section 1: Brand Identity
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -274,7 +274,7 @@ export default function BrandIntelligence() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-primary" /> Section 2 — Performance Signals
+                <TrendingUp className="h-4 w-4 text-primary" /> Section 2: Performance Signals
               </CardTitle>
               <CardDescription className="text-xs">
                 Fields marked <span className="text-primary font-medium">Auto</span> are fetched from the sample ASIN — adjust if needed.
@@ -291,7 +291,7 @@ export default function BrandIntelligence() {
                   isAuto={autoFilled.has("monthlySalesPerAsin")}
                 />
                 <AutoNumField
-                  label="Ratings (avg) — 0 to 5 stars"
+                  label="Ratings (avg, 0–5 stars)"
                   value={input.avgRating}
                   onChange={(v) => set("avgRating", v)}
                   step={0.1} max={5}
@@ -314,7 +314,7 @@ export default function BrandIntelligence() {
                   isAuto={autoFilled.has("fbaSellersPerAsin")}
                 />
                 <AutoNumField
-                  label="Buybox Share — Amazon as seller (%)"
+                  label="Buybox Share: Amazon as seller (%)"
                   hint="% of time Amazon holds the Buy Box"
                   value={input.amazonBuyboxSharePct}
                   onChange={(v) => set("amazonBuyboxSharePct", v)}
@@ -337,7 +337,7 @@ export default function BrandIntelligence() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
-                <ShieldAlert className="h-4 w-4 text-destructive" /> Section 3 — Risk Flags
+                <ShieldAlert className="h-4 w-4 text-destructive" /> Section 3: Risk Flags
               </CardTitle>
               <CardDescription className="text-xs">
                 <span className="text-primary font-medium">Auto-detected:</span> Hazmat · Adult/High-Risk · MAP enforcement &nbsp;|&nbsp;

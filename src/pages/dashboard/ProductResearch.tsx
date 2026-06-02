@@ -809,7 +809,7 @@ const ProductResearch = () => {
               {/* Section A: Hard-reject flags */}
               <div>
                 <p className="text-xs font-semibold text-destructive mb-2 uppercase tracking-wide">
-                  Hard Reject Checks — any "Yes" below = REJECT
+                  Hard Reject Checks
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   <ToggleRow
@@ -862,7 +862,7 @@ const ProductResearch = () => {
               {/* Section B: Scoring flags */}
               <div>
                 <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-                  Scoring Checks — affect points (not hard reject)
+                  Scoring Checks
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   <ToggleRow
@@ -912,7 +912,7 @@ const ProductResearch = () => {
 
           {/* ── Charts (90-day data) ──────────────────────────────────────── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <ChartCard title="Selling Price — Last 90 Days" description="Buy Box price with 90-day median reference line">
+            <ChartCard title="Selling Price (Last 90 Days)" description="Buy Box price with 90-day median reference line">
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={data.series.price.map((p) => ({ date: fmtDate(p.t), value: p.v }))}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -936,7 +936,7 @@ const ProductResearch = () => {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="BSR / Sales Rank — Last 90 Days" description="Lower = better rank. Negative trend = improving.">
+            <ChartCard title="BSR / Sales Rank (Last 90 Days)" description="Lower = better rank. Negative trend = improving.">
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={data.series.rank.map((p) => ({ date: fmtDate(p.t), value: p.v }))}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -960,7 +960,7 @@ const ProductResearch = () => {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Reviews — Last 90 Days" description="Cumulative review count">
+            <ChartCard title="Reviews (Last 90 Days)" description="Cumulative review count">
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={data.series.reviews.map((p) => ({ date: fmtDate(p.t), value: p.v }))}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
