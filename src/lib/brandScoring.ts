@@ -136,13 +136,13 @@ export function scoreBrand(
     },
     {
       key: "noHazmat",         criteriaNum: 9,  tier: "high",   weight: W.noHazmat,
-      label: "No hazmat-heavy catalog (< 10%)", rejectIfFail: true,
+      label: "No hazmat-heavy catalog (< 10%)", rejectIfFail: false,
       passCondition: "Less than 10% of catalog classified as hazmat",
       passed: !input.hazmatHeavyCatalog,
     },
     {
       key: "noAdultRisk",      criteriaNum: 10, tier: "high",   weight: W.noAdultRisk,
-      label: "No adult / high-risk category",   rejectIfFail: true,
+      label: "No adult / high-risk category",   rejectIfFail: false,
       passCondition: "Not adult, gambling, weapons, or other high-risk",
       passed: !input.adultOrHighRisk,
     },

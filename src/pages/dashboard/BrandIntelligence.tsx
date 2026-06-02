@@ -359,11 +359,10 @@ export default function BrandIntelligence() {
                 />
                 <ToggleField
                   label="Hazmat-heavy catalog (≥10%)"
-                  hint="≥10% of catalog is hazmat? (Yes = REJECT)"
+                  hint="≥10% of catalog is hazmat? (Yes = lose 10 pts)"
                   checked={input.hazmatHeavyCatalog}
                   onChange={(v) => set("hazmatHeavyCatalog", v)}
                   danger={input.hazmatHeavyCatalog}
-                  rejectIfYes
                   isAuto={autoFilled.has("hazmatHeavyCatalog")}
                 />
                 <ToggleField
@@ -376,11 +375,10 @@ export default function BrandIntelligence() {
                 />
                 <ToggleField
                   label="Adult / High-Risk Category"
-                  hint="Adult, gambling, weapons, etc.? (Yes = REJECT)"
+                  hint="Adult, gambling, weapons, etc.? (Yes = lose 10 pts)"
                   checked={input.adultOrHighRisk}
                   onChange={(v) => set("adultOrHighRisk", v)}
                   danger={input.adultOrHighRisk}
-                  rejectIfYes
                   isAuto={autoFilled.has("adultOrHighRisk")}
                 />
                 <ToggleField
@@ -505,8 +503,8 @@ export default function BrandIntelligence() {
               <CardTitle className="text-xs text-muted-foreground uppercase tracking-wide">Scoring Reference</CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground space-y-1.5">
-              <p><span className="font-semibold text-destructive">Hard Reject (5):</span> Website · Registration · No hazmat ≥10% · No adult/high-risk · No mass takedowns</p>
-              <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · ≤1 IP complaint</p>
+              <p><span className="font-semibold text-destructive">Hard Reject (3):</span> Website · Registration · No mass takedowns</p>
+              <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · ≤1 IP complaint · No hazmat ≥10% · No adult/high-risk</p>
               <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> No IP-Alert flags · FBA sellers 3–5 · Sales &gt;100/mo</p>
               <p className="pt-1 border-t border-border/40">Pass = all hard checks + ≥70% weighted points</p>
             </CardContent>
