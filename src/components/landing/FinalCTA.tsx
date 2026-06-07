@@ -21,13 +21,13 @@ const FinalCTA = () => (
             </div>
 
             <h2 className="font-display text-4xl font-bold leading-tight md:text-5xl">
-              Start Your Research
+              Find your next
               <br className="hidden sm:block" />
-              <span className="gradient-text">Journey Today</span>
+              <span className="gradient-text">profitable product</span>
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-              Create a free account and analyze your first product in under 30 seconds.
+              Sign up free and run your first ASIN in under a minute. No spreadsheets, no guesswork.
             </p>
 
             {/* Fake ASIN input teaser */}

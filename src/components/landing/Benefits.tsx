@@ -1,10 +1,10 @@
 import { Clock, Database, Target, Trophy, CheckCircle2 } from "lucide-react";
 
 const benefits = [
-  { icon: Clock,    title: "Save hours on research",       text: "What used to take hours now takes seconds. Automated ASIN lookup, scoring, and profit calculation done for you." },
-  { icon: Database, title: "Live data, not guesswork",     text: "Every number comes from real live market data. 90-day history, not a snapshot." },
-  { icon: Target,   title: "Identify profitable products", text: "Spot products with BSR < 50k, ROI ≥ 20%, and no Amazon competition before sourcing." },
-  { icon: Trophy,   title: "Score brands intelligently",   text: "12-point brand vetting covering IP complaints, hazmat status, MAP sensitivity, and seller count, all in one place." },
+  { icon: Clock,    title: "Research in seconds, not hours", text: "Researching one product used to take 20 minutes of tab-switching. With Aurix it takes 3 seconds." },
+  { icon: Database, title: "Real data, not estimates",      text: "Every number is pulled live from Keepa. You get 90 days of actual price and rank history, not a cached guess." },
+  { icon: Target,   title: "Find products worth sourcing",  text: "Spot products with a healthy BSR, solid ROI, and no Amazon on the listing before you spend a penny." },
+  { icon: Trophy,   title: "Vet brands before you call",   text: "Check IP complaints, hazmat risk, MAP enforcement, and seller count before you invest time in a supplier relationship." },
 ];
 
 const metrics = [
@@ -15,12 +15,12 @@ const metrics = [
 ];
 
 const checks = [
-  "Referral fee auto-detected by category",
-  "FBA fee from weight & dimensions",
-  "Monthly sales estimate from BSR",
-  "Hazmat auto-flagged from product data",
-  "Buy Box & Amazon seller detection",
-  "Rank spike anomaly detection",
+  "Referral fees auto-detected for every Amazon category",
+  "FBA fees calculated from real product weight and dimensions",
+  "Monthly sales pulled from Amazon's own Bought in past month data",
+  "Hazmat products flagged automatically, no manual checking",
+  "Buy Box ownership and Amazon seller status detected instantly",
+  "BSR spike detection to catch inflated or unreliable rankings",
 ];
 
 const Benefits = () => (
@@ -49,11 +49,11 @@ const Benefits = () => (
         <div>
           <span className="text-sm font-semibold uppercase tracking-wider text-accent">Why Aurix</span>
           <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-            Built for sellers who want to{" "}
-            <span className="gradient-text">win faster</span>
+            Less time researching,{" "}
+            <span className="gradient-text">more time sourcing</span>
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
-            Stop drowning in spreadsheets. Aurix does the heavy lifting so you can focus on sourcing and scaling.
+            Every calculation that used to happen in a spreadsheet now happens automatically. You just paste the ASIN.
           </p>
 
           {/* Check list */}

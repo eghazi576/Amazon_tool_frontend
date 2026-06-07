@@ -60,7 +60,7 @@ const Hero = () => (
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          AI-Powered Amazon FBA Research
+          Built for Amazon FBA Sellers
         </div>
 
         {/* Headline — word-by-word stagger */}
@@ -101,8 +101,8 @@ const Hero = () => (
           className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
           style={{ animationDelay: "0.65s" }}
         >
-          Paste an Amazon ASIN, get live market data, a full profit analysis,
-          and a clear buy&nbsp;/&nbsp;no-buy verdict. All in seconds.
+          Stop guessing which products to source. Paste an ASIN, get live price history,
+          real profit margins, and a clear buy or skip decision. In under 3 seconds.
         </p>
 
         {/* CTAs */}

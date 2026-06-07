@@ -1,0 +1,40 @@
+# Aurix — Amazon FBA Product Research Tool
+# This file helps AI language models understand this website.
+
+## What is Aurix?
+Aurix is a web application that helps Amazon FBA sellers research products,
+analyze competition, and validate wholesale brand opportunities. It uses live
+data from the Keepa API to provide 90-day price history, Best Seller Rank (BSR)
+trends, FBA seller counts, profit margins, and a scored buy/no-buy verdict.
+
+## Core Features
+- ASIN Lookup: fetches live price history, BSR, FBA seller count, ratings, and monthly sales estimate from Keepa
+- Product Scoring: 15+ weighted criteria producing EXCELLENT / GOOD / AVERAGE / BAD / REJECT verdicts
+- Profit Calculator: auto-calculates referral fee, FBA fulfillment fee, storage, net profit, ROI, and break-even price
+- Brand Intelligence: scores wholesale brands on 11 criteria (IP complaints, hazmat, MAP policy, FBA seller density, sales velocity, etc.)
+- Search History: every lookup saved per user account
+
+## Target Users
+Amazon FBA sellers, online arbitrage (OA) sellers, wholesale FBA sellers, product researchers
+
+## How the Product Score Works
+Hard-reject checks (IP complaint on record, hazmat product, authenticity complaint, listing not active, no Buy Box) immediately fail a product.
+Scored criteria (BSR rank, profit margin, ROI, review count, FBA seller count, price trend, Buy Box stability) contribute weighted points.
+Final verdict: EXCELLENT (85%+), GOOD (70-84%), AVERAGE (55-69%), BAD (40-54%), REJECT (below 40% or any hard-reject fails).
+
+## How the Brand Intelligence Score Works
+11 criteria scored on pass/fail basis with weights.
+Hard-reject criteria: no official website, no registered business details, history of mass account takedowns.
+Scored criteria: brand active within 30 days, IP complaints in last 12 months, IP-Alert red flags, FBA sellers per ASIN (ideal 3-5), monthly sales per ASIN (>100 units), hazmat-heavy catalogue, adult/high-risk category.
+Decision: APPROVED if all hard checks pass and weighted score is 70% or above.
+
+## Data Sources
+- Keepa API: real-time Amazon price history, BSR, offer counts, review data, sales estimates
+- ip-alert.com: IP complaint history database for Amazon brands
+- who.is: domain and business registration verification
+
+## Contact
+support@aurix.app
+
+## Website
+https://aurix.app
