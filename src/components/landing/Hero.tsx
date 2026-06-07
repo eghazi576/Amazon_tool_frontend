@@ -102,7 +102,7 @@ const Hero = () => (
           style={{ animationDelay: "0.65s" }}
         >
           Paste an Amazon ASIN, get live market data, a full profit analysis,
-          and a clear buy&nbsp;/&nbsp;no-buy verdict — all in seconds.
+          and a clear buy&nbsp;/&nbsp;no-buy verdict. All in seconds.
         </p>
 
         {/* CTAs */}

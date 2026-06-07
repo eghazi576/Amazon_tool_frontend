@@ -1,10 +1,10 @@
 import { Clock, Database, Target, Trophy, CheckCircle2 } from "lucide-react";
 
 const benefits = [
-  { icon: Clock,    title: "Save hours on research",       text: "What takes hours manually takes seconds — automated ASIN lookup, scoring, and profit calc." },
+  { icon: Clock,    title: "Save hours on research",       text: "What used to take hours now takes seconds. Automated ASIN lookup, scoring, and profit calculation done for you." },
   { icon: Database, title: "Live data, not guesswork",     text: "Every number comes from real live market data. 90-day history, not a snapshot." },
   { icon: Target,   title: "Identify profitable products", text: "Spot products with BSR < 50k, ROI ≥ 20%, and no Amazon competition before sourcing." },
-  { icon: Trophy,   title: "Score brands intelligently",   text: "12-point brand vetting: IP complaints, hazmat, MAP sensitivity, seller count — all in one tool." },
+  { icon: Trophy,   title: "Score brands intelligently",   text: "12-point brand vetting covering IP complaints, hazmat status, MAP sensitivity, and seller count, all in one place." },
 ];
 
 const metrics = [

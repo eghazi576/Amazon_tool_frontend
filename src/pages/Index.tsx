@@ -4,6 +4,7 @@ import Features from "@/components/landing/Features";
 import GraphPreview from "@/components/landing/GraphPreview";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Benefits from "@/components/landing/Benefits";
+import FAQSection from "@/components/landing/FAQSection";
 import FinalCTA from "@/components/landing/FinalCTA";
 import Footer from "@/components/landing/Footer";
 
@@ -137,6 +138,7 @@ const Index = () => (
         <GraphPreview />
         <HowItWorks />
         <Benefits />
+        <FAQSection />
         <FinalCTA />
       </main>
       <Footer />

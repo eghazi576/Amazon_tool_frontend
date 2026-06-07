@@ -4,7 +4,7 @@ const features = [
   {
     icon: ScanBarcode,
     title: "ASIN Lookup & Analysis",
-    description: "Paste any Amazon ASIN and get live 90-day market data — price history, BSR, FBA sellers, ratings, and more.",
+    description: "Paste any Amazon ASIN and get live 90-day market data including price history, BSR, FBA sellers, ratings, and more.",
     accent: "from-primary/20 to-secondary/10",
     iconColor: "text-primary",
   },
@@ -25,7 +25,7 @@ const features = [
   {
     icon: Search,
     title: "Brand Intelligence",
-    description: "Score brands on 12 criteria — IP history, hazmat catalog, FBA seller count, and more before you reach out.",
+    description: "Score brands on 12 criteria including IP history, hazmat catalog, and FBA seller count before you reach out.",
     accent: "from-primary/15 to-accent/15",
     iconColor: "text-primary",
   },

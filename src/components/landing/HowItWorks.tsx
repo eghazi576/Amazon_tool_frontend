@@ -5,7 +5,7 @@ const steps = [
     icon: ScanBarcode,
     title: "Enter an Amazon ASIN",
     description:
-      "Paste any 10-character Amazon product ID. We fetch live price history, BSR, ratings, FBA sellers, and more — instantly.",
+      "Paste any 10-character Amazon product ID. We fetch live price history, BSR, ratings, FBA sellers, and more. Instantly.",
     color: "from-primary/30 to-primary/5",
     glow: "bg-primary/20",
     ring: "border-primary/40",
@@ -25,7 +25,7 @@ const steps = [
     icon: Lightbulb,
     title: "Get a clear buy / no-buy verdict",
     description:
-      "See EXCELLENT, GOOD, AVERAGE, BAD, or REJECT with a full breakdown — source with confidence, not guesswork.",
+      "See EXCELLENT, GOOD, AVERAGE, BAD, or REJECT with a full breakdown. Source with confidence, not guesswork.",
     color: "from-accent/30 to-accent/5",
     glow: "bg-accent/20",
     ring: "border-accent/40",
