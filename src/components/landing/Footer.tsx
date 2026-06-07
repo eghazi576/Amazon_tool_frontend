@@ -103,12 +103,9 @@ const Footer = () => {
 
       {/* Bottom bar */}
       <div className="border-t border-border/40">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-6 py-5 sm:flex-row">
+        <div className="container mx-auto px-6 py-5 text-center">
           <p className="text-xs text-muted-foreground">
-            © {year} Aurix. All rights reserved.
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Built for Amazon wholesale FBA sellers
+            © {year} Aurix. All rights reserved. Built for Amazon wholesale FBA sellers.
           </p>
         </div>
       </div>
