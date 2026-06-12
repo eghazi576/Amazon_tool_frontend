@@ -1,7 +1,7 @@
 import { Clock, Database, Target, Trophy, CheckCircle2 } from "lucide-react";
 
 const benefits = [
-  { icon: Clock,    title: "Research in seconds, not hours", text: "Researching one product used to take 20 minutes of tab-switching. With Aurix it takes 3 seconds." },
+  { icon: Clock,    title: "Research in seconds, not hours", text: "Researching one product used to take 20 minutes of tab-switching. With WholesaleOS it takes 3 seconds." },
   { icon: Database, title: "Real data, not estimates",      text: "Every number is pulled live from Keepa. You get 90 days of actual price and rank history, not a cached guess." },
   { icon: Target,   title: "Find products worth sourcing",  text: "Spot products with a healthy BSR, solid ROI, and no Amazon on the listing before you spend a penny." },
   { icon: Trophy,   title: "Vet brands before you call",   text: "Check IP complaints, hazmat risk, MAP enforcement, and seller count before you invest time in a supplier relationship." },
@@ -47,7 +47,7 @@ const Benefits = () => (
       {/* Main content */}
       <div className="grid items-center gap-16 lg:grid-cols-2">
         <div>
-          <span className="text-sm font-semibold uppercase tracking-wider text-accent">Why Aurix</span>
+          <span className="text-sm font-semibold uppercase tracking-wider text-accent">Why WholesaleOS</span>
           <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
             Less time researching,{" "}
             <span className="gradient-text">more time sourcing</span>

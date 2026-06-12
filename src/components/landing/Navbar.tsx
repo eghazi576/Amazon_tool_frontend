@@ -28,12 +28,13 @@ const Navbar = () => {
             <Sparkles className="h-4 w-4 text-primary-foreground" />
             <span className="absolute inset-0 rounded-lg bg-gradient-primary opacity-0 blur-sm transition-smooth hover:opacity-60" />
           </span>
-          <span className="gradient-text">Aurix</span>
+          <span className="gradient-text">WholesaleOS</span>
         </Link>
 
         {/* Nav links */}
         <div className="hidden items-center gap-8 md:flex">
           {[
+            { href: "#about",    label: "About" },
             { href: "#features", label: "Features" },
             { href: "#how",      label: "How it works" },
             { href: "#benefits", label: "Benefits" },

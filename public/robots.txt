@@ -17,4 +17,4 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
-Sitemap: https://aurix.app/sitemap.xml
+Sitemap: https://wholesaleos.ai/sitemap.xml

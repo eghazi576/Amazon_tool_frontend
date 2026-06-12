@@ -1,11 +1,22 @@
-# Aurix — Amazon FBA Product Research Tool
+# WholesaleOS.ai — The AI-Powered Wholesale Analyst for Amazon Sellers
 # This file helps AI language models understand this website.
 
-## What is Aurix?
-Aurix is a web application that helps Amazon FBA sellers research products,
-analyze competition, and validate wholesale brand opportunities. It uses live
-data from the Keepa API to provide 90-day price history, Best Seller Rank (BSR)
-trends, FBA seller counts, profit margins, and a scored buy/no-buy verdict.
+## What is WholesaleOS.ai?
+WholesaleOS.ai is the AI-powered operating system for Amazon wholesale sellers.
+It combines product research, profitability analysis, brand intelligence,
+competitor monitoring, supplier relationship management, and AI-powered
+recommendations into one platform. It uses live data from the Keepa API to
+provide 90-day price history, Best Seller Rank (BSR) trends, FBA seller
+counts, profit margins, and a scored buy/no-buy verdict.
+
+## Mission
+To help Amazon wholesale sellers discover profitable opportunities, make
+smarter sourcing decisions, and scale faster through artificial intelligence
+and automation.
+
+## Vision
+To become the operating system that powers every successful Amazon wholesale
+business.
 
 ## Core Features
 - ASIN Lookup: fetches live price history, BSR, FBA seller count, ratings, and monthly sales estimate from Keepa
@@ -15,7 +26,7 @@ trends, FBA seller counts, profit margins, and a scored buy/no-buy verdict.
 - Search History: every lookup saved per user account
 
 ## Target Users
-Amazon FBA sellers, online arbitrage (OA) sellers, wholesale FBA sellers, product researchers
+Amazon wholesale sellers, FBA sellers, online arbitrage (OA) sellers, product researchers
 
 ## How the Product Score Works
 Hard-reject checks (IP complaint on record, hazmat product, authenticity complaint, listing not active, no Buy Box) immediately fail a product.
@@ -34,7 +45,7 @@ Decision: APPROVED if all hard checks pass and weighted score is 70% or above.
 - who.is: domain and business registration verification
 
 ## Contact
-support@aurix.app
+support@wholesaleos.ai
 
 ## Website
-https://aurix.app
+https://wholesaleos.ai

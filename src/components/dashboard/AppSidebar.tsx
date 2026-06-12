@@ -46,7 +46,7 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <span className="font-display text-lg font-bold tracking-tight">
-              Brand<span className="gradient-text">IQ</span>
+              Wholesale<span className="gradient-text">OS</span>
             </span>
           )}
         </Link>
@@ -64,7 +64,7 @@ export function AppSidebar() {
                       to={item.url}
                       end={item.end}
                       className={({ isActive }) =>
-                        `flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-smooth ${
+                        `flex items-center gap-2 rounded-md px-2 py-2 text-sm no-underline transition-smooth ${
                           isActive
                             ? "bg-primary/10 text-primary font-medium"
                             : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
@@ -87,7 +87,7 @@ export function AppSidebar() {
           <NavLink
             to="/admin"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-md px-2 py-2 text-sm w-full transition-smooth ${
+              `flex items-center gap-2 rounded-md px-2 py-2 text-sm w-full no-underline transition-smooth ${
                 isActive
                   ? "bg-primary/10 text-primary font-medium"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"

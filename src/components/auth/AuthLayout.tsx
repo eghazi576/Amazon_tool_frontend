@@ -19,7 +19,7 @@ const AuthLayout = ({ title, subtitle, children, footer }: AuthLayoutProps) => {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-elegant">
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </span>
-          <span className="gradient-text">Aurix</span>
+          <span className="gradient-text">WholesaleOS</span>
         </Link>
 
         <div className="my-auto py-10">
@@ -34,7 +34,7 @@ const AuthLayout = ({ title, subtitle, children, footer }: AuthLayoutProps) => {
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} Aurix. UI demo — auth not connected.
+          &copy; {new Date().getFullYear()} WholesaleOS. UI demo — auth not connected.
         </p>
       </div>
     </div>

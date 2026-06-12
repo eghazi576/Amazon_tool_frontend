@@ -177,7 +177,7 @@ const actions = [
     to: "/dashboard/research",
     icon: Search,
     title: "Product Research",
-    desc: "Enter an ASIN — get live market data, profit & viability score instantly.",
+    desc: "Enter an ASIN, get live market data, profit & viability score instantly.",
     cta: "Analyze a product",
     accent: "from-primary/20 to-primary/5",
     border: "hover:border-primary/40",
@@ -195,7 +195,7 @@ const actions = [
     to: "/dashboard/history",
     icon: Clock,
     title: "Search History",
-    desc: "All your product and brand lookups — searchable, filterable, exportable.",
+    desc: "All your product and brand lookups, searchable, filterable, exportable.",
     cta: "View history",
     accent: "from-sky-500/20 to-sky-500/5",
     border: "hover:border-sky-500/40",
@@ -246,7 +246,7 @@ const Overview = () => {
       {/* Quick actions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {actions.map((a) => (
-          <Link key={a.to} to={a.to} className="group block">
+          <Link key={a.to} to={a.to} className="group block no-underline">
             <Card className={`h-full relative overflow-hidden border-border/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant ${a.border}`}>
               <div className={`absolute inset-0 bg-gradient-to-br ${a.accent} opacity-0 group-hover:opacity-70 transition-opacity duration-300`} />
               <CardContent className="relative p-5 flex flex-col gap-3 h-full">

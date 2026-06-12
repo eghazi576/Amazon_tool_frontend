@@ -58,20 +58,20 @@ const ReportsPage = () => {
 
   const exportCSV = () => {
     if (entries.length === 0) return toast({ title: "Nothing to export", description: "Run an analysis first." });
-    downloadFile(`brandiq-report-${new Date().toISOString().slice(0, 10)}.csv`, toCSV(entries), "text/csv");
+    downloadFile(`wholesaleos-report-${new Date().toISOString().slice(0, 10)}.csv`, toCSV(entries), "text/csv");
     toast({ title: "CSV downloaded" });
   };
 
   const exportJSON = () => {
     if (entries.length === 0) return toast({ title: "Nothing to export", description: "Run an analysis first." });
-    downloadFile(`brandiq-report-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(entries, null, 2), "application/json");
+    downloadFile(`wholesaleos-report-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(entries, null, 2), "application/json");
     toast({ title: "JSON downloaded" });
   };
 
   const exportSummary = () => {
     if (entries.length === 0) return toast({ title: "Nothing to export", description: "Run an analysis first." });
     const lines = [
-      `BrandIQ Product Research Report`,
+      `WholesaleOS Product Research Report`,
       `Generated: ${new Date().toLocaleString()}`,
       ``,
       `Total lookups: ${stats.total}`,
@@ -86,7 +86,7 @@ const ReportsPage = () => {
         (e) => `  [${e.decision}] ${e.asin} — ${e.title?.slice(0, 60) ?? ""} | $${e.sellingPrice.toFixed(2)} | ROI ${e.roi.toFixed(0)}%`
       ),
     ].join("\n");
-    downloadFile(`brandiq-summary-${new Date().toISOString().slice(0, 10)}.txt`, lines, "text/plain");
+    downloadFile(`wholesaleos-summary-${new Date().toISOString().slice(0, 10)}.txt`, lines, "text/plain");
     toast({ title: "Summary downloaded" });
   };
 

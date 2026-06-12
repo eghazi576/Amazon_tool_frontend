@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { Eye, EyeOff, Loader2, Mail } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
-import SocialButtons from "@/components/auth/SocialButtons";
 import PasswordStrength from "@/components/auth/PasswordStrength";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,13 +59,6 @@ const SignUp = () => {
       subtitle="Start researching Amazon products in minutes"
       footer={<>Already have an account?{" "}<Link to="/sign-in" className="font-medium text-primary hover:underline">Sign in</Link></>}
     >
-      <SocialButtons />
-      <div className="my-5 flex items-center gap-3">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>

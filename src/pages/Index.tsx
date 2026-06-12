@@ -1,5 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
+import About from "@/components/landing/About";
 import Features from "@/components/landing/Features";
 import GraphPreview from "@/components/landing/GraphPreview";
 import HowItWorks from "@/components/landing/HowItWorks";
@@ -134,6 +135,7 @@ const Index = () => (
       <Navbar />
       <main>
         <Hero />
+        <About />
         <Features />
         <GraphPreview />
         <HowItWorks />

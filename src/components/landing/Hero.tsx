@@ -10,8 +10,8 @@ const stats = [
 ];
 
 // Headline words with stagger
-const line1 = ["Smart", "Amazon", "Product"];
-const line2 = ["Research", "Powered", "by"];
+const line1 = ["The", "AI-Powered", "Wholesale"];
+const line2 = ["Analyst", "That", "Never"];
 
 const Hero = () => (
   <section className="relative overflow-hidden pb-24 pt-32 md:pt-40">
@@ -60,7 +60,7 @@ const Hero = () => (
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          Built for Amazon FBA Sellers
+          Built for Amazon Wholesale Sellers
         </div>
 
         {/* Headline — word-by-word stagger */}
@@ -91,7 +91,7 @@ const Hero = () => (
               className="animate-word-up inline-block gradient-text"
               style={{ animationDelay: "0.58s" }}
             >
-              AI
+              Sleeps
             </span>
           </span>
         </h1>
@@ -101,8 +101,8 @@ const Hero = () => (
           className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
           style={{ animationDelay: "0.65s" }}
         >
-          Stop guessing which products to source. Paste an ASIN, get live price history,
-          real profit margins, and a clear buy or skip decision. In under 3 seconds.
+          Research products. Analyze profitability. Discover brands.
+          Monitor competitors. Manage suppliers.
         </p>
 
         {/* CTAs */}
