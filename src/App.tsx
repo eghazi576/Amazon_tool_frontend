@@ -30,6 +30,13 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
+function RequireAdmin({ children }: { children: JSX.Element }) {
+  const { user, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (!user?.isAdmin) return <Navigate to="/dashboard" replace />;
+  return children;
+}
+
 function GuestOnly({ children }: { children: JSX.Element }) {
   const { token, isLoading } = useAuth();
   if (isLoading) return null;
@@ -50,7 +57,7 @@ const App = () => (
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
             <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password"  element={<ResetPassword />} />
+            <Route path="/reset-password"  element={<GuestOnly><ResetPassword /></GuestOnly>} />
             <Route
               path="/dashboard"
               element={<RequireAuth><DashboardLayout /></RequireAuth>}
@@ -63,7 +70,7 @@ const App = () => (
               <Route path="reports"     element={<ReportsPage />} />
               <Route path="settings"    element={<Settings />} />
             </Route>
-            <Route path="/admin" element={<RequireAuth><AdminDashboard /></RequireAuth>} />
+            <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

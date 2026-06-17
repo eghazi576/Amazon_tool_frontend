@@ -5,6 +5,7 @@ import {
   getStoredUser, setStoredUser,
   apiLogin, apiRegister, apiLogout,
   apiForgotPassword, apiResetPassword,
+  isTokenExpired,
 } from "@/lib/authClient";
 
 type AuthContextType = {
@@ -27,9 +28,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const storedToken = getToken();
-    if (!storedToken) { setIsLoading(false); return; }
 
-    // Always fetch fresh user from backend so isAdmin stays up-to-date
+    // Immediately reject tokens that have expired (no network call needed)
+    if (!storedToken || isTokenExpired(storedToken)) {
+      clearAuth();
+      setIsLoading(false);
+      return;
+    }
+
+    // Validate with backend so isAdmin stays up-to-date
     fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"}/api/auth/me`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     })
@@ -40,13 +47,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(json.data.user);
           setTokenState(storedToken);
         } else {
+          // Backend rejected the token (invalid/revoked)
           clearAuth();
         }
       })
       .catch(() => {
-        // Offline fallback — use stored user
+        // Network offline — only trust stored session if token is still valid
         const storedUser = getStoredUser();
-        if (storedUser) { setUser(storedUser); setTokenState(storedToken); }
+        if (storedUser && !isTokenExpired(storedToken)) {
+          setUser(storedUser);
+          setTokenState(storedToken);
+        } else {
+          clearAuth();
+        }
       })
       .finally(() => setIsLoading(false));
   }, []);
