@@ -34,7 +34,7 @@ const AuthLayout = ({ title, subtitle, children, footer }: AuthLayoutProps) => {
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} WholesaleOS. UI demo — auth not connected.
+          &copy; {new Date().getFullYear()} WholesaleOS. All rights reserved.
         </p>
       </div>
     </div>
