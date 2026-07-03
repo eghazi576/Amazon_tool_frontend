@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -24,10 +23,7 @@ const Navbar = () => {
       <nav className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold">
-          <span className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-elegant">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
-            <span className="absolute inset-0 rounded-lg bg-gradient-primary opacity-0 blur-sm transition-smooth hover:opacity-60" />
-          </span>
+          <img src="/logo.png" alt="WholesaleOS" className="h-9 w-9 rounded-lg object-cover" />
           <span className="gradient-text">WholesaleOS</span>
         </Link>
 

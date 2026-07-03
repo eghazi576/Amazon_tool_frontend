@@ -27,25 +27,9 @@ const Hero = () => (
       }}
     />
 
-    {/* ── Sonar pulse rings from hero center ──────────────────── */}
-    <div className="pointer-events-none absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2">
-      {[0, 1, 2, 3].map((i) => (
-        <span
-          key={i}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/20 animate-sonar"
-          style={{
-            width: "120px", height: "120px",
-            animationDelay: `${i * 0.75}s`,
-            animationDuration: "3s",
-          }}
-        />
-      ))}
-    </div>
-
-    {/* ── Section orbs ────────────────────────────────────────── */}
-    <div className="pointer-events-none absolute left-[6%]  top-[18%] h-64 w-64 rounded-full bg-primary/10   blur-3xl animate-orb" />
-    <div className="pointer-events-none absolute right-[5%] top-[30%] h-48 w-48 rounded-full bg-secondary/10 blur-3xl animate-orb" style={{ animationDelay: "-4s" }} />
-    <div className="pointer-events-none absolute left-[20%] bottom-[8%] h-32 w-32 rounded-full bg-accent/8  blur-2xl animate-float-slow" style={{ animationDelay: "-2s" }} />
+    {/* ── Static section orbs ─────────────────────────────────── */}
+    <div className="pointer-events-none absolute left-[6%]  top-[18%] h-64 w-64 rounded-full bg-primary/8   blur-3xl" />
+    <div className="pointer-events-none absolute right-[5%] top-[30%] h-48 w-48 rounded-full bg-secondary/8 blur-3xl" />
 
     {/* ── Main content ─────────────────────────────────────────── */}
     <div className="container relative mx-auto px-6">
@@ -110,7 +94,7 @@ const Hero = () => (
           className="animate-fade-up mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           style={{ animationDelay: "0.75s" }}
         >
-          <Button asChild variant="hero" size="xl" className="group w-full sm:w-auto animate-pulse-glow">
+          <Button asChild variant="hero" size="xl" className="group w-full sm:w-auto shadow-elegant">
             <Link to="/sign-up">
               Get Started Free
               <ArrowRight className="transition-smooth group-hover:translate-x-1" />
@@ -149,14 +133,7 @@ const Hero = () => (
         style={{ animationDelay: "0.7s" }}
       >
         <div className="absolute inset-0 -z-10 bg-gradient-primary opacity-20 blur-3xl" />
-        <div
-          className="pointer-events-none absolute -inset-8 rounded-3xl border border-primary/10 animate-spin-slow"
-          style={{ borderRadius: "28px" }}
-        />
-        <div
-          className="pointer-events-none absolute -inset-14 rounded-3xl border border-accent/6 animate-spin-slow"
-          style={{ borderRadius: "36px", animationDirection: "reverse", animationDuration: "30s" }}
-        />
+        <div className="pointer-events-none absolute -inset-8 rounded-3xl border border-primary/10" style={{ borderRadius: "28px" }} />
         <DashboardMockup />
       </div>
     </div>

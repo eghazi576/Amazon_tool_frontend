@@ -148,6 +148,9 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
   }
 
   body {
@@ -193,16 +196,14 @@
   }
 
   .glass {
-    background: hsl(240 14% 8% / 0.5);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: hsl(240 14% 8% / 0.88);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid hsl(240 10% 20% / 0.5);
   }
 
   .glass-card {
-    background: hsl(240 14% 8% / 0.6);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: hsl(240 14% 9% / 0.92);
     border: 1px solid hsl(240 10% 22% / 0.6);
     box-shadow: 0 4px 24px hsl(240 15% 2% / 0.4), inset 0 1px 0 hsl(240 10% 100% / 0.04);
   }
@@ -258,18 +259,18 @@
   }
 
   .light .glass {
-    background: hsl(0 0% 100% / 0.7);
+    background: hsl(0 0% 100% / 0.93);
     border: 1px solid hsl(240 10% 80% / 0.6);
   }
 
   .light .glass-card {
-    background: hsl(0 0% 100% / 0.85);
+    background: hsl(0 0% 100% / 0.96);
     border: 1px solid hsl(240 10% 84% / 0.7);
     box-shadow: 0 4px 24px hsl(240 15% 60% / 0.1), inset 0 1px 0 hsl(0 0% 100% / 0.8);
   }
 
   .light .stat-pill {
-    background: hsl(0 0% 100% / 0.85);
+    background: hsl(0 0% 100% / 0.96);
     border: 1px solid hsl(240 10% 82% / 0.8);
   }
 
@@ -314,8 +315,9 @@
       hsl(263 85% 65% / 0.3) 288deg
     );
     filter: blur(72px);
-    animation: aurora 20s ease-in-out infinite alternate;
+    animation: aurora 30s ease-in-out infinite alternate;
     will-change: transform;
+    contain: layout style paint;
   }
 
   /* Scan line for mockup */
@@ -344,9 +346,23 @@
 
   /* Number stat pill */
   .stat-pill {
-    background: hsl(240 14% 10% / 0.8);
+    background: hsl(240 14% 10% / 0.95);
     border: 1px solid hsl(240 10% 20% / 0.7);
-    backdrop-filter: blur(12px);
+  }
+}
+
+/* ── Performance: skip rendering of offscreen landing sections ─────────────── */
+section[id] {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+/* ── Respect prefers-reduced-motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -374,8 +390,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 40px hsl(263 85% 65% / 0.3); }
-  50%       { box-shadow: 0 0 80px hsl(263 85% 65% / 0.6), 0 0 120px hsl(263 85% 65% / 0.2); }
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.82; }
 }
 
 @keyframes draw-line {

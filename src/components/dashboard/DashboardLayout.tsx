@@ -15,7 +15,7 @@ const DashboardLayout = () => {
       <div className="min-h-screen flex w-full bg-background font-sans">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border/60 bg-background/80 px-4 backdrop-blur-md">
+          <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border/60 bg-background px-4">
             <div className="flex items-center gap-2">
               <SidebarTrigger />
               <span className="text-sm text-muted-foreground hidden sm:inline">

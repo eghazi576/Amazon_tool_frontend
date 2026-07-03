@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Sparkles } from "lucide-react";
 
 interface AuthLayoutProps {
   title: string;
@@ -16,9 +15,7 @@ const AuthLayout = ({ title, subtitle, children, footer }: AuthLayoutProps) => {
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-8 sm:px-6 sm:py-12">
         <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-elegant">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
-          </span>
+          <img src="/logo.png" alt="WholesaleOS" className="h-9 w-9 rounded-lg object-cover" />
           <span className="gradient-text">WholesaleOS</span>
         </Link>
 

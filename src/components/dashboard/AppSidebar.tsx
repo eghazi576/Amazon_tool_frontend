@@ -41,9 +41,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r border-border/60">
       <SidebarHeader className="border-b border-border/60 px-4 py-4">
         <Link to="/dashboard" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-elegant">
-            <BarChart3 className="h-4 w-4 text-primary-foreground" />
-          </div>
+          <img src="/logo.png" alt="WholesaleOS" className="h-8 w-8 rounded-lg object-cover shrink-0" />
           {!collapsed && (
             <span className="font-display text-lg font-bold tracking-tight">
               Wholesale<span className="gradient-text">OS</span>
