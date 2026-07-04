@@ -157,7 +157,7 @@ export default function BrandIntelligence() {
           <Card className="border-primary/20 bg-primary/3">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" /> Auto-fill from ASIN
+                <Sparkles className="h-4 w-4 text-primary" /> Auto fill from ASIN
               </CardTitle>
               <CardDescription className="text-xs">
                 Enter a sample ASIN from this brand and brand name, category, ratings, FBA sellers, hazmat status and more will be auto filled.
@@ -282,7 +282,7 @@ export default function BrandIntelligence() {
                 <TrendingUp className="h-4 w-4 text-primary" /> Section 2: Performance Signals
               </CardTitle>
               <CardDescription className="text-xs">
-                Fields marked <span className="text-primary font-medium">Auto</span> are fetched from the sample ASIN — adjust if needed.
+                Fields marked <span className="text-primary font-medium">Auto</span> are fetched from the sample ASIN and adjust if needed.
               </CardDescription>
             </CardHeader>
             <CardContent>
