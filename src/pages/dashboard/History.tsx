@@ -367,7 +367,7 @@ const HistoryPage = () => (
     <div>
       <h1 className="font-display text-2xl sm:text-3xl font-bold">Search History</h1>
       <p className="text-sm text-muted-foreground mt-1">
-        Every analysis you've run — saved to your account, accessible across devices.
+        Every analysis you've run saved to your account, accessible across devices.
       </p>
     </div>
 
