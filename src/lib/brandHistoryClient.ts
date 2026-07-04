@@ -2,18 +2,14 @@ import type { BrandInput, BrandScoreResult } from "./brandScoring";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL ?? "";
 
-function authHeaders() {
-  const token = localStorage.getItem("auth_token");
-  return {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
-
 async function apiFetch(path: string, options?: RequestInit) {
   const resp = await fetch(`${BACKEND}/api/brand-history${path}`, {
     ...options,
-    headers: { ...authHeaders(), ...(options?.headers ?? {}) },
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(options?.headers ?? {}),
+    },
   });
   const json = await resp.json();
   if (!resp.ok) throw new Error(json.error || `HTTP ${resp.status}`);

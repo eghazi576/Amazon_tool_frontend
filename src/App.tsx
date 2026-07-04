@@ -24,9 +24,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 const queryClient = new QueryClient();
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  const { token, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   if (isLoading) return null;
-  if (!token) return <Navigate to="/sign-in" replace />;
+  if (!user) return <Navigate to="/sign-in" replace />;
   return children;
 }
 
@@ -38,9 +38,9 @@ function RequireAdmin({ children }: { children: JSX.Element }) {
 }
 
 function GuestOnly({ children }: { children: JSX.Element }) {
-  const { token, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   if (isLoading) return null;
-  if (token) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/dashboard" replace />;
   return children;
 }
 

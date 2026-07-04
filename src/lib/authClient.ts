@@ -1,8 +1,5 @@
 const BACKEND = import.meta.env.VITE_BACKEND_URL ?? "";
 
-const TOKEN_KEY = "auth_token";
-const USER_KEY  = "auth_user";
-
 export type AuthUser = {
   id:        string;
   email:     string;
@@ -10,55 +7,32 @@ export type AuthUser = {
   isAdmin?:  boolean;
 };
 
-// ─── JWT helpers ───────────────────────────────────────────────────────────
+// ─── Base fetch with auto-refresh on 401 ───────────────────────────────────
 
-export function isTokenExpired(token: string): boolean {
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return typeof payload.exp === "number" && payload.exp * 1000 < Date.now();
-  } catch {
-    return true;
-  }
-}
+let refreshing: Promise<void> | null = null;
 
-// ─── Token storage ─────────────────────────────────────────────────────────
-
-export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
-}
-
-export function setToken(token: string): void {
-  localStorage.setItem(TOKEN_KEY, token);
-}
-
-export function clearAuth(): void {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
-}
-
-export function getStoredUser(): AuthUser | null {
-  try {
-    const raw = localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw) as AuthUser) : null;
-  } catch {
-    return null;
-  }
-}
-
-export function setStoredUser(user: AuthUser): void {
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
-}
-
-// ─── Base fetch helper ──────────────────────────────────────────────────────
-
-async function apiFetch(path: string, options?: RequestInit): Promise<any> {
+async function apiFetch(path: string, options?: RequestInit, retry = true): Promise<any> {
   const resp = await fetch(`${BACKEND}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(options?.headers ?? {}),
     },
   });
+
+  if (resp.status === 401 && retry) {
+    // Attempt token refresh once
+    if (!refreshing) {
+      refreshing = fetch(`${BACKEND}/api/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+      }).then(() => { refreshing = null; }).catch(() => { refreshing = null; });
+    }
+    await refreshing;
+    return apiFetch(path, options, false);
+  }
+
   const json = await resp.json();
   if (!resp.ok) throw new Error(json.error || `HTTP ${resp.status}`);
   return json.data;
@@ -70,33 +44,34 @@ export function apiLogin(email: string, password: string) {
   return apiFetch("/api/auth/login", {
     method: "POST",
     body:   JSON.stringify({ email, password }),
-  }) as Promise<{ user: AuthUser; token: string }>;
+  }, false) as Promise<{ user: AuthUser }>;
 }
 
 export function apiRegister(email: string, password: string) {
   return apiFetch("/api/auth/register", {
     method: "POST",
     body:   JSON.stringify({ email, password }),
-  }) as Promise<{ user: AuthUser; token: string }>;
+  }, false) as Promise<{ user: AuthUser }>;
 }
 
-export function apiLogout(token: string) {
-  return apiFetch("/api/auth/logout", {
-    method:  "POST",
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export function apiLogout() {
+  return apiFetch("/api/auth/logout", { method: "POST" }, false);
+}
+
+export function apiMe() {
+  return apiFetch("/api/auth/me", undefined, false) as Promise<{ user: AuthUser }>;
 }
 
 export function apiForgotPassword(email: string) {
   return apiFetch("/api/auth/forgot-password", {
     method: "POST",
     body:   JSON.stringify({ email }),
-  }) as Promise<void>;
+  }, false) as Promise<void>;
 }
 
 export function apiResetPassword(token: string, password: string) {
   return apiFetch("/api/auth/reset-password", {
     method: "POST",
     body:   JSON.stringify({ token, password }),
-  });
+  }, false);
 }

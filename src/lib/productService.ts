@@ -86,13 +86,10 @@ export async function fetchProduct(
   manualWeightG: number = 0,
   manualReferralRate: number | null = null
 ): Promise<ProductApiResponse> {
-  const token = localStorage.getItem("auth_token");
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (token) headers["Authorization"] = `Bearer ${token}`;
-
   const resp = await fetch(`${BACKEND_URL}/api/keepa/product`, {
     method: "POST",
-    headers,
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ asin, domain, cogs, manualWeightG, manualReferralRate }),
   });
   const json = await resp.json();

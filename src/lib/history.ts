@@ -11,7 +11,6 @@
  *   DELETE /api/search/clear/all
  */
 
-import { getToken } from "@/lib/authClient";
 import type { ScoreResult } from "./scoring";
 
 export type HistoryEntry = {
@@ -46,10 +45,6 @@ const BACKEND = import.meta.env.VITE_BACKEND_URL ?? "";
 const LS_KEY  = "asin_history";
 const LS_MAX  = 100;
 
-function getBearerToken(): string | null {
-  return getToken();
-}
-
 const notify = () => window.dispatchEvent(new Event("asin_history_changed"));
 
 // ─── localStorage fallback ────────────────────────────────────────────────────
@@ -58,6 +53,10 @@ function lsGet(): HistoryEntry[] {
 }
 function lsSave(entries: HistoryEntry[]) {
   localStorage.setItem(LS_KEY, JSON.stringify(entries.slice(0, LS_MAX)));
+}
+
+function credFetch(url: string, options?: RequestInit) {
+  return fetch(url, { ...options, credentials: "include" });
 }
 
 // ─── addHistory ───────────────────────────────────────────────────────────────
@@ -71,51 +70,46 @@ export async function addHistory(
     timestamp: Date.now(),
   };
 
-  const token = getBearerToken();
-
-  if (token) {
-    try {
-      await fetch(`${BACKEND}/api/search/save`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          asin:                 full.asin,
-          title:                full.title,
-          brand:                full.brand,
-          image:                full.image,
-          category:             full.category,
-          sellingPrice:         full.sellingPrice,
-          medianPrice:          full.medianPrice ?? full.sellingPrice,
-          profit:               full.profit,
-          roi:                  full.roi,
-          margin:               scoreResult?.margin ?? 0,
-          decision:             full.decision,
-          score:                full.total,
-          maxScore:             full.maxTotal,
-          pct:                  scoreResult?.pct ?? 0,
-          referralFee:          scoreResult?.referralFee ?? 0,
-          fbaFee:               scoreResult?.fbaFee ?? 0,
-          storageFee:           scoreResult?.storageFee ?? 0,
-          totalFees:            scoreResult?.totalFees ?? 0,
-          cogs:                 scoreResult?.cogs ?? 0,
-          breakEven:            scoreResult?.breakEven ?? 0,
-          rejectionReasons:     full.rejectionReasons,
-          currentRank:          full.currentRank,
-          avgRank90:            full.avgRank90,
-          currentRating:        full.rating,
-          currentReviewCount:   full.reviewCount,
-          currentFbaCount:      full.fbaSellerCount,
-          monthlySalesEstimate: full.monthlySalesEstimate,
-          monthlyRevenue:       full.monthlyRevenue,
-          isHazmat:             full.isHazmat,
-          amazonIsSeller:       full.amazonIsSeller,
-        }),
-      });
-    } catch (e) {
-      console.warn("History DB save failed, falling back to localStorage:", e);
-      lsSave([full, ...lsGet()]);
-    }
-  } else {
+  try {
+    const resp = await credFetch(`${BACKEND}/api/search/save`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        asin:                 full.asin,
+        title:                full.title,
+        brand:                full.brand,
+        image:                full.image,
+        category:             full.category,
+        sellingPrice:         full.sellingPrice,
+        medianPrice:          full.medianPrice ?? full.sellingPrice,
+        profit:               full.profit,
+        roi:                  full.roi,
+        margin:               scoreResult?.margin ?? 0,
+        decision:             full.decision,
+        score:                full.total,
+        maxScore:             full.maxTotal,
+        pct:                  scoreResult?.pct ?? 0,
+        referralFee:          scoreResult?.referralFee ?? 0,
+        fbaFee:               scoreResult?.fbaFee ?? 0,
+        storageFee:           scoreResult?.storageFee ?? 0,
+        totalFees:            scoreResult?.totalFees ?? 0,
+        cogs:                 scoreResult?.cogs ?? 0,
+        breakEven:            scoreResult?.breakEven ?? 0,
+        rejectionReasons:     full.rejectionReasons,
+        currentRank:          full.currentRank,
+        avgRank90:            full.avgRank90,
+        currentRating:        full.rating,
+        currentReviewCount:   full.reviewCount,
+        currentFbaCount:      full.fbaSellerCount,
+        monthlySalesEstimate: full.monthlySalesEstimate,
+        monthlyRevenue:       full.monthlyRevenue,
+        isHazmat:             full.isHazmat,
+        amazonIsSeller:       full.amazonIsSeller,
+      }),
+    });
+    if (!resp.ok) throw new Error("save failed");
+  } catch (e) {
+    console.warn("History DB save failed, falling back to localStorage:", e);
     lsSave([full, ...lsGet()]);
   }
 
@@ -125,65 +119,48 @@ export async function addHistory(
 
 // ─── getHistory ───────────────────────────────────────────────────────────────
 export async function getHistory(): Promise<HistoryEntry[]> {
-  const token = getBearerToken();
+  try {
+    const resp = await credFetch(`${BACKEND}/api/search/history?limit=200`);
+    if (!resp.ok) throw new Error("DB fetch failed");
+    const json = await resp.json();
+    const entries = json?.data?.entries ?? [];
 
-  if (token) {
-    try {
-      const resp = await fetch(`${BACKEND}/api/search/history?limit=200`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!resp.ok) throw new Error("DB fetch failed");
-      const json = await resp.json();
-      const entries = json?.data?.entries ?? [];
-
-      // Prisma returns camelCase field names
-      return entries.map((row: any): HistoryEntry => ({
-        id:               row.id,
-        timestamp:        new Date(row.createdAt).getTime(),
-        asin:             row.asin,
-        title:            row.title,
-        brand:            row.brand,
-        image:            row.image,
-        category:         row.category,
-        decision:         row.decision,
-        total:            row.score ?? 0,
-        maxTotal:         row.maxScore ?? 104,
-        pct:              row.scorePct,
-        sellingPrice:     row.sellingPrice ?? 0,
-        profit:           row.profitPerUnit ?? 0,
-        roi:              row.roiPct ?? 0,
-        rejectionReasons: row.rejectionReasons ?? [],
-        currentRank:      row.currentBsr,
-        avgRank90:        row.avgBsr90d,
-        rating:           row.rating,
-        reviewCount:      row.reviewCount,
-        fbaSellerCount:   row.fbaSellerCount,
-        monthlySalesEstimate: row.monthlySalesEst,
-        monthlyRevenue:   row.monthlyRevenue,
-        isHazmat:         row.isHazmat,
-        amazonIsSeller:   row.amazonIsSeller,
-      }));
-    } catch {
-      return lsGet();
-    }
+    return entries.map((row: any): HistoryEntry => ({
+      id:               row.id,
+      timestamp:        new Date(row.createdAt).getTime(),
+      asin:             row.asin,
+      title:            row.title,
+      brand:            row.brand,
+      image:            row.image,
+      category:         row.category,
+      decision:         row.decision,
+      total:            row.score ?? 0,
+      maxTotal:         row.maxScore ?? 104,
+      pct:              row.scorePct,
+      sellingPrice:     row.sellingPrice ?? 0,
+      profit:           row.profitPerUnit ?? 0,
+      roi:              row.roiPct ?? 0,
+      rejectionReasons: row.rejectionReasons ?? [],
+      currentRank:      row.currentBsr,
+      avgRank90:        row.avgBsr90d,
+      rating:           row.rating,
+      reviewCount:      row.reviewCount,
+      fbaSellerCount:   row.fbaSellerCount,
+      monthlySalesEstimate: row.monthlySalesEst,
+      monthlyRevenue:   row.monthlyRevenue,
+      isHazmat:         row.isHazmat,
+      amazonIsSeller:   row.amazonIsSeller,
+    }));
+  } catch {
+    return lsGet();
   }
-
-  return lsGet();
 }
 
 // ─── removeHistory ────────────────────────────────────────────────────────────
 export async function removeHistory(id: string): Promise<void> {
-  const token = getBearerToken();
-  if (token) {
-    try {
-      await fetch(`${BACKEND}/api/search/${id}`, {
-        method:  "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    } catch {
-      lsSave(lsGet().filter((e) => e.id !== id));
-    }
-  } else {
+  try {
+    await credFetch(`${BACKEND}/api/search/${id}`, { method: "DELETE" });
+  } catch {
     lsSave(lsGet().filter((e) => e.id !== id));
   }
   notify();
@@ -191,17 +168,9 @@ export async function removeHistory(id: string): Promise<void> {
 
 // ─── clearHistory ─────────────────────────────────────────────────────────────
 export async function clearHistory(): Promise<void> {
-  const token = getBearerToken();
-  if (token) {
-    try {
-      await fetch(`${BACKEND}/api/search/clear/all`, {
-        method:  "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    } catch {
-      localStorage.removeItem(LS_KEY);
-    }
-  } else {
+  try {
+    await credFetch(`${BACKEND}/api/search/clear/all`, { method: "DELETE" });
+  } catch {
     localStorage.removeItem(LS_KEY);
   }
   notify();
