@@ -142,7 +142,7 @@ export default function BrandIntelligence() {
         <div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold">Brand Intelligence</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Enter an ASIN to auto-fill brand data, then complete the remaining fields and evaluate.
+            Enter an ASIN to auto fill brand data, then complete the remaining fields and evaluate.
           </p>
         </div>
         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-primary shadow-elegant">
@@ -160,7 +160,7 @@ export default function BrandIntelligence() {
                 <Sparkles className="h-4 w-4 text-primary" /> Auto-fill from ASIN
               </CardTitle>
               <CardDescription className="text-xs">
-                Enter a sample ASIN from this brand — brand name, category, ratings, FBA sellers, hazmat status and more will be auto-filled.
+                Enter a sample ASIN from this brand and brand name, category, ratings, FBA sellers, hazmat status and more will be auto filled.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -180,7 +180,7 @@ export default function BrandIntelligence() {
               {fetchError && <p className="text-xs text-destructive">{fetchError}</p>}
               {autoFilled.size > 0 && (
                 <p className="text-xs text-primary">
-                  ✓ {autoFilled.size} fields auto-filled — review and adjust below if needed.
+                  ✓ {autoFilled.size} fields auto filled review and adjust below if needed.
                 </p>
               )}
             </CardContent>
