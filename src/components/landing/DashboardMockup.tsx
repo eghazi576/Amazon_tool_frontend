@@ -12,7 +12,7 @@ const DashboardMockup = () => (
         <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
         <span className="h-3 w-3 rounded-full bg-emerald-500/70" />
       </div>
-      <span className="text-[11px] text-muted-foreground">wholesaleos.ai</span>
+      <span className="text-[11px] text-muted-foreground">thewholesaleos.com</span>
       <div className="h-4 w-16 rounded-full bg-muted/60" />
     </div>
 
