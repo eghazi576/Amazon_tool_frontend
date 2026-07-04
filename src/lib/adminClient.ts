@@ -1,7 +1,7 @@
 import { type ScoringConfig } from "./scoring";
 import { type BrandScoringConfig } from "./brandScoring";
 
-const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+const BACKEND = import.meta.env.VITE_BACKEND_URL ?? "";
 
 function authHeaders() {
   const token = localStorage.getItem("auth_token");

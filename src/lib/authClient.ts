@@ -1,4 +1,4 @@
-const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+const BACKEND = import.meta.env.VITE_BACKEND_URL ?? "";
 
 const TOKEN_KEY = "auth_token";
 const USER_KEY  = "auth_user";
