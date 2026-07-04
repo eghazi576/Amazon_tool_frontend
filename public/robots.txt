@@ -17,4 +17,4 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
-Sitemap: https://wholesaleos.ai/sitemap.xml
+Sitemap: https://thewholesaleos.com/sitemap.xml
