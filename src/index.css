@@ -197,9 +197,10 @@
 
   .glass {
     background: hsl(240 14% 8% / 0.88);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: saturate(180%) blur(8px);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
     border: 1px solid hsl(240 10% 20% / 0.5);
+    transform: translateZ(0);
   }
 
   .glass-card {
@@ -260,7 +261,10 @@
 
   .light .glass {
     background: hsl(0 0% 100% / 0.93);
+    backdrop-filter: saturate(180%) blur(8px);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
     border: 1px solid hsl(240 10% 80% / 0.6);
+    transform: translateZ(0);
   }
 
   .light .glass-card {
@@ -351,11 +355,7 @@
   }
 }
 
-/* ── Performance: skip rendering of offscreen landing sections ─────────────── */
-section[id] {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 600px;
-}
+/* content-visibility removed — caused layout shift/glitch on scroll */
 
 /* ── Respect prefers-reduced-motion ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

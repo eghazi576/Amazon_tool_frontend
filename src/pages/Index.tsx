@@ -15,7 +15,7 @@ const Index = () => (
     {/* ── Fixed background — composited GPU layer, never repaints on scroll ── */}
     <div
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 0, transform: "translateZ(0)", willChange: "transform" }}
       aria-hidden="true"
     >
       <div className="absolute inset-0 grid-pattern" />
