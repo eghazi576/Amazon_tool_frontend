@@ -50,7 +50,7 @@ const Footer = () => {
 
           {/* Product column */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Product</h4>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Product</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="#about" className="transition-colors hover:text-foreground">About</a></li>
               <li><a href="#features" className="transition-colors hover:text-foreground">Features</a></li>
@@ -72,7 +72,7 @@ const Footer = () => {
 
           {/* Account column */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Account</h4>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Account</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li>
                 <Link to="/sign-in" className="transition-colors hover:text-foreground">Sign in</Link>
@@ -91,7 +91,7 @@ const Footer = () => {
 
           {/* Legal column */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Legal</h4>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Legal</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li><a href="#" className="transition-colors hover:text-foreground">Privacy Policy</a></li>
               <li><a href="#" className="transition-colors hover:text-foreground">Terms of Service</a></li>
