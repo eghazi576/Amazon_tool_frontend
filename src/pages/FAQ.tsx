@@ -1,14 +1,18 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Sparkles, HelpCircle } from "lucide-react";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
+import Seo from "@/components/Seo";
+import { faqPageSchema } from "@/lib/jsonld";
+import { routeMeta } from "@/lib/routes.js";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+const meta = routeMeta("/faq");
 
 // ─── FAQ Data ────────────────────────────────────────────────────────────────
 
@@ -130,32 +134,20 @@ const categories = [
 
 // ─── JSON-LD FAQ Schema (GEO / structured data) ──────────────────────────────
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: categories.flatMap((cat) =>
-    cat.faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    }))
-  ),
-};
+const faqSchema = faqPageSchema(categories.flatMap((cat) => cat.faqs));
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function FAQPage() {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(faqSchema);
-    script.id = "faq-schema";
-    document.head.appendChild(script);
-    return () => { document.getElementById("faq-schema")?.remove(); };
-  }, []);
-
   return (
     <div className="relative min-h-screen bg-background font-sans text-foreground">
+
+      <Seo
+        title={meta.title}
+        description={meta.description}
+        path={meta.path}
+        jsonLd={faqSchema}
+      />
 
       <Navbar />
 

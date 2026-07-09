@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 import Index from "./pages/Index.tsx";
+import FAQ from "./pages/FAQ.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
@@ -54,6 +55,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/"                element={<Index />} />
+            <Route path="/faq"             element={<FAQ />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
             <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
