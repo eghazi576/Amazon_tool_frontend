@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-seo-files.mjs",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/generate-seo-files.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "seo:files": "node scripts/generate-seo-files.mjs"
+    "seo:files": "node scripts/generate-seo-files.mjs",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -86,6 +86,11 @@ const Seo = ({
 
     // Page-scoped JSON-LD. The sitewide Organization node in index.html carries
     // no data-seo-jsonld attribute, so it is never touched here.
+    //
+    // Clear before appending: on a prerendered route the snapshot already contains
+    // these tags, and hydration would otherwise append a duplicate set.
+    document.head.querySelectorAll("script[data-seo-jsonld]").forEach((n) => n.remove());
+
     const nodes = (jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []).map((schema) => {
       const script = document.createElement("script");
       script.type = "application/ld+json";
