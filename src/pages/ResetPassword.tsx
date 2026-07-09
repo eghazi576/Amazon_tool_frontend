@@ -9,6 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import Seo from "@/components/Seo";
+import { routeMeta } from "@/lib/routes.js";
+
+const meta = routeMeta("/reset-password");
 
 const schema = z.object({
   password: z.string().min(8, { message: "At least 8 characters" }).max(100),
@@ -38,6 +42,8 @@ const ResetPassword = () => {
         subtitle="This reset link is missing a token."
         footer={<Link to="/forgot-password" className="font-medium text-primary hover:underline">Request a new link</Link>}
       >
+        <Seo title={meta.title} description={meta.description} path={meta.path} noindex />
+
         <p className="text-sm text-muted-foreground text-center">
           Please request a new password reset link.
         </p>
@@ -79,6 +85,8 @@ const ResetPassword = () => {
         </Link>
       }
     >
+      <Seo title={meta.title} description={meta.description} path={meta.path} noindex />
+
       {done ? (
         <div className="flex flex-col items-center gap-4 py-2 text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/15">
