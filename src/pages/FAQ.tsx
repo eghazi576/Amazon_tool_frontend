@@ -184,7 +184,9 @@ export default function FAQPage() {
                     <AccordionTrigger className="text-left text-sm font-medium leading-snug hover:no-underline">
                       {faq.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                    {/* forceMount: see FAQSection.tsx. The answers must exist in the
+                        HTML, because faqPageSchema() publishes them as structured data. */}
+                    <AccordionContent forceMount className="text-sm leading-relaxed text-muted-foreground">
                       {faq.a}
                     </AccordionContent>
                   </AccordionItem>

@@ -39,7 +39,10 @@ const FAQSection = () => {
               <AccordionTrigger className="text-left text-sm font-medium leading-snug hover:no-underline">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+              {/* forceMount keeps the answer in the DOM while collapsed. Radix still
+                  applies hidden={!open}, so nothing changes visually -- but the text
+                  now exists in the HTML that the FAQPage JSON-LD claims to describe. */}
+              <AccordionContent forceMount className="text-sm leading-relaxed text-muted-foreground">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>

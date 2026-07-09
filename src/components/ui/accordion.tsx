@@ -40,7 +40,12 @@ const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    // data-[state=closed]:h-0 is required by the FAQ accordions, which pass forceMount so
+    // their answers stay in the HTML for crawlers and the FAQPage JSON-LD. Radix only
+    // applies hidden={!open} on its unmount path, and animate-accordion-up has no
+    // fill-mode, so a force-mounted closed panel would spring back to height:auto and
+    // render expanded. A no-op for accordions that unmount normally.
+    className="overflow-hidden text-sm transition-all data-[state=closed]:h-0 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
     <div className={cn("pb-4 pt-0", className)}>{children}</div>
