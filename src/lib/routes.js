@@ -33,36 +33,36 @@ export const canonical = (path) => new URL(path, SITE_URL).href;
 export const ROUTES = [
   {
     path: "/",
-    title: "WholesaleOS | The AI-Powered Wholesale Analyst for Amazon Sellers",
+    title: "WholesaleOS | AI Wholesale Analyst for Amazon Sellers",
     description:
-      "WholesaleOS is the AI-powered operating system for Amazon wholesale sellers. Research products, analyze profitability, vet brands, monitor competitors, and manage suppliers from one platform.",
+      "Research Amazon products, score wholesale brands, and get a buy or no-buy verdict in seconds. Live Keepa data, profit math, and IP checks in one tool.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "weekly", priority: "1.0" },
   },
   {
     path: "/faq",
-    title: "Frequently Asked Questions | WholesaleOS",
+    title: "WholesaleOS FAQ | Amazon FBA Product & Brand Research",
     description:
-      "How the 15-criteria product viability score works, how Brand Intelligence vets wholesale brands across 11 criteria, where the live Keepa data comes from, and how accurate the monthly sales estimates really are.",
+      "How the 15-criteria viability score works, how Brand Intelligence vets wholesale brands, where the live Keepa data comes from, and how accurate estimates are.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.7" },
   },
   {
     path: "/sign-up",
-    title: "Create Your Free Account | WholesaleOS",
+    title: "Create Your Free WholesaleOS Account | Amazon FBA Tool",
     description:
-      "Create a free WholesaleOS account and run a full market analysis on your first Amazon ASIN in under three seconds. No credit card required.",
+      "Create a free WholesaleOS account and run a full market analysis on your first Amazon ASIN in under three seconds. No credit card required to get started.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.8" },
   },
   {
     path: "/sign-in",
-    title: "Sign In | WholesaleOS",
+    title: "Sign In to WholesaleOS | Amazon FBA Product Research",
     description:
-      "Sign in to WholesaleOS to research Amazon products, score wholesale brands, and review your saved search history.",
+      "Sign in to WholesaleOS to research Amazon products, score wholesale brands, and review every product lookup and brand evaluation saved to your account.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.5" },
