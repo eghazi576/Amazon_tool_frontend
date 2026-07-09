@@ -32,6 +32,21 @@ const NAV_TIMEOUT_MS = 30_000;
 const outputPath = (route) =>
   route === "/" ? "index.html" : join(route.replace(/^\//, ""), "index.html");
 
+/**
+ * dist/index.html is both the homepage and nginx's SPA fallback for every route
+ * that was not prerendered (/dashboard, /admin, unknown paths). Those routes
+ * would otherwise paint the homepage for as long as the JS bundle takes to boot.
+ *
+ * Hide #root when the fallback shell is serving a URL that is not "/". main.tsx
+ * drops the class as soon as React takes over. If JS never runs, a non-prerendered
+ * route renders blank -- which is exactly what it did before prerendering existed.
+ */
+const FALLBACK_GUARD = `    <script>
+      if (location.pathname !== "/") document.documentElement.classList.add("spa-fallback");
+    </script>
+    <style>html.spa-fallback #root { display: none }</style>
+`;
+
 const server = await preview({
   preview: { port: PORT, strictPort: true },
   logLevel: "warn",
@@ -91,6 +106,8 @@ try {
       // The readiness flag is a build-time signal, not something to ship. Leaving
       // it in would also make a re-run of this script snapshot before hydration.
       html = html.replace(/\s*data-seo-ready="true"/, "");
+
+      if (route === "/") html = html.replace("</head>", `${FALLBACK_GUARD}  </head>`);
 
       snapshots.set(route, html);
 
