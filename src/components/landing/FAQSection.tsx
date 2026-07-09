@@ -49,8 +49,8 @@ const FAQSection = () => {
         {/* Bottom CTA */}
         <p className="mt-10 text-center text-sm text-muted-foreground">
           Still have questions?{" "}
-          <a href="mailto:support@wholesaleos.ai" className="text-primary underline underline-offset-2 hover:opacity-80">
-            support@wholesaleos.ai
+          <a href="mailto:support@wholesaleos.com" className="text-primary underline underline-offset-2 hover:opacity-80">
+            support@wholesaleos.com
           </a>
         </p>
       </div>

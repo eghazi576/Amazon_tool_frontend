@@ -126,7 +126,7 @@ const categories = [
       },
       {
         q: "How do I contact support?",
-        a: "You can reach the WholesaleOS team by email at support@wholesaleos.ai. We respond to all enquiries within 24 hours on business days.",
+        a: "You can reach the WholesaleOS team by email at support@wholesaleos.com. We respond to all enquiries within 24 hours on business days.",
       },
     ],
   },
@@ -199,8 +199,8 @@ export default function FAQPage() {
           <h2 className="font-display text-xl font-bold">Still have questions?</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Reach us at{" "}
-            <a href="mailto:support@wholesaleos.ai" className="text-primary underline underline-offset-2">
-              support@wholesaleos.ai
+            <a href="mailto:support@wholesaleos.com" className="text-primary underline underline-offset-2">
+              support@wholesaleos.com
             </a>{" "}
             or just start using the tool — most answers become obvious once you try it.
           </p>
