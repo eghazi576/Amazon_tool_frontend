@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, LogIn, Zap, TrendingUp, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -47,30 +48,36 @@ const Hero = () => (
           Built for Amazon Wholesale Sellers
         </div>
 
-        {/* Headline — word-by-word stagger */}
+        {/* Headline — word-by-word stagger.
+            Each word sits in its own span for the animation, separated by real
+            whitespace text nodes. Without them the h1's textContent collapses to
+            "TheAI-PoweredWholesale..." — the visual gap came from a margin, which
+            crawlers and screen readers do not see. The margin is gone; the space
+            now does the spacing. */}
         <h1 className="mt-6 font-display text-5xl font-bold leading-[1.1] tracking-tight md:text-7xl" style={{ perspective: "600px" }}>
           <span className="block">
             {line1.map((word, i) => (
-              <span
-                key={word}
-                className="animate-word-up inline-block mr-[0.25em]"
-                style={{ animationDelay: `${0.08 + i * 0.1}s` }}
-              >
-                {word}
-              </span>
+              <Fragment key={word}>
+                <span
+                  className="animate-word-up inline-block"
+                  style={{ animationDelay: `${0.08 + i * 0.1}s` }}
+                >
+                  {word}
+                </span>{" "}
+              </Fragment>
             ))}
           </span>
           <span className="block mt-1">
             {line2.map((word, i) => (
-              <span
-                key={word}
-                className="animate-word-up inline-block mr-[0.25em]"
-                style={{ animationDelay: `${0.28 + i * 0.1}s` }}
-              >
-                {word}
-              </span>
+              <Fragment key={word}>
+                <span
+                  className="animate-word-up inline-block"
+                  style={{ animationDelay: `${0.28 + i * 0.1}s` }}
+                >
+                  {word}
+                </span>{" "}
+              </Fragment>
             ))}
-            {" "}
             <span
               className="animate-word-up inline-block gradient-text"
               style={{ animationDelay: "0.58s" }}

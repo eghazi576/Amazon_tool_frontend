@@ -6,11 +6,24 @@ import GraphPreview from "@/components/landing/GraphPreview";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Benefits from "@/components/landing/Benefits";
 import FAQSection from "@/components/landing/FAQSection";
+import { homepageFaqs } from "@/components/landing/faqs";
 import FinalCTA from "@/components/landing/FinalCTA";
 import Footer from "@/components/landing/Footer";
+import Seo from "@/components/Seo";
+import { faqPageSchema, softwareApplicationSchema } from "@/lib/jsonld";
+import { routeMeta } from "@/lib/routes.js";
+
+const meta = routeMeta("/");
 
 const Index = () => (
   <div className="relative min-h-screen bg-background font-sans text-foreground overflow-x-hidden">
+
+    <Seo
+      title={meta.title}
+      description={meta.description}
+      path={meta.path}
+      jsonLd={[softwareApplicationSchema, faqPageSchema(homepageFaqs)]}
+    />
 
     {/* ── Fixed background — composited GPU layer, never repaints on scroll ── */}
     <div

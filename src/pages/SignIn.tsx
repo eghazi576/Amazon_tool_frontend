@@ -9,6 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import Seo from "@/components/Seo";
+import { routeMeta } from "@/lib/routes.js";
+
+const meta = routeMeta("/sign-in");
 
 const schema = z.object({
   email:    z.string().trim().email({ message: "Enter a valid email" }).max(255),
@@ -53,6 +57,8 @@ const SignIn = () => {
       subtitle="Sign in to your account"
       footer={<>Don't have an account?{" "}<Link to="/sign-up" className="font-medium text-primary hover:underline">Sign up</Link></>}
     >
+      <Seo title={meta.title} description={meta.description} path={meta.path} />
+
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>

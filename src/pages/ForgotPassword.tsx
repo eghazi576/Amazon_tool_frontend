@@ -8,6 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import Seo from "@/components/Seo";
+import { routeMeta } from "@/lib/routes.js";
+
+const meta = routeMeta("/forgot-password");
 
 const schema = z.object({
   email: z.string().trim().email({ message: "Enter a valid email" }).max(255),
@@ -58,6 +62,8 @@ const ForgotPassword = () => {
         </Link>
       }
     >
+      <Seo title={meta.title} description={meta.description} path={meta.path} noindex />
+
       {sent ? (
         <div className="flex flex-col items-center gap-4 py-2 text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/15">

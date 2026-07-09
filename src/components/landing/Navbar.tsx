@@ -23,7 +23,7 @@ const Navbar = () => {
       <nav className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold">
-          <img src="/logo.png" alt="WholesaleOS" className="h-9 w-9 rounded-lg object-cover" />
+          <img src="/logo.png" alt="" className="h-9 w-9 rounded-lg object-cover" />
           <span className="gradient-text">WholesaleOS</span>
         </Link>
 

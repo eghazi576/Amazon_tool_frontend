@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/generate-seo-files.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seo:files": "node scripts/generate-seo-files.mjs",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -81,6 +83,7 @@
     "jsdom": "^20.0.3",
     "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
+    "puppeteer": "^24.43.1",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
