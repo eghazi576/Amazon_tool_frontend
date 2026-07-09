@@ -1,5 +1,6 @@
+import { useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -45,6 +46,25 @@ function GuestOnly({ children }: { children: JSX.Element }) {
   return children;
 }
 
+/**
+ * Entry animations are suppressed on the first paint of a prerendered route,
+ * whose content is already on screen (index.css, `html[data-prerendered]`).
+ * Once the user navigates, pages are built by React from nothing and should
+ * animate in as designed, so drop the flag on the first route change.
+ */
+function ReleasePrerenderedAnimations() {
+  const { pathname } = useLocation();
+  const initial = useRef(pathname);
+
+  useEffect(() => {
+    if (pathname !== initial.current) {
+      delete document.documentElement.dataset.prerendered;
+    }
+  }, [pathname]);
+
+  return null;
+}
+
 const App = () => (
   <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
   <QueryClientProvider client={queryClient}>
@@ -53,6 +73,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ReleasePrerenderedAnimations />
           <Routes>
             <Route path="/"                element={<Index />} />
             <Route path="/faq"             element={<FAQ />} />

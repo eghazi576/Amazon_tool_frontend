@@ -101,6 +101,13 @@ try {
       // Every prerendered route renders exactly one <h1>.
       await page.waitForSelector("h1");
 
+      // Record which route this snapshot is for. index.css uses the attribute's
+      // presence to skip entry animations on the paint that already shows content;
+      // main.tsx drops it when the snapshot does not match the URL being served.
+      await page.evaluate((r) => {
+        document.documentElement.dataset.prerendered = r;
+      }, route);
+
       let html = await page.content();
 
       // The readiness flag is a build-time signal, not something to ship. Leaving
