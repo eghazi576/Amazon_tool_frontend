@@ -58,14 +58,20 @@ export const ROUTES = [
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.8" },
   },
+  // A login form has nothing to offer a searcher, and Google says so. Kept
+  // prerendered (link previews, and a noindex only counts if it can be read)
+  // but marked noindex and dropped from the sitemap.
+  //
+  // /sign-up above stays indexable on purpose: it is a real landing page with
+  // unique copy, and it is where "wholesaleos sign up" should land.
   {
     path: "/sign-in",
     title: "Sign In to WholesaleOS | Amazon FBA Product Research",
     description:
       "Sign in to WholesaleOS to research Amazon products, score wholesale brands, and review every product lookup and brand evaluation saved to your account.",
-    index: true,
+    index: false,
     prerender: true,
-    sitemap: { changefreq: "monthly", priority: "0.5" },
+    sitemap: null,
   },
 
   // Publicly reachable, but thin and not worth indexing. Prerendering them buys

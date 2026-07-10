@@ -6,11 +6,10 @@ import GraphPreview from "@/components/landing/GraphPreview";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Benefits from "@/components/landing/Benefits";
 import FAQSection from "@/components/landing/FAQSection";
-import { homepageFaqs } from "@/components/landing/faqs";
 import FinalCTA from "@/components/landing/FinalCTA";
 import Footer from "@/components/landing/Footer";
 import Seo from "@/components/Seo";
-import { faqPageSchema, softwareApplicationSchema } from "@/lib/jsonld";
+import { softwareApplicationSchema } from "@/lib/jsonld";
 import { routeMeta } from "@/lib/routes.js";
 
 const meta = routeMeta("/");
@@ -18,11 +17,16 @@ const meta = routeMeta("/");
 const Index = () => (
   <div className="relative min-h-screen bg-background font-sans text-foreground overflow-x-hidden">
 
+    {/* No FAQPage schema here. Ten of the homepage's questions are also on /faq,
+        and publishing the same Q&A as structured data on two URLs invites Google
+        to treat one as a duplicate. /faq owns the schema; this section keeps the
+        visible copy and links there. */}
     <Seo
       title={meta.title}
       description={meta.description}
       path={meta.path}
-      jsonLd={[softwareApplicationSchema, faqPageSchema(homepageFaqs)]}
+      noindex={!meta.index}
+      jsonLd={softwareApplicationSchema}
     />
 
     {/* ── Fixed background — composited GPU layer, never repaints on scroll ── */}

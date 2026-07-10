@@ -62,7 +62,7 @@ const ForgotPassword = () => {
         </Link>
       }
     >
-      <Seo title={meta.title} description={meta.description} path={meta.path} noindex />
+      <Seo title={meta.title} description={meta.description} path={meta.path} noindex={!meta.index} />
 
       {sent ? (
         <div className="flex flex-col items-center gap-4 py-2 text-center">

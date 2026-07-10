@@ -16,10 +16,18 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://www.thewholesaleos.com/" />
 
-    <!-- Fonts -->
+    <!-- Fonts: preload + onload so they never block the first paint. display=swap. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    </noscript>
 
     <!-- Open Graph -->
     <meta property="og:type"        content="website" />
@@ -28,23 +36,16 @@
     <meta property="og:title"       content="WholesaleOS | AI Wholesale Analyst for Amazon Sellers" />
     <meta property="og:description" content="Paste an Amazon ASIN and get live price history, BSR trends, profit margins, and a buy/no-buy verdict in seconds. Built for FBA wholesale sellers." />
     <meta property="og:image"       content="https://www.thewholesaleos.com/og-image.png" />
-    <meta property="og:image:width"  content="1200" />
-    <meta property="og:image:height" content="630" />
+    <!-- og:image:width/height omitted until public/og-image.png is a real 1200x630. -->
     <meta property="og:image:alt"    content="WholesaleOS — Amazon FBA Product Research Tool" />
 
-    <!-- Twitter / X -->
+    <!-- Twitter / X. No twitter:site: the @wholesaleoscom handle does not exist. -->
     <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:site"        content="@wholesaleoscom" />
     <meta name="twitter:title"       content="WholesaleOS | AI Wholesale Analyst for Amazon Sellers" />
     <meta name="twitter:description" content="Paste an Amazon ASIN and get live price history, BSR trends, profit margins, and a buy/no-buy verdict in seconds." />
     <meta name="twitter:image"       content="https://www.thewholesaleos.com/og-image.png" />
 
-    <!--
-      JSON-LD: Organization (sitewide).
-      SoftwareApplication is homepage-scoped and is emitted by <Seo> in
-      src/pages/Index.tsx; the prerenderer bakes it into dist/index.html.
-      Note: this node carries no data-seo-jsonld attribute, so <Seo> leaves it alone.
-    -->
+    <!-- JSON-LD: Organization (sitewide). SoftwareApplication is homepage-scoped, emitted by <Seo>. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
