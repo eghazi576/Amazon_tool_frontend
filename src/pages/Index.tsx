@@ -25,6 +25,7 @@ const Index = () => (
       title={meta.title}
       description={meta.description}
       path={meta.path}
+      noindex={!meta.index}
       jsonLd={softwareApplicationSchema}
     />
 

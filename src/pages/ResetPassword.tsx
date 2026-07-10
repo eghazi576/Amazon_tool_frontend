@@ -42,7 +42,7 @@ const ResetPassword = () => {
         subtitle="This reset link is missing a token."
         footer={<Link to="/forgot-password" className="font-medium text-primary hover:underline">Request a new link</Link>}
       >
-        <Seo title={meta.title} description={meta.description} path={meta.path} noindex />
+        <Seo title={meta.title} description={meta.description} path={meta.path} noindex={!meta.index} />
 
         <p className="text-sm text-muted-foreground text-center">
           Please request a new password reset link.
@@ -85,7 +85,7 @@ const ResetPassword = () => {
         </Link>
       }
     >
-      <Seo title={meta.title} description={meta.description} path={meta.path} noindex />
+      <Seo title={meta.title} description={meta.description} path={meta.path} noindex={!meta.index} />
 
       {done ? (
         <div className="flex flex-col items-center gap-4 py-2 text-center">
