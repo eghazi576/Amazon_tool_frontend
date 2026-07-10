@@ -70,73 +70,93 @@ let failed = 0;
  */
 const snapshots = new Map();
 
-try {
-  for (const route of PRERENDER_ROUTES) {
-    const page = await browser.newPage();
-    page.setDefaultTimeout(NAV_TIMEOUT_MS);
+/**
+ * Load one URL, wait for React to settle, and return the rendered HTML.
+ * `label` and `dest` are for logging only. Returns null on failure.
+ */
+async function capture(url, { label, dest, isPrerenderedRoute }) {
+  const page = await browser.newPage();
+  page.setDefaultTimeout(NAV_TIMEOUT_MS);
 
-    // Keep the snapshot hermetic. Google Fonts and the backend API are both
-    // reachable from a dev machine and both would make the build nondeterministic
-    // (or, for /api/auth/me, could resolve a real session into the HTML).
-    // Blocking them leaves the <link> and <script> tags in place; only the
-    // network fetch is skipped. AuthContext catches the failure and settles as
-    // logged-out, which is exactly the state a crawler should see.
-    await page.setRequestInterception(true);
-    page.on("request", (req) => {
-      const url = req.url();
-      const external = !url.startsWith(base) && !url.startsWith("data:");
-      if (external || url.includes("/api/")) req.abort().catch(() => {});
-      else req.continue().catch(() => {});
-    });
+  // Keep the snapshot hermetic. Google Fonts and the backend API are both
+  // reachable from a dev machine and both would make the build nondeterministic
+  // (or, for /api/auth/me, could resolve a real session into the HTML).
+  // Blocking them leaves the <link> and <script> tags in place; only the
+  // network fetch is skipped. AuthContext catches the failure and settles as
+  // logged-out, which is exactly the state a crawler should see.
+  await page.setRequestInterception(true);
+  page.on("request", (req) => {
+    const u = req.url();
+    const external = !u.startsWith(base) && !u.startsWith("data:");
+    if (external || u.includes("/api/")) req.abort().catch(() => {});
+    else req.continue().catch(() => {});
+  });
 
-    const errors = [];
-    page.on("pageerror", (err) => errors.push(err.message));
+  const errors = [];
+  page.on("pageerror", (err) => errors.push(err.message));
 
-    try {
-      await page.goto(`${base}${route}`, { waitUntil: "domcontentloaded" });
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded" });
 
-      // <Seo> sets this once it has written <head>. Waiting on it (rather than a
-      // fixed sleep) is what guarantees the snapshot has real metadata.
-      await page.waitForSelector("html[data-seo-ready='true']");
-      // Every prerendered route renders exactly one <h1>.
-      await page.waitForSelector("h1");
+    // <Seo> sets this once it has written <head>. Waiting on it (rather than a
+    // fixed sleep) is what guarantees the snapshot has real metadata.
+    await page.waitForSelector("html[data-seo-ready='true']");
+    // Every page we snapshot renders exactly one <h1> (NotFound's is "404").
+    await page.waitForSelector("h1");
 
-      // Record which route this snapshot is for. index.css uses the attribute's
-      // presence to skip entry animations on the paint that already shows content;
-      // main.tsx drops it when the snapshot does not match the URL being served.
+    if (isPrerenderedRoute) {
+      // index.css skips entry animations on the paint that already shows content;
+      // main.tsx drops the attribute when it does not match the served URL.
       await page.evaluate((r) => {
         document.documentElement.dataset.prerendered = r;
-      }, route);
-
-      let html = await page.content();
-
-      // The readiness flag is a build-time signal, not something to ship. Leaving
-      // it in would also make a re-run of this script snapshot before hydration.
-      html = html.replace(/\s*data-seo-ready="true"/, "");
-
-      if (route === "/") html = html.replace("</head>", `${FALLBACK_GUARD}  </head>`);
-
-      snapshots.set(route, html);
-
-      const h1Count = await page.$$eval("h1", (els) => els.length);
-      const h1 = await page.$eval("h1", (el) => el.textContent.trim().replace(/\s+/g, " "));
-      const title = await page.title();
-      console.log(`[prerender] ${route.padEnd(12)} -> ${outputPath(route).padEnd(18)} ${(html.length / 1024).toFixed(1)} kB`);
-      console.log(`[prerender]   title: ${title}`);
-      console.log(`[prerender]   h1:    ${h1.slice(0, 70)}${h1Count === 1 ? "" : `   <-- ${h1Count} h1 tags!`}`);
-      if (h1Count !== 1) {
-        failed++;
-        console.error(`[prerender]   expected exactly one <h1> on ${route}, found ${h1Count}`);
-      }
-      if (errors.length) console.warn(`[prerender]   page errors: ${errors.join("; ")}`);
-    } catch (err) {
-      failed++;
-      console.error(`[prerender] FAILED ${route}: ${err.message}`);
-      if (errors.length) console.error(`[prerender]   page errors: ${errors.join("; ")}`);
-    } finally {
-      await page.close();
+      }, isPrerenderedRoute);
     }
+
+    let html = await page.content();
+    html = html.replace(/\s*data-seo-ready="true"/, "");
+    if (isPrerenderedRoute === "/") html = html.replace("</head>", `${FALLBACK_GUARD}  </head>`);
+
+    const h1Count = await page.$$eval("h1", (els) => els.length);
+    const h1 = await page.$eval("h1", (el) => el.textContent.trim().replace(/\s+/g, " "));
+    console.log(`[prerender] ${label.padEnd(12)} -> ${dest.padEnd(18)} ${(html.length / 1024).toFixed(1)} kB`);
+    console.log(`[prerender]   title: ${await page.title()}`);
+    console.log(`[prerender]   h1:    ${h1.slice(0, 70)}${h1Count === 1 ? "" : `   <-- ${h1Count} h1 tags!`}`);
+    if (h1Count !== 1) {
+      failed++;
+      console.error(`[prerender]   expected exactly one <h1> on ${label}, found ${h1Count}`);
+    }
+    if (errors.length) console.warn(`[prerender]   page errors: ${errors.join("; ")}`);
+    return html;
+  } catch (err) {
+    failed++;
+    console.error(`[prerender] FAILED ${label}: ${err.message}`);
+    if (errors.length) console.error(`[prerender]   page errors: ${errors.join("; ")}`);
+    return null;
+  } finally {
+    await page.close();
   }
+}
+
+try {
+  for (const route of PRERENDER_ROUTES) {
+    const html = await capture(`${base}${route}`, {
+      label: route,
+      dest: outputPath(route),
+      isPrerenderedRoute: route,
+    });
+    if (html) snapshots.set(outputPath(route), html);
+  }
+
+  // A real 404 page. nginx serves this with a 404 status for any path that is
+  // neither a prerendered file nor a known client route, which turns the old
+  // soft 404 (unknown URL -> homepage, HTTP 200) into an honest one. The URL is
+  // deliberately one no route matches, so the SPA falls through to NotFound.
+  // NotFound is noindex, so its bogus canonical never matters.
+  const notFound = await capture(`${base}/__prerender_404__`, {
+    label: "404",
+    dest: "404.html",
+  });
+  if (notFound) snapshots.set("404.html", notFound);
 } finally {
   await browser.close();
   await (server.close?.() ?? new Promise((r) => server.httpServer.close(r)));
@@ -148,11 +168,12 @@ if (failed) {
   process.exit(1);
 }
 
-// Server is down and every route captured -- safe to overwrite dist now.
-for (const [route, html] of snapshots) {
-  const dest = resolve(DIST, outputPath(route));
+// Server is down and every route captured -- safe to overwrite dist now. Keys
+// are already dist-relative paths ("index.html", "faq/index.html", "404.html").
+for (const [rel, html] of snapshots) {
+  const dest = resolve(DIST, rel);
   await mkdir(dirname(dest), { recursive: true });
   await writeFile(dest, html, "utf8");
 }
 
-console.log(`[prerender] ${snapshots.size} route(s) prerendered`);
+console.log(`[prerender] ${snapshots.size} file(s) written`);
