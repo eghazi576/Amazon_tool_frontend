@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Suspense, lazy, useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
@@ -14,14 +14,22 @@ import SignUp from "./pages/SignUp.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import DashboardLayout from "./components/dashboard/DashboardLayout.tsx";
-import Overview from "./pages/dashboard/Overview.tsx";
-import ProductResearch from "./pages/dashboard/ProductResearch.tsx";
-import HistoryPage from "./pages/dashboard/History.tsx";
-import ReportsPage from "./pages/dashboard/Reports.tsx";
-import BrandIntelligence from "./pages/dashboard/BrandIntelligence.tsx";
-import { AIInsights, Settings } from "./pages/dashboard/Stubs.tsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
+
+// The public marketing routes stay eagerly imported: they are prerendered and
+// must paint without waiting on a second request.
+//
+// Everything behind RequireAuth/RequireAdmin is code-split. It is ~185 kB of
+// source and pulls in recharts, none of which a visitor reading the homepage
+// will ever execute. Splitting it keeps that weight out of the entry chunk.
+const DashboardLayout   = lazy(() => import("./components/dashboard/DashboardLayout.tsx"));
+const Overview          = lazy(() => import("./pages/dashboard/Overview.tsx"));
+const ProductResearch   = lazy(() => import("./pages/dashboard/ProductResearch.tsx"));
+const HistoryPage       = lazy(() => import("./pages/dashboard/History.tsx"));
+const ReportsPage       = lazy(() => import("./pages/dashboard/Reports.tsx"));
+const BrandIntelligence = lazy(() => import("./pages/dashboard/BrandIntelligence.tsx"));
+const AdminDashboard    = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
+const AIInsights = lazy(() => import("./pages/dashboard/Stubs.tsx").then((m) => ({ default: m.AIInsights })));
+const Settings   = lazy(() => import("./pages/dashboard/Stubs.tsx").then((m) => ({ default: m.Settings })));
 
 const queryClient = new QueryClient();
 
@@ -74,6 +82,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ReleasePrerenderedAnimations />
+          {/* fallback={null} matches what RequireAuth already renders while the
+              session resolves, so a lazy chunk loading looks no different. */}
+          <Suspense fallback={null}>
           <Routes>
             <Route path="/"                element={<Index />} />
             <Route path="/faq"             element={<FAQ />} />
@@ -96,6 +107,7 @@ const App = () => (
             <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
