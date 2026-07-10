@@ -16,10 +16,29 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://www.thewholesaleos.com/" />
 
-    <!-- Fonts -->
+    <!--
+      Fonts, loaded without blocking the first paint.
+
+      The pages are prerendered, so the HTML paints as soon as it arrives. A
+      plain <link rel="stylesheet"> to fonts.googleapis.com held that paint
+      hostage to a DNS lookup, a TLS handshake and a round trip to a third party.
+
+      rel="preload" fetches at high priority without blocking; onload promotes it
+      to a stylesheet. The URL already carries display=swap, so text renders in
+      the fallback face and swaps when Inter arrives -- the same swap as before,
+      just no longer waiting for it to start.
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    </noscript>
 
     <!-- Open Graph -->
     <meta property="og:type"        content="website" />
