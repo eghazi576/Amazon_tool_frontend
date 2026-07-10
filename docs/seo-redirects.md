@@ -91,7 +91,7 @@ curl -sI https://thewholesaleos.com/faq | head -2
 #         location: https://www.thewholesaleos.com/faq
 ```
 
-## 3. nginx must serve the prerendered directories
+## 3. nginx — DONE (2026-07-10)
 
 `scripts/prerender.mjs` writes one file per public route:
 
@@ -102,42 +102,69 @@ dist/sign-up/index.html    ->  /sign-up
 dist/sign-in/index.html    ->  /sign-in
 ```
 
-The live config (mirrored in the backend repo at `nginx.conf.example`) uses:
+The old config had two bugs, both fixed on the droplet and now reflected in the
+backend repo's `nginx.conf.example` and `setup-droplet.sh`:
 
 ```nginx
+# before
 location / {
     try_files $uri $uri/ /index.html;
 }
-```
 
-The `$uri/` branch resolves `/faq` to the *directory* `dist/faq/`, and nginx's
-`index` module answers a directory request that lacks a trailing slash with a
-`301 /faq/`. That would leave `/faq` redirecting to `/faq/` while every canonical
-tag, sitemap entry, and internal link says `/faq` — a needless hop and a
-canonical/served-URL mismatch.
+# after
+absolute_redirect off;
 
-Match the file directly instead:
-
-```nginx
 location / {
     try_files $uri $uri/index.html /index.html;
 }
 ```
 
-`/faq` now resolves to `dist/faq/index.html` with no redirect, and anything that
-matches no file still falls back to the SPA shell.
+**`$uri/` matched the directory.** It resolved `/faq` to `dist/faq/`, and nginx's
+`index` module answers a slash-less directory request with a `301 /faq/` — while
+every canonical tag and sitemap entry says `/faq`. Matching `$uri/index.html`
+serves the file directly, no redirect.
 
-**Verify on the droplet before relying on it** — this is the one item here I could
-not test locally, and the `$uri/` behaviour is worth confirming rather than
-trusting a comment:
+**The redirect also downgraded HTTPS.** Cloudflare terminates TLS, so the origin
+always sees `$scheme = http` and nginx emitted `Location: http://www.…/faq/`.
+`absolute_redirect off` makes nginx send a relative `Location`, preserving the
+browser's scheme.
 
-```bash
-curl -sI https://www.thewholesaleos.com/faq | head -2   # expect 200, not 301
+Measured before and after:
+
+```
+before:  GET /faq -> 301  Location: http://www.thewholesaleos.com/faq/
+after:   GET /faq -> 200  hops=0   https://www.thewholesaleos.com/faq
 ```
 
-That file lives in the **backend** repository, which is a separate git repo from
-this one, and the deploy workflow never copies it to the server. Changing it is a
-separate change in that repo, plus a manual install on the droplet.
+### Two traps found while doing this
+
+**`sites-enabled/amazon-tool` was a plain file, not a symlink.** It had diverged
+from `sites-available/amazon-tool`: nginx served one, every edit landed in the
+other, and `nginx -t` passed either way. The live copy carried the real
+hostnames, `root /var/www/amazon-frontend` (no `/dist`), and a set of
+`deny all` blocks for dotfiles, `.env`, `.key`, `.pem` — none of which existed in
+`sites-available`. Always check first:
+
+```bash
+ls -l /etc/nginx/sites-enabled/amazon-tool     # expect  l...  -> ../sites-available/...
+diff /etc/nginx/sites-{available,enabled}/amazon-tool
+```
+
+**`root` is `/var/www/amazon-frontend`, not `.../dist`.** The frontend deploy
+scps `dist/*` with `strip_components: 1`, so the built files land one level up.
+`setup-droplet.sh` claimed `.../dist` and would have 404'd every route on a
+rebuilt droplet.
+
+### Never put the host/protocol redirects here
+
+Under Cloudflare's **Flexible** SSL mode the origin always sees `$scheme = http`.
+A redirect keyed on `$scheme` therefore loops forever: browser asks over https,
+Cloudflare fetches over http, nginx 301s to https, repeat. The apex→www and
+http→https redirects belong in Cloudflare (sections 1 and 2), not in nginx.
+
+The nginx config lives in the **backend** repository, which is a separate git repo,
+and the frontend deploy workflow never copies it to the server. Changes there need
+a manual install on the droplet.
 
 ## 4. Known gap: the soft 404
 
@@ -168,7 +195,11 @@ and all three live outside this repository.
 
 - [ ] Always Use HTTPS enabled
 - [ ] Apex → www 301 redirect rule live and verified with `curl -sI`
-- [ ] nginx `try_files` updated and `/faq` returns 200 with no redirect
+- [x] nginx `try_files` + `absolute_redirect off`; `/faq` returns `200 hops=0` (2026-07-10)
+- [x] `robots.txt` serving the www sitemap (the stale 4h edge cache expired on its own)
+- [ ] `sites-enabled/amazon-tool` restored to a symlink of `sites-available`
+- [ ] Real assets: `logo.png`, `og-image.png` and `favicon.png` are currently the
+      same 669×373 file, and `og:image` declares a 1200×630 it does not have
 - [ ] Search Console property for `https://www.thewholesaleos.com` verified,
       sitemap `https://www.thewholesaleos.com/sitemap.xml` submitted
 - [ ] Soft-404 approach chosen
