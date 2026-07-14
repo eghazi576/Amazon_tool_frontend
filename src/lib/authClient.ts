@@ -75,3 +75,17 @@ export function apiResetPassword(token: string, password: string) {
     body:   JSON.stringify({ token, password }),
   }, false);
 }
+
+/**
+ * Permanently delete the account, its search history and its brand evaluations.
+ *
+ * The password is required by the server, not just the session cookie: a stolen
+ * session should not be enough to destroy someone's data. `retry: false` matters
+ * here -- there is no session left to refresh afterwards.
+ */
+export function apiDeleteAccount(password: string) {
+  return apiFetch("/api/auth/account", {
+    method: "DELETE",
+    body:   JSON.stringify({ password }),
+  }, false) as Promise<void>;
+}
