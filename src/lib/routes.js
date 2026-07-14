@@ -74,6 +74,37 @@ export const ROUTES = [
     sitemap: null,
   },
 
+  // Legal pages. Indexable and prerendered -- they are a trust signal Google
+  // looks for, and a footer link to a dead "#" is worse than no link at all.
+  // Low sitemap priority: real, but not what we want to rank for.
+  {
+    path: "/privacy",
+    title: "Privacy Policy | WholesaleOS",
+    description:
+      "What WholesaleOS collects and what it never does. No analytics, no advertising trackers, no selling of your data, and no cookies at all on the public pages.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "yearly", priority: "0.3" },
+  },
+  {
+    path: "/terms",
+    title: "Terms of Service | WholesaleOS",
+    description:
+      "The agreement between you and WholesaleOS, including the data-accuracy disclaimer and our independence from Amazon. Sales figures are estimates, not guarantees.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "yearly", priority: "0.3" },
+  },
+  {
+    path: "/cookies",
+    title: "Cookie Policy | WholesaleOS",
+    description:
+      "WholesaleOS sets two cookies, both strictly necessary to keep you signed in, and both httpOnly. There are no analytics, advertising or tracking cookies.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "yearly", priority: "0.3" },
+  },
+
   // Publicly reachable, but thin and not worth indexing. Prerendering them buys
   // nothing (they are behind an email link) and they stay out of the sitemap.
   {
