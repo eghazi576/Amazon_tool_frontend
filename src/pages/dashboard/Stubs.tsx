@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Sparkles, Settings as SettingsIcon } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const Stub = ({ icon: Icon, title, desc }: any) => (
   <div className="container mx-auto p-4 sm:p-6 lg:p-8">
@@ -25,6 +25,6 @@ const Stub = ({ icon: Icon, title, desc }: any) => (
 export const AIInsights = () => (
   <Stub icon={Sparkles} title="AI Insights" desc="Conversational analysis on your tracked products." />
 );
-export const Settings = () => (
-  <Stub icon={SettingsIcon} title="Settings" desc="Workspace preferences and API quota." />
-);
+
+// Settings is no longer a stub -- it is the account-deletion page.
+// See src/pages/dashboard/Settings.tsx

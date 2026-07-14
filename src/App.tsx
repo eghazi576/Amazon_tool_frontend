@@ -32,7 +32,7 @@ const ReportsPage       = lazy(() => import("./pages/dashboard/Reports.tsx"));
 const BrandIntelligence = lazy(() => import("./pages/dashboard/BrandIntelligence.tsx"));
 const AdminDashboard    = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
 const AIInsights = lazy(() => import("./pages/dashboard/Stubs.tsx").then((m) => ({ default: m.AIInsights })));
-const Settings   = lazy(() => import("./pages/dashboard/Stubs.tsx").then((m) => ({ default: m.Settings })));
+const Settings   = lazy(() => import("./pages/dashboard/Settings.tsx"));
 
 const queryClient = new QueryClient();
 
