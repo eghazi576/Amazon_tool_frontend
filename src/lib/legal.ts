@@ -34,11 +34,19 @@ export const ADDRESS_LINE = `${ADDRESS.street}, ${ADDRESS.city}, ${ADDRESS.regio
 
 export const PHONE = "+1 (505) 378-4031";
 
-/** Contact for privacy, data and legal requests. */
-export const LEGAL_EMAIL = "mentifyllc@gmail.com";
+/**
+ * The one address the company actually reads. Support, privacy and legal all land
+ * here on purpose.
+ *
+ * It used to be support@wholesaleos.com in the UI and the schema. That mailbox is
+ * not monitored, so every page, every mailto: and the FAQPage/Organization JSON-LD
+ * now import this constant -- a published contact address nobody reads is worse
+ * than no address at all, and hardcoding it in six files is how it drifted before.
+ */
+export const CONTACT_EMAIL = "mentifyllc@gmail.com";
 
-/** Contact for product support (the address the app and FAQ already use). */
-export const SUPPORT_EMAIL = "support@wholesaleos.com";
+/** @deprecated Use CONTACT_EMAIL. Kept as an alias so imports stay obvious. */
+export const LEGAL_EMAIL = CONTACT_EMAIL;
 
 /** Governing law and the forum for disputes. */
 export const JURISDICTION = "the State of New Mexico, United States";

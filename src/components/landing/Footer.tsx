@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Sparkles, Mail } from "lucide-react";
+import { CONTACT_EMAIL } from "@/lib/legal";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -29,7 +30,7 @@ const Footer = () => {
             */}
             <div className="mt-6 flex items-center gap-3">
               <a
-                href="mailto:support@wholesaleos.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-muted/40 text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
                 aria-label="Email WholesaleOS support"
               >
