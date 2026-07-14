@@ -1,5 +1,18 @@
 node_modules
 
-.env
 dev.log
 dist
+
+# ── Secrets ──────────────────────────────────────────────────────────────────
+# Every .env variant, not just ".env" -- a stray .env.local or .env.production
+# holds exactly the same secrets and was not covered before.
+.env
+.env.*
+!.env.example
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
