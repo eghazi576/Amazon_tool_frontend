@@ -9,6 +9,9 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 import Index from "./pages/Index.tsx";
 import FAQ from "./pages/FAQ.tsx";
+import Privacy from "./pages/legal/Privacy.tsx";
+import Terms from "./pages/legal/Terms.tsx";
+import Cookies from "./pages/legal/Cookies.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
@@ -88,6 +91,9 @@ const App = () => (
           <Routes>
             <Route path="/"                element={<Index />} />
             <Route path="/faq"             element={<FAQ />} />
+            <Route path="/privacy"         element={<Privacy />} />
+            <Route path="/terms"           element={<Terms />} />
+            <Route path="/cookies"         element={<Cookies />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
             <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
