@@ -45,7 +45,7 @@ Decision: APPROVED if all hard checks pass and weighted score is 70% or above.
 - who.is: domain and business registration verification
 
 ## Contact
-support@wholesaleos.ai
+mentifyllc@gmail.com
 
 ## Website
 https://wholesaleos.ai

@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { homepageFaqs as faqs } from "./faqs";
+import { CONTACT_EMAIL } from "@/lib/legal";
 
 
 
@@ -52,8 +53,8 @@ const FAQSection = () => {
         {/* Bottom CTA */}
         <p className="mt-10 text-center text-sm text-muted-foreground">
           Still have questions?{" "}
-          <a href="mailto:support@wholesaleos.com" className="text-primary underline underline-offset-2 hover:opacity-80">
-            support@wholesaleos.com
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary underline underline-offset-2 hover:opacity-80">
+            {CONTACT_EMAIL}
           </a>
         </p>
       </div>
