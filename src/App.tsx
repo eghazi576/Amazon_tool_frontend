@@ -14,6 +14,7 @@ import Terms from "./pages/legal/Terms.tsx";
 import Cookies from "./pages/legal/Cookies.tsx";
 import CompareIndex from "./pages/compare/CompareIndex.tsx";
 import ComparePage from "./pages/compare/ComparePage.tsx";
+import BestWholesaleTools from "./pages/guides/BestWholesaleTools.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
@@ -98,6 +99,7 @@ const App = () => (
             <Route path="/cookies"         element={<Cookies />} />
             <Route path="/compare"         element={<CompareIndex />} />
             <Route path="/compare/:slug"   element={<ComparePage />} />
+            <Route path="/best-amazon-wholesale-tools" element={<BestWholesaleTools />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
             <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
