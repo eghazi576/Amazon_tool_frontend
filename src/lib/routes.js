@@ -49,6 +49,56 @@ export const ROUTES = [
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.7" },
   },
+
+  // Comparison pages. High commercial intent, low competition, and exactly the
+  // kind of balanced side-by-side content AI answer engines cite. Each names one
+  // competitor. The body lives in src/lib/comparisons.ts; only SEO metadata is
+  // here. Keep the two in sync when adding a comparison.
+  {
+    path: "/compare",
+    title: "WholesaleOS Comparisons | vs Keepa, Jungle Scout, Helium 10",
+    description:
+      "Honest side-by-side comparisons of WholesaleOS against Keepa, Jungle Scout, Helium 10 and SellerAmp for Amazon wholesale and online-arbitrage sourcing.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-keepa",
+    title: "WholesaleOS vs Keepa | Scored Verdict vs Raw Data",
+    description:
+      "WholesaleOS is built on the Keepa API and adds a scored buy/no-buy verdict, profit maths and brand vetting on top of Keepa's price and BSR history. Compared fairly.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-jungle-scout",
+    title: "WholesaleOS vs Jungle Scout | Wholesale Scoring vs Suite",
+    description:
+      "A focused wholesale and brand-scoring tool versus a broad product-research suite. When to choose WholesaleOS and when Jungle Scout fits better — compared honestly.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-helium-10",
+    title: "WholesaleOS vs Helium 10 | Focused Tool vs All-in-One",
+    description:
+      "A focused product and wholesale-brand scoring tool versus a large all-in-one Amazon suite. Where each one wins, and how to choose — a fair side-by-side.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-selleramp",
+    title: "WholesaleOS vs SellerAmp | Structured Scoring vs Sourcing",
+    description:
+      "Both are sourcing-decision tools. WholesaleOS adds weighted 15-criteria product scoring and dedicated 11-criteria wholesale brand vetting. Compared fairly.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
   {
     path: "/sign-up",
     title: "Create Your Free WholesaleOS Account | Amazon FBA Tool",
