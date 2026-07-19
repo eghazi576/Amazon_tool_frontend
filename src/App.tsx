@@ -12,6 +12,8 @@ import FAQ from "./pages/FAQ.tsx";
 import Privacy from "./pages/legal/Privacy.tsx";
 import Terms from "./pages/legal/Terms.tsx";
 import Cookies from "./pages/legal/Cookies.tsx";
+import CompareIndex from "./pages/compare/CompareIndex.tsx";
+import ComparePage from "./pages/compare/ComparePage.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
@@ -94,6 +96,8 @@ const App = () => (
             <Route path="/privacy"         element={<Privacy />} />
             <Route path="/terms"           element={<Terms />} />
             <Route path="/cookies"         element={<Cookies />} />
+            <Route path="/compare"         element={<CompareIndex />} />
+            <Route path="/compare/:slug"   element={<ComparePage />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
             <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
