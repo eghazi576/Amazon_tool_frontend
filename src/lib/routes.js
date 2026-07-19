@@ -55,6 +55,15 @@ export const ROUTES = [
   // competitor. The body lives in src/lib/comparisons.ts; only SEO metadata is
   // here. Keep the two in sync when adding a comparison.
   {
+    path: "/best-amazon-wholesale-tools",
+    title: "Best Amazon Wholesale & Sourcing Tools (2026 Guide)",
+    description:
+      "A categorised guide to the Amazon wholesale and sourcing tool landscape — Keepa, Jungle Scout, Helium 10, Tactical Arbitrage, SmartScout and more, grouped by the job each does.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.7" },
+  },
+  {
     path: "/compare",
     title: "WholesaleOS Comparisons | vs Keepa, Jungle Scout, Helium 10",
     description:
