@@ -100,6 +100,42 @@ export const ROUTES = [
     sitemap: { changefreq: "monthly", priority: "0.6" },
   },
   {
+    path: "/compare/wholesaleos-vs-amzscout",
+    title: "WholesaleOS vs AMZScout | Wholesale Scoring vs Discovery",
+    description:
+      "A focused wholesale and brand-scoring tool versus a product-discovery suite. When AMZScout fits and when WholesaleOS does — an honest side-by-side.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-tactical-arbitrage",
+    title: "WholesaleOS vs Tactical Arbitrage | Score Deals vs Scan Sources",
+    description:
+      "Tactical Arbitrage scans sources at scale to find candidates; WholesaleOS scores a candidate or brand with a verdict. Two halves of sourcing, compared fairly.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-smartscout",
+    title: "WholesaleOS vs SmartScout | Score a Brand vs Discover Brands",
+    description:
+      "SmartScout discovers brands across the catalogue; WholesaleOS scores a specific brand's wholesale viability across 11 criteria. A fair brand-level comparison.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/compare/wholesaleos-vs-seller-assistant",
+    title: "WholesaleOS vs Seller Assistant | Structured Scoring vs Inline",
+    description:
+      "Both target online-arbitrage and wholesale sourcing. WholesaleOS returns a weighted score and brand verdict; Seller Assistant works inline as an extension.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
     path: "/sign-up",
     title: "Create Your Free WholesaleOS Account | Amazon FBA Tool",
     description:
