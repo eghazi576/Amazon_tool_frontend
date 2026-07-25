@@ -121,7 +121,7 @@ const ComparePage = () => {
         {/* FAQ — plain text so it is in the HTML the schema describes */}
         <section className="mt-12">
           <h2 className="font-display text-xl font-bold tracking-tight">
-            WholesaleOS vs {c.competitor} — common questions
+            WholesaleOS vs {c.competitor}: common questions
           </h2>
           <div className="mt-4 space-y-6">
             {c.faqs.map((f) => (

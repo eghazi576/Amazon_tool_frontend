@@ -35,7 +35,7 @@ type Category = { title: string; blurb: string; tools: Tool[] };
 const CATEGORIES: Category[] = [
   {
     title: "Market data & price history",
-    blurb: "The underlying data layer — price and Best Seller Rank history over time. Most other tools, WholesaleOS included, build on this.",
+    blurb: "The underlying data layer: price and Best Seller Rank history over time. Most other tools, WholesaleOS included, build on this.",
     tools: [
       { name: "Keepa", compareSlug: "wholesaleos-vs-keepa", bestFor: "The reference price and BSR history, via extension and API" },
     ],
@@ -51,7 +51,7 @@ const CATEGORIES: Category[] = [
   },
   {
     title: "Sourcing & buy / no-buy decisions",
-    blurb: "Tools for deciding whether a specific product is worth buying to resell — the step after you have a candidate.",
+    blurb: "Tools for deciding whether a specific product is worth buying to resell, the step after you have a candidate.",
     tools: [
       { name: "SellerAmp (SAS)", compareSlug: "wholesaleos-vs-selleramp", bestFor: "Fast product analysis and a mobile scanner" },
       { name: "Seller Assistant", compareSlug: "wholesaleos-vs-seller-assistant", bestFor: "Inline profit and restriction checks while you browse" },
@@ -67,7 +67,7 @@ const CATEGORIES: Category[] = [
   },
   {
     title: "Brand research & wholesale brand vetting",
-    blurb: "Working at the brand level — discovering brands, and vetting whether a brand is a safe wholesale opportunity.",
+    blurb: "Working at the brand level: discovering brands, and vetting whether a brand is a safe wholesale opportunity.",
     tools: [
       { name: "SmartScout", compareSlug: "wholesaleos-vs-smartscout", bestFor: "Discovering brands and exploring the catalogue" },
       { name: "WholesaleOS", us: true, bestFor: "An 11-criteria APPROVED/REJECTED verdict on a wholesale brand" },
@@ -78,15 +78,15 @@ const CATEGORIES: Category[] = [
 const FAQS = [
   {
     q: "What is the best Amazon wholesale tool?",
-    a: "There is no single best tool — it depends on the job. Keepa is the reference for market data; Jungle Scout, Helium 10 and AMZScout are broad research suites; Tactical Arbitrage scans sources in bulk; SellerAmp, Seller Assistant and WholesaleOS help decide on a specific product; and SmartScout and WholesaleOS work at the brand level. The right choice is the one that matches the step you are stuck on.",
+    a: "There is no single best tool. It depends on the job. Keepa is the reference for market data; Jungle Scout, Helium 10 and AMZScout are broad research suites; Tactical Arbitrage scans sources in bulk; SellerAmp, Seller Assistant and WholesaleOS help decide on a specific product; and SmartScout and WholesaleOS work at the brand level. The right choice is the one that matches the step you are stuck on.",
   },
   {
     q: "Which tool is best for vetting wholesale brands?",
-    a: "Wholesale brand vetting is a specific, underserved job. WholesaleOS is built for it: its Brand Intelligence module scores a brand across 11 criteria — website and business verification, IP complaint history, hazmat catalogue percentage, FBA seller density, sales velocity and more — and returns an APPROVED or REJECTED verdict before you invest time in a supplier.",
+    a: "Wholesale brand vetting is a specific, underserved job. WholesaleOS is built for it: its Brand Intelligence module scores a brand across 11 criteria: website and business verification, IP complaint history, hazmat catalogue percentage, FBA seller density, sales velocity and more, and returns an APPROVED or REJECTED verdict before you invest time in a supplier.",
   },
   {
     q: "Do I need more than one Amazon tool?",
-    a: "Often, yes — because the tools solve different steps. A common setup pairs a data or discovery tool to find candidates with a scoring tool to decide on them. For example, you might scan sources with a bulk tool, then score the shortlist and vet the brand with WholesaleOS.",
+    a: "Often, yes, because the tools solve different steps. A common setup pairs a data or discovery tool to find candidates with a scoring tool to decide on them. For example, you might scan sources with a bulk tool, then score the shortlist and vet the brand with WholesaleOS.",
   },
   {
     q: "What is a good free or low-cost way to start?",
@@ -106,7 +106,7 @@ const BestWholesaleTools = () => (
         The best Amazon wholesale &amp; sourcing tools
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-        There is no single &ldquo;best&rdquo; Amazon tool — the right one depends on which step you are on.
+        There is no single &ldquo;best&rdquo; Amazon tool. The right one depends on which step you are on.
         This guide maps the landscape by the job each tool does, so you can match the tool to your bottleneck
         rather than the loudest brand. It is written by the team behind WholesaleOS, and we have kept our own
         product to the categories it genuinely serves.
@@ -119,7 +119,7 @@ const BestWholesaleTools = () => (
           {[
             "Are you finding candidates, or deciding on one you already have? Discovery suites and decision tools are different jobs.",
             "Product level or brand level? Vetting a wholesale brand's risk is a distinct task from analysing a single ASIN.",
-            "What is your model — private label, online arbitrage, or wholesale? Tools lean towards one.",
+            "What is your model: private label, online arbitrage, or wholesale? Tools lean towards one.",
             "Do you want raw data to interpret, or a scored verdict? Both are valid; they suit different working styles.",
           ].map((li) => (
             <li key={li} className="flex gap-2 text-sm text-muted-foreground">
@@ -167,7 +167,7 @@ const BestWholesaleTools = () => (
           product with a weighted 15-criteria verdict (EXCELLENT to REJECT, with hard-reject checks for IP
           complaints, hazmat and authenticity), and it vets a wholesale brand across 11 criteria with an
           APPROVED or REJECTED result. Both run on live Keepa data. If your bottleneck is deciding on a deal or
-          a brand — rather than discovering ideas or scanning at scale — that focus is the point.
+          a brand, rather than discovering ideas or scanning at scale, that focus is the point.
         </p>
       </section>
 

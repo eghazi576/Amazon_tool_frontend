@@ -20,7 +20,7 @@ const CompareIndex = () => (
         WholesaleOS compared to other Amazon tools
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-        Honest, side-by-side comparisons — including when the other tool is the better choice.
+        Honest, side-by-side comparisons, including when the other tool is the better choice.
         WholesaleOS is a focused product and wholesale-brand scoring tool built on live Keepa data.
       </p>
 

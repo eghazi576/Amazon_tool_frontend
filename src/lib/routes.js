@@ -58,7 +58,7 @@ export const ROUTES = [
     path: "/best-amazon-wholesale-tools",
     title: "Best Amazon Wholesale & Sourcing Tools (2026 Guide)",
     description:
-      "A categorised guide to the Amazon wholesale and sourcing tool landscape — Keepa, Jungle Scout, Helium 10, Tactical Arbitrage, SmartScout and more, grouped by the job each does.",
+      "A categorised guide to the Amazon wholesale and sourcing tool landscape: Keepa, Jungle Scout, Helium 10, Tactical Arbitrage, SmartScout and more, grouped by the job each does.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.7" },
@@ -85,7 +85,7 @@ export const ROUTES = [
     path: "/compare/wholesaleos-vs-jungle-scout",
     title: "WholesaleOS vs Jungle Scout | Wholesale Scoring vs Suite",
     description:
-      "A focused wholesale and brand-scoring tool versus a broad product-research suite. When to choose WholesaleOS and when Jungle Scout fits better — compared honestly.",
+      "A focused wholesale and brand-scoring tool versus a broad product-research suite. When to choose WholesaleOS and when Jungle Scout fits better, compared honestly.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.6" },
@@ -94,7 +94,7 @@ export const ROUTES = [
     path: "/compare/wholesaleos-vs-helium-10",
     title: "WholesaleOS vs Helium 10 | Focused Tool vs All-in-One",
     description:
-      "A focused product and wholesale-brand scoring tool versus a large all-in-one Amazon suite. Where each one wins, and how to choose — a fair side-by-side.",
+      "A focused product and wholesale-brand scoring tool versus a large all-in-one Amazon suite. Where each one wins, and how to choose, a fair side-by-side.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.6" },
@@ -112,7 +112,7 @@ export const ROUTES = [
     path: "/compare/wholesaleos-vs-amzscout",
     title: "WholesaleOS vs AMZScout | Wholesale Scoring vs Discovery",
     description:
-      "A focused wholesale and brand-scoring tool versus a product-discovery suite. When AMZScout fits and when WholesaleOS does — an honest side-by-side.",
+      "A focused wholesale and brand-scoring tool versus a product-discovery suite. When AMZScout fits and when WholesaleOS does, an honest side-by-side.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.6" },
@@ -185,7 +185,7 @@ export const ROUTES = [
     path: "/legal",
     title: "Legal Information | WholesaleOS",
     description:
-      "The policies that govern your use of WholesaleOS by Mentify LLC — Privacy Policy, Terms of Service and Cookie Policy — plus intellectual-property, disclaimer and contact terms in one place.",
+      "The policies that govern your use of WholesaleOS by Mentify LLC: the Privacy Policy, Terms of Service and Cookie Policy, plus intellectual-property, disclaimer and contact terms in one place.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "yearly", priority: "0.3" },
