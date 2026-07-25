@@ -97,7 +97,7 @@ const SignUp = () => {
         </div>
         <label className="flex cursor-pointer items-start gap-2 text-sm text-muted-foreground">
           <Checkbox className="mt-0.5" checked={terms} onCheckedChange={(v) => setTerms(!!v)} />
-          <span>I agree to the <a href="#" className="text-primary hover:underline">Terms</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a></span>
+          <span>I agree to the <Link to="/terms" className="text-primary hover:underline">Terms</Link> and <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link></span>
         </label>
         {errors.terms && <p className="text-xs text-destructive">{errors.terms}</p>}
         <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
@@ -105,6 +105,32 @@ const SignUp = () => {
           {loading ? "Creating account..." : "Create account"}
         </Button>
       </form>
+
+      {/*
+        A real landing section, not filler: /sign-up is indexable on purpose and
+        is where "wholesaleos sign up" should rank, so it carries genuine copy and
+        a couple of internal links rather than a bare form. Every claim here is one
+        the product actually delivers.
+      */}
+      <div className="mt-8 border-t border-border/60 pt-6 text-sm text-muted-foreground">
+        <p className="font-medium text-foreground">What you get with a free account</p>
+        <ul className="mt-3 space-y-2">
+          <li>Analyze any Amazon ASIN with live Keepa data: 90-day price and Best Seller Rank history, FBA seller count, and a monthly sales estimate.</li>
+          <li>A scored buy or no-buy verdict across 15 weighted criteria, with hard-reject checks for IP complaints, hazmat and authenticity.</li>
+          <li>A built-in FBA profit calculator that works out referral fees, fulfillment, storage, net profit, ROI and break-even for you.</li>
+          <li>Brand Intelligence that vets a wholesale brand across 11 criteria before you ever contact a supplier.</li>
+          <li>Your full research history saved to your account, so you can pick up exactly where you left off.</li>
+        </ul>
+        <p className="mt-4">
+          WholesaleOS is built for Amazon wholesale, FBA and online-arbitrage sellers who want a fast,
+          structured sourcing decision instead of raw charts to interpret. Creating an account takes under
+          a minute, and no credit card is required to run your first analysis. Want the detail first? Read
+          the <Link to="/faq" className="text-primary hover:underline">FAQ</Link> on how the scoring and
+          brand vetting work, or see how WholesaleOS{" "}
+          <Link to="/compare" className="text-primary hover:underline">compares with other Amazon tools</Link>{" "}
+          such as Keepa, Jungle Scout and Helium 10.
+        </p>
+      </div>
     </AuthLayout>
   );
 };

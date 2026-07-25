@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import Seo from "@/components/Seo";
 import { routeMeta } from "@/lib/routes.js";
 import { faqPageSchema } from "@/lib/jsonld";
-import { comparisonBySlug } from "@/lib/comparisons";
+import { comparisonBySlug, COMPARISONS } from "@/lib/comparisons";
 
 /**
  * One template renders every /compare/<slug> page. The prerenderer visits each
@@ -148,12 +148,41 @@ const ComparePage = () => {
           </Button>
         </div>
 
-        <nav className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-border/60 pt-8 text-sm">
-          <span className="text-muted-foreground">More comparisons:</span>
-          <Link to="/compare" className="text-primary underline underline-offset-2 hover:opacity-80">
-            All comparisons
-          </Link>
-        </nav>
+        {/*
+          Cross-link every other comparison, the index and the landscape guide.
+          Each /compare page is otherwise reachable only from the index, which
+          leaves the cluster thinly linked; linking siblings gives crawlers (and
+          readers) a real path between them.
+        */}
+        <section className="mt-10 border-t border-border/60 pt-8">
+          <h2 className="font-display text-lg font-bold tracking-tight">Other comparisons</h2>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {COMPARISONS.filter((o) => o.slug !== c.slug).map((o) => (
+              <li key={o.slug}>
+                <Link
+                  to={`/compare/${o.slug}`}
+                  className="text-sm text-primary underline underline-offset-2 hover:opacity-80"
+                >
+                  WholesaleOS vs {o.competitor}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-sm text-muted-foreground">
+            See the full{" "}
+            <Link to="/compare" className="text-primary underline underline-offset-2 hover:opacity-80">
+              comparison index
+            </Link>{" "}
+            or the{" "}
+            <Link
+              to="/best-amazon-wholesale-tools"
+              className="text-primary underline underline-offset-2 hover:opacity-80"
+            >
+              best Amazon wholesale tools guide
+            </Link>
+            .
+          </p>
+        </section>
       </main>
 
       <Footer />

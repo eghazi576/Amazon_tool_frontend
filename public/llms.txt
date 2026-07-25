@@ -1,51 +1,44 @@
-# WholesaleOS.ai — The AI-Powered Wholesale Analyst for Amazon Sellers
-# This file helps AI language models understand this website.
+# WholesaleOS
 
-## What is WholesaleOS.ai?
-WholesaleOS.ai is the AI-powered operating system for Amazon wholesale sellers.
-It combines product research, profitability analysis, brand intelligence,
-competitor monitoring, supplier relationship management, and AI-powered
-recommendations into one platform. It uses live data from the Keepa API to
-provide 90-day price history, Best Seller Rank (BSR) trends, FBA seller
-counts, profit margins, and a scored buy/no-buy verdict.
+> WholesaleOS is an AI-powered product and brand research tool for Amazon wholesale, FBA and online-arbitrage sellers. It analyzes any ASIN using live Keepa data to return price and Best Seller Rank history, FBA seller counts, profit and ROI math, and a scored buy/no-buy verdict, plus an 11-criteria wholesale brand vetting score.
 
-## Mission
-To help Amazon wholesale sellers discover profitable opportunities, make
-smarter sourcing decisions, and scale faster through artificial intelligence
-and automation.
+WholesaleOS is owned and operated by Mentify LLC and available at https://www.thewholesaleos.com. It combines product research, profitability analysis and brand intelligence into one platform, using live data from the Keepa API. Pricing is disclosed after account creation. The public pages set no analytics, advertising or tracking cookies.
 
-## Vision
-To become the operating system that powers every successful Amazon wholesale
-business.
+## Key pages
+- [Homepage](https://www.thewholesaleos.com/): what WholesaleOS does and how it works
+- [FAQ](https://www.thewholesaleos.com/faq): how the scoring, brand vetting and Keepa data work
+- [Tool comparisons](https://www.thewholesaleos.com/compare): WholesaleOS vs Keepa, Jungle Scout, Helium 10, SellerAmp, AMZScout, Tactical Arbitrage, SmartScout and Seller Assistant
+- [Best Amazon wholesale tools guide](https://www.thewholesaleos.com/best-amazon-wholesale-tools): the sourcing tool landscape grouped by the job each does
+- [Create a free account](https://www.thewholesaleos.com/sign-up): run a full analysis on your first ASIN, no credit card required
 
-## Core Features
-- ASIN Lookup: fetches live price history, BSR, FBA seller count, ratings, and monthly sales estimate from Keepa
-- Product Scoring: 15+ weighted criteria producing EXCELLENT / GOOD / AVERAGE / BAD / REJECT verdicts
-- Profit Calculator: auto-calculates referral fee, FBA fulfillment fee, storage, net profit, ROI, and break-even price
-- Brand Intelligence: scores wholesale brands on 11 criteria (IP complaints, hazmat, MAP policy, FBA seller density, sales velocity, etc.)
-- Search History: every lookup saved per user account
+## Core features
+- ASIN lookup: live price history, BSR, FBA seller count, ratings and a monthly sales estimate from the Keepa API
+- Product scoring: 15 weighted criteria producing an EXCELLENT / GOOD / AVERAGE / BAD / REJECT verdict
+- Profit calculator: referral fee, FBA fulfillment fee, storage, net profit, ROI and break-even price
+- Brand Intelligence: scores wholesale brands on 11 criteria (IP complaints, hazmat, MAP policy, FBA seller density, sales velocity and more)
+- Search history: every lookup saved to the user's account
 
-## Target Users
-Amazon wholesale sellers, FBA sellers, online arbitrage (OA) sellers, product researchers
+## How the product score works
+Hard-reject checks (IP complaint on record, hazmat product, authenticity complaint, listing not active, no Buy Box) immediately fail a product. Scored criteria (BSR, profit margin, ROI, review count, FBA seller count, price trend, Buy Box stability) contribute weighted points. Final verdict: EXCELLENT (85%+), GOOD (70-84%), AVERAGE (55-69%), BAD (40-54%), REJECT (below 40%, or any hard-reject fails).
 
-## How the Product Score Works
-Hard-reject checks (IP complaint on record, hazmat product, authenticity complaint, listing not active, no Buy Box) immediately fail a product.
-Scored criteria (BSR rank, profit margin, ROI, review count, FBA seller count, price trend, Buy Box stability) contribute weighted points.
-Final verdict: EXCELLENT (85%+), GOOD (70-84%), AVERAGE (55-69%), BAD (40-54%), REJECT (below 40% or any hard-reject fails).
+## How Brand Intelligence works
+11 criteria scored pass/fail with weights. Hard-reject criteria: no official website, no registered business details, a history of mass account takedowns. Scored criteria: brand active within 30 days, IP complaints in the last 12 months, IP-Alert red flags, FBA sellers per ASIN (ideal 3-5), monthly sales per ASIN (over 100 units), hazmat-heavy catalogue, adult/high-risk category. Decision: APPROVED if all hard checks pass and the weighted score is 70% or above.
 
-## How the Brand Intelligence Score Works
-11 criteria scored on pass/fail basis with weights.
-Hard-reject criteria: no official website, no registered business details, history of mass account takedowns.
-Scored criteria: brand active within 30 days, IP complaints in last 12 months, IP-Alert red flags, FBA sellers per ASIN (ideal 3-5), monthly sales per ASIN (>100 units), hazmat-heavy catalogue, adult/high-risk category.
-Decision: APPROVED if all hard checks pass and weighted score is 70% or above.
+## Target users
+Amazon wholesale sellers, FBA sellers, online-arbitrage (OA) sellers and product researchers.
 
-## Data Sources
-- Keepa API: real-time Amazon price history, BSR, offer counts, review data, sales estimates
-- ip-alert.com: IP complaint history database for Amazon brands
+## Data sources
+- Keepa API: real-time Amazon price history, BSR, offer counts, review data and sales estimates
+- ip-alert.com: IP complaint history for Amazon brands
 - who.is: domain and business registration verification
 
-## Contact
-mentifyllc@gmail.com
+## Company
+- Operator: Mentify LLC, 1209 Mountain Road Pl NE, Ste 5054, Albuquerque, NM 87110, USA
+- Contact: mentifyllc@gmail.com
+- Website: https://www.thewholesaleos.com
 
-## Website
-https://wholesaleos.ai
+## Legal
+- [Privacy Policy](https://www.thewholesaleos.com/privacy)
+- [Terms of Service](https://www.thewholesaleos.com/terms)
+- [Cookie Policy](https://www.thewholesaleos.com/cookies)
+- [Legal Information](https://www.thewholesaleos.com/legal)
