@@ -118,10 +118,8 @@ const Privacy = () => (
         voluntarily provide information including:
       </p>
       <ul>
-        <li>Full name</li>
         <li>Email address</li>
-        <li>Password (stored using secure encryption)</li>
-        <li>Country or region</li>
+        <li>Password (stored only as a secure one-way hash, never in plain text)</li>
         <li>Account preferences</li>
         <li>Support requests and correspondence</li>
         <li>Feedback and suggestions you choose to submit</li>
@@ -278,16 +276,17 @@ const Privacy = () => (
         to improve the browsing experience and reduce the need for repeated configuration during future
         visits.
       </p>
-      <h3>Analytics Cookies</h3>
+      <h3>Analytics and Advertising Cookies</h3>
       <p>
-        Analytics cookies help us understand how visitors interact with WholesaleOS. These cookies provide
-        statistical information regarding platform usage, feature adoption, page performance, and overall
-        user experience. The information collected is generally aggregated and used to improve our
-        Services.
+        WholesaleOS does not use analytics, advertising, or tracking cookies. We do not run Google
+        Analytics, a tag manager, an advertising pixel, or a session recorder. The public pages of the
+        site set no cookies at all; the only cookies we set are the strictly necessary ones described
+        above, used to keep you signed in. If this ever changes, this Privacy Policy and our Cookie Policy
+        will be updated before any such cookie is introduced.
       </p>
       <p>
-        Users may control or disable cookies through their browser settings. However, disabling certain
-        cookies may affect the availability or functionality of some features within WholesaleOS.
+        Users may control or disable cookies through their browser settings. However, disabling the
+        strictly necessary cookies will prevent you from staying signed in.
       </p>
       <p>
         Additional information regarding cookies is available in our separate <a href="/cookies">Cookie Policy</a>.
@@ -461,11 +460,12 @@ const Privacy = () => (
     <section>
       <h2>16. Children's Privacy</h2>
       <p>
-        WholesaleOS is intended for individuals who are at least thirteen (13) years of age. We do not
-        knowingly collect personal information from children under the age of 13.
+        WholesaleOS is a business tool intended for individuals who are at least sixteen (16) years of
+        age, consistent with our Terms of Service. We do not knowingly collect personal information from
+        children under the age of 16.
       </p>
       <p>
-        If we become aware that personal information has been collected from a child under the age of 13
+        If we become aware that personal information has been collected from a child under the age of 16
         without appropriate authorization, we will take reasonable steps to delete such information as
         soon as practicable.
       </p>
