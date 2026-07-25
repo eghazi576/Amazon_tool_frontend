@@ -17,6 +17,7 @@ const LegalLayout = ({
   path,
   title,
   intro,
+  effectiveDate = EFFECTIVE_DATE,
   children,
 }: {
   /** Router path, e.g. "/privacy" — also keys the SEO metadata. */
@@ -24,6 +25,8 @@ const LegalLayout = ({
   /** The page's single <h1>. */
   title: string;
   intro: string;
+  /** Per-page effective date; defaults to the shared EFFECTIVE_DATE. */
+  effectiveDate?: string;
   children: React.ReactNode;
 }) => {
   const meta = routeMeta(path);
@@ -44,7 +47,7 @@ const LegalLayout = ({
           <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
           <p className="mt-3 leading-relaxed text-muted-foreground">{intro}</p>
           <p className="mt-5 text-xs uppercase tracking-widest text-muted-foreground">
-            Effective {EFFECTIVE_DATE}
+            Effective {effectiveDate}
           </p>
         </header>
 
