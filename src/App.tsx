@@ -61,6 +61,38 @@ function GuestOnly({ children }: { children: JSX.Element }) {
 }
 
 /**
+ * Reset the scroll position to the top on every route change.
+ *
+ * Without this, a single-page app keeps the previous page's scroll offset when
+ * you navigate. Clicking a footer link (Privacy, Terms) from the bottom of a
+ * long page loaded the new page still scrolled to the bottom, so the reader had
+ * to scroll up by hand. The browser does this automatically for real navigations;
+ * a client-side router has to do it itself.
+ *
+ * A hash link (#faq, #about) is left alone -- that navigation is meant to scroll
+ * to a specific element, not to the top.
+ */
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) return;
+    // index.css sets `html { scroll-behavior: smooth }`, which makes a plain
+    // scrollTo animate. On navigation we want an instant jump, not a visible
+    // scroll-up, so disable smooth for this one call and restore it. Setting
+    // scroll-behavior directly is the reliable way -- `behavior: "instant"` is
+    // not in every browser's typings.
+    const root = document.documentElement;
+    const prev = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    root.style.scrollBehavior = prev;
+  }, [pathname, hash]);
+
+  return null;
+}
+
+/**
  * Entry animations are suppressed on the first paint of a prerendered route,
  * whose content is already on screen (index.css, `html[data-prerendered]`).
  * Once the user navigates, pages are built by React from nothing and should
@@ -87,6 +119,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <ReleasePrerenderedAnimations />
           {/* fallback={null} matches what RequireAuth already renders while the
               session resolves, so a lazy chunk loading looks no different. */}
