@@ -53,10 +53,15 @@ const Privacy = () => (
       <h2>2. Company Information</h2>
       <p>WholesaleOS is owned and operated by:</p>
       <ul>
-        <li><strong>{COMPANY}</strong></li>
-        <li>{ADDRESS.street}</li>
-        <li>{ADDRESS.city}, {ADDRESS.region} {ADDRESS.postalCode}</li>
-        <li>United States of America</li>
+        <li>
+          <strong>{COMPANY}</strong>
+          <br />
+          {ADDRESS.street}
+          <br />
+          {ADDRESS.city}, {ADDRESS.region} {ADDRESS.postalCode}
+          <br />
+          United States of America
+        </li>
         <li><strong>Email:</strong> <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
         <li><strong>Phone:</strong> {PHONE}</li>
         <li><strong>Website:</strong> <a href="https://www.thewholesaleos.com">https://www.thewholesaleos.com</a></li>
@@ -517,10 +522,15 @@ const Privacy = () => (
         handling of your personal information, please contact us using the information below:
       </p>
       <ul>
-        <li><strong>{COMPANY}</strong></li>
-        <li>{ADDRESS.street}</li>
-        <li>{ADDRESS.city}, {ADDRESS.region} {ADDRESS.postalCode}</li>
-        <li>United States</li>
+        <li>
+          <strong>{COMPANY}</strong>
+          <br />
+          {ADDRESS.street}
+          <br />
+          {ADDRESS.city}, {ADDRESS.region} {ADDRESS.postalCode}
+          <br />
+          United States
+        </li>
         <li><strong>Email:</strong> <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
         <li><strong>Phone:</strong> {PHONE}</li>
         <li><strong>Website:</strong> <a href="https://www.thewholesaleos.com">https://www.thewholesaleos.com</a></li>

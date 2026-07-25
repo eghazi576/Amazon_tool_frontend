@@ -40,7 +40,7 @@ const Cookies = () => (
           have not embedded anyone else's.
         </li>
         <li>
-          <strong>We show no cookie banner</strong> — because we set nothing that would legally require
+          <strong>We show no cookie banner,</strong> because we set nothing that would legally require
           your consent. Strictly necessary cookies do not.
         </li>
       </ul>
@@ -75,11 +75,11 @@ const Cookies = () => (
       </p>
       <ul>
         <li>
-          <strong>theme</strong> — whether you chose light or dark mode, so the page does not flash the
+          <strong>theme</strong>: whether you chose light or dark mode, so the page does not flash the
           wrong one on load.
         </li>
         <li>
-          <strong>asin_history</strong> — a short list of your recent lookups, so the interface can
+          <strong>asin_history</strong>: a short list of your recent lookups, so the interface can
           show them instantly instead of waiting on the network.
         </li>
       </ul>
@@ -91,12 +91,12 @@ const Cookies = () => (
       <p>We embed no advertising or analytics scripts. Two third parties are nevertheless involved in delivering the site:</p>
       <ul>
         <li>
-          <strong>Cloudflare</strong> — sits in front of the site for security and caching. It may set
+          <strong>Cloudflare</strong>: sits in front of the site for security and caching. It may set
           its own security cookie to distinguish humans from bots. It is not used to track you across
           sites and we cannot read it.
         </li>
         <li>
-          <strong>Google Fonts</strong> — the site's typefaces load from Google's servers. This sets no
+          <strong>Google Fonts</strong>: the site's typefaces load from Google's servers. This sets no
           cookie, but it does mean your IP address reaches Google when a page loads.
         </li>
       </ul>
@@ -106,7 +106,7 @@ const Cookies = () => (
       <h2>Turning them off</h2>
       <p>
         You can block or delete cookies in your browser settings. Be aware that blocking our two
-        cookies means <strong>you will not be able to stay signed in</strong> — they are what
+        cookies means <strong>you will not be able to stay signed in</strong>; they are what
         authentication is built on. The public pages will still work perfectly, because they never
         needed a cookie in the first place.
       </p>

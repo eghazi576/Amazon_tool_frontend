@@ -5,7 +5,7 @@ const Terms = () => (
   <LegalLayout
     path="/terms"
     title="Terms of Service"
-    intro="The agreement between you and WholesaleOS. The important parts are the data disclaimer and the fact that we are not Amazon — please read those."
+    intro="The agreement between you and WholesaleOS. The important parts are the data disclaimer and the fact that we are not Amazon. Please read those."
   >
     <section>
       <h2>Agreement</h2>
@@ -21,7 +21,7 @@ const Terms = () => (
       <h2>What WholesaleOS is</h2>
       <p>
         WholesaleOS is a research tool for Amazon sellers. You give it an ASIN or a brand; it retrieves
-        market data, runs it through a scoring model, and shows you an analysis — price and Best Seller
+        market data, runs it through a scoring model, and shows you an analysis: price and Best Seller
         Rank history, estimated sales, fee and profit calculations, and a scored verdict.
       </p>
       <p>
@@ -151,9 +151,9 @@ const Terms = () => (
         <strong>
           To the maximum extent the law allows, we are not liable for lost profits, lost inventory,
           missed opportunities, account suspensions, or any indirect or consequential loss arising from
-          your use of WholesaleOS or from decisions you made using it
+          your use of WholesaleOS or from decisions you made using it,
         </strong>{" "}
-        — including decisions based on its estimates, scores or verdicts.
+        including decisions based on its estimates, scores or verdicts.
       </p>
       <p>
         Where liability cannot lawfully be excluded, it is limited to the amount you paid us in the
