@@ -55,6 +55,7 @@ export const JURISDICTION = "the State of New Mexico, United States";
 export const EFFECTIVE_DATE = "14 July 2026";
 
 export const LEGAL_PAGES = [
+  { path: "/legal", label: "Legal Information" },
   { path: "/privacy", label: "Privacy Policy" },
   { path: "/terms", label: "Terms of Service" },
   { path: "/cookies", label: "Cookie Policy" },

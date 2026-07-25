@@ -182,6 +182,15 @@ export const ROUTES = [
     sitemap: { changefreq: "yearly", priority: "0.3" },
   },
   {
+    path: "/legal",
+    title: "Legal Information | WholesaleOS",
+    description:
+      "The policies that govern your use of WholesaleOS by Mentify LLC — Privacy Policy, Terms of Service and Cookie Policy — plus intellectual-property, disclaimer and contact terms in one place.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "yearly", priority: "0.3" },
+  },
+  {
     path: "/terms",
     title: "Terms of Service | WholesaleOS",
     description:

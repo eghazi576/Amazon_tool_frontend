@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 import Index from "./pages/Index.tsx";
 import FAQ from "./pages/FAQ.tsx";
+import LegalInfo from "./pages/legal/LegalInfo.tsx";
 import Privacy from "./pages/legal/Privacy.tsx";
 import Terms from "./pages/legal/Terms.tsx";
 import Cookies from "./pages/legal/Cookies.tsx";
@@ -127,6 +128,7 @@ const App = () => (
           <Routes>
             <Route path="/"                element={<Index />} />
             <Route path="/faq"             element={<FAQ />} />
+            <Route path="/legal"           element={<LegalInfo />} />
             <Route path="/privacy"         element={<Privacy />} />
             <Route path="/terms"           element={<Terms />} />
             <Route path="/cookies"         element={<Cookies />} />

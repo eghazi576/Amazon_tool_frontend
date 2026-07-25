@@ -85,6 +85,7 @@ const Footer = () => {
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">Legal</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link to="/legal" className="transition-colors hover:text-foreground">Legal Information</Link></li>
               <li><Link to="/privacy" className="transition-colors hover:text-foreground">Privacy Policy</Link></li>
               <li><Link to="/terms" className="transition-colors hover:text-foreground">Terms of Service</Link></li>
               <li><Link to="/cookies" className="transition-colors hover:text-foreground">Cookie Policy</Link></li>
