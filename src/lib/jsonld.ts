@@ -14,7 +14,7 @@ export const softwareApplicationSchema: JsonLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:
-    "WholesaleOS is an Amazon FBA product and brand research tool. It analyzes any ASIN using live Keepa data to provide price history, BSR trends, FBA seller counts, profit margins, and a buy/no-buy viability score.",
+    "WholesaleOS is an Amazon product research tool for FBA and wholesale sellers. It analyzes any ASIN using live Keepa data to provide price history, BSR trends, FBA seller counts, profit margins, and a buy/no-buy viability score.",
   // No `offers` block. It previously published price "0" USD while the FAQ says
   // pricing is disclosed after registration -- the two could not both be true, and
   // publishing a price we cannot stand behind is exactly what Google penalizes.

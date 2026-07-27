@@ -45,6 +45,14 @@ const Navbar = () => {
               <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gradient-primary transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
+          {/* A real route, not an in-page anchor, so it works from every page. */}
+          <Link
+            to="/blog"
+            className="relative text-sm text-muted-foreground transition-smooth hover:text-foreground group"
+          >
+            Blog
+            <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gradient-primary transition-all duration-300 group-hover:w-full" />
+          </Link>
         </div>
 
         {/* CTA buttons */}

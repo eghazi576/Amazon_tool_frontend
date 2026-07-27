@@ -33,9 +33,9 @@ export const canonical = (path) => new URL(path, SITE_URL).href;
 export const ROUTES = [
   {
     path: "/",
-    title: "WholesaleOS | AI Wholesale Analyst for Amazon Sellers",
+    title: "Amazon Product Research Tool for FBA Sellers | WholesaleOS",
     description:
-      "Research Amazon products, score wholesale brands, and get a buy or no-buy verdict in seconds. Live Keepa data, profit math, and IP checks in one tool.",
+      "WholesaleOS is an Amazon product research tool that scores any ASIN with live Keepa data: price and BSR history, profit math, IP checks, and a buy or no-buy verdict in seconds.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "weekly", priority: "1.0" },
@@ -48,6 +48,46 @@ export const ROUTES = [
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.7" },
+  },
+
+  // Blog. Indexable, prerendered, SEO-first. The post body lives in
+  // src/lib/blog.ts; only metadata is here. Keep the two in sync when adding a
+  // post (add a route entry with a matching slug).
+  {
+    path: "/blog",
+    title: "Blog | Amazon Product Research & Wholesale Guides | WholesaleOS",
+    description:
+      "Practical guides to Amazon product research, wholesale brand vetting, and reading Keepa market data, for FBA, wholesale and online-arbitrage sellers.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "weekly", priority: "0.7" },
+  },
+  {
+    path: "/blog/what-is-an-amazon-product-research-tool",
+    title: "What Is an Amazon Product Research Tool? | WholesaleOS",
+    description:
+      "An Amazon product research tool turns raw market data into a sourcing decision. What one does, the questions it answers, and how to choose one for wholesale and FBA.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/blog/how-to-vet-a-wholesale-brand",
+    title: "How to Vet a Wholesale Brand Before You Buy | WholesaleOS",
+    description:
+      "Product scoring tells you if an ASIN sells; brand vetting tells you if the brand is safe to stock. What to check before you open a wholesale account.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
+  },
+  {
+    path: "/blog/how-to-read-a-keepa-chart",
+    title: "How to Read a Keepa Chart: Price, BSR & Sell-Through | WholesaleOS",
+    description:
+      "A Keepa chart holds most of what you need to judge an Amazon product. How to turn price and Best Seller Rank history into a demand and stability read.",
+    index: true,
+    prerender: true,
+    sitemap: { changefreq: "monthly", priority: "0.6" },
   },
 
   // Comparison pages. High commercial intent, low competition, and exactly the

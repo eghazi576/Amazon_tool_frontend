@@ -10,9 +10,11 @@ const stats = [
   { icon: Shield,     value: "100%",  label: "Live market data"  },
 ];
 
-// Headline words with stagger
-const line1 = ["The", "AI-Powered", "Wholesale"];
-const line2 = ["Analyst", "That", "Never"];
+// Headline words with stagger. The exact primary keyword "Amazon Product
+// Research Tool" runs across the line break, so the h1's textContent reads
+// "The Amazon Product Research Tool That Never Sleeps" for crawlers.
+const line1 = ["The", "Amazon", "Product", "Research"];
+const line2 = ["Tool", "That", "Never"];
 
 const Hero = () => (
   <section className="relative overflow-hidden pb-24 pt-32 md:pt-40">
@@ -72,7 +74,7 @@ const Hero = () => (
               <Fragment key={word}>
                 <span
                   className="animate-word-up inline-block"
-                  style={{ animationDelay: `${0.28 + i * 0.1}s` }}
+                  style={{ animationDelay: `${0.48 + i * 0.1}s` }}
                 >
                   {word}
                 </span>{" "}
@@ -80,7 +82,7 @@ const Hero = () => (
             ))}
             <span
               className="animate-word-up inline-block gradient-text"
-              style={{ animationDelay: "0.58s" }}
+              style={{ animationDelay: "0.78s" }}
             >
               Sleeps
             </span>
@@ -92,8 +94,9 @@ const Hero = () => (
           className="animate-fade-up mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
           style={{ animationDelay: "0.65s" }}
         >
-          Research products. Analyze profitability. Discover brands.
-          Monitor competitors. Manage suppliers.
+          The Amazon product research tool for wholesale and FBA sellers. Score
+          any ASIN with live Keepa data, analyze profitability, and vet brands in
+          seconds.
         </p>
 
         {/* CTAs */}
