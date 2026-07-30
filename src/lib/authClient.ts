@@ -58,8 +58,24 @@ export function apiLogout() {
   return apiFetch("/api/auth/logout", { method: "POST" }, false);
 }
 
+// retry:true so a page load with an expired 15-minute access token but a still
+// valid refresh token silently refreshes instead of logging the user out.
 export function apiMe() {
-  return apiFetch("/api/auth/me", undefined, false) as Promise<{ user: AuthUser }>;
+  return apiFetch("/api/auth/me", undefined, true) as Promise<{ user: AuthUser }>;
+}
+
+/**
+ * Exchange the refresh token for a fresh access token (and a rotated refresh
+ * token). Called on a timer while the app is open so an active session never
+ * expires under the user.
+ */
+export function apiRefresh(): Promise<void> {
+  return fetch(`${BACKEND}/api/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+  }).then((r) => {
+    if (!r.ok) throw new Error("Session refresh failed");
+  });
 }
 
 export function apiForgotPassword(email: string) {

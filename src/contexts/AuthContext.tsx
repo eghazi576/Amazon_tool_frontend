@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   AuthUser,
   apiLogin, apiRegister, apiLogout,
-  apiForgotPassword, apiResetPassword, apiMe,
+  apiForgotPassword, apiResetPassword, apiMe, apiRefresh,
 } from "@/lib/authClient";
 
 type AuthContextType = {
@@ -28,6 +28,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
   }, []);
+
+  // Keep an active session alive. The access token lives 15 minutes, so while a
+  // user is signed in and the app is open we refresh it every 14 -- the refresh
+  // token rotates on each call, so the session never expires under someone who
+  // is still using the tool. The timer stops on logout or when the tab closes.
+  useEffect(() => {
+    if (!user) return;
+    const id = setInterval(() => {
+      apiRefresh().catch(() => {}); // a failed refresh surfaces on the next API call
+    }, 14 * 60 * 1000);
+    return () => clearInterval(id);
+  }, [user]);
 
   const login = async (email: string, password: string) => {
     const data = await apiLogin(email, password);
