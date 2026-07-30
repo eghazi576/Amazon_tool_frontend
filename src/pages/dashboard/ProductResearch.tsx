@@ -509,7 +509,7 @@ const ProductResearch = () => {
                   {/* Auto-fetched metrics grid (from PDF spec "auto-fetch" fields) */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <AutoStat label="Selling Price (now)" value={fmtMoney(data.pricing.sellingPrice)} auto />
-                    <AutoStat label="Buy Box (90d median)" value={fmtMoney(data.pricing.medianBuyBox)} auto />
+                    <AutoStat label="Buy Box (90d Average)" value={fmtMoney(data.pricing.medianBuyBox)} auto />
                     <AutoStat label="BSR (current)" value={fmtNum(data.metrics.currentRank)} auto />
                     <AutoStat label="BSR (90d avg)" value={fmtNum(data.metrics.avgRank90)} auto />
                     <AutoStat label="Rating (avg)" value={data.metrics.currentRating?.toFixed(1) ?? "—"} auto />
@@ -538,9 +538,6 @@ const ProductResearch = () => {
                       <span className="flex items-center gap-1"><Weight className="h-3 w-3" /> {(data.packageWeightG / 453.592).toFixed(2)} lb</span>
                     )}
                     {data.model && <span>Model: {data.model}</span>}
-                    {data.tokensLeft != null && (
-                      <span className="ml-auto opacity-50">API tokens: {fmtNum(data.tokensLeft)}</span>
-                    )}
                   </div>
                 </div>
               </div>
@@ -938,7 +935,7 @@ const ProductResearch = () => {
                       stroke="hsl(var(--primary))"
                       strokeDasharray="6 3"
                       strokeOpacity={0.7}
-                      label={{ value: `90d median $${data.pricing.medianBuyBox.toFixed(2)}`, position: "insideTopRight", fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                      label={{ value: `90d Average $${data.pricing.medianBuyBox.toFixed(2)}`, position: "insideTopRight", fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
                     />
                   )}
                   <Line type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
