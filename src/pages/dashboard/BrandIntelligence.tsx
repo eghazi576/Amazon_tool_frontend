@@ -320,7 +320,7 @@ export default function BrandIntelligence() {
                 />
                 <AutoNumField
                   label="Buybox Share: Amazon as seller (%)"
-                  hint="% of time Amazon holds the Buy Box"
+                  hint="% of time Amazon holds the Buy Box (>50% = lose 5 pts)"
                   value={input.amazonBuyboxSharePct}
                   onChange={(v) => set("amazonBuyboxSharePct", v)}
                   max={100}
@@ -509,7 +509,7 @@ export default function BrandIntelligence() {
             <CardContent className="text-xs text-muted-foreground space-y-1.5">
               <p><span className="font-semibold text-destructive">Hard Reject (2):</span> Website · No mass takedowns</p>
               <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · No IP-Alert flags (counterfeit / IP) · No hazmat ≥10% · No adult/high-risk</p>
-              <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> FBA sellers 3–5 · Sales &gt;100/mo</p>
+              <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> FBA sellers 3–5 · Sales &gt;100/mo · Amazon Buy Box ≤50%</p>
               <p><span className="font-semibold text-foreground">Info only (0 pts):</span> IP complaints (last 12 months)</p>
               <p className="pt-1 border-t border-border/40">Pass = all hard checks + ≥70% weighted points</p>
             </CardContent>

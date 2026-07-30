@@ -51,6 +51,7 @@ export type BrandScoringConfig = {
     noCounterfeit:      number; // 10
     fbaSellers:         number; // 5
     salesVelocity:      number; // 5
+    lowAmazonBuybox:    number; // 5  — Amazon Buy Box share > 50% loses these
   };
 };
 
@@ -61,7 +62,7 @@ export const DEFAULT_BRAND_CONFIG: BrandScoringConfig = {
     website: 10, registeredBusiness: 0, noHazmat: 10,
     noAdultRisk: 10, noTakedowns: 10, brandActive: 10,
     noIPComplaints: 0, noCounterfeit: 10, fbaSellers: 5,
-    salesVelocity: 5,
+    salesVelocity: 5, lowAmazonBuybox: 5,
   },
 };
 
@@ -185,6 +186,12 @@ export function scoreBrand(
       label: `Sales velocity > ${cfg.minMonthlySales} units/month`, rejectIfFail: false,
       passCondition: `Monthly sales > ${cfg.minMonthlySales} units per top ASIN`,
       passed: input.monthlySalesPerAsin > cfg.minMonthlySales,
+    },
+    {
+      key: "lowAmazonBuybox",  criteriaNum: 11, tier: "medium", weight: W.lowAmazonBuybox,
+      label: "Amazon Buy Box share ≤ 50%", rejectIfFail: false,
+      passCondition: "Amazon holds 50% or less of the Buy Box",
+      passed: input.amazonBuyboxSharePct <= 50,
     },
   ];
 
