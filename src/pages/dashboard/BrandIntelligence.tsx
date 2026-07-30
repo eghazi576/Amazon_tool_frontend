@@ -329,7 +329,7 @@ export default function BrandIntelligence() {
                 />
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium">IP Complaints (last 12 months)</Label>
-                  <p className="text-[10px] text-muted-foreground -mt-1">0–1 = OK | ≥2 = lose 10 pts.{" "}
+                  <p className="text-[10px] text-muted-foreground -mt-1">0–1 = OK | ≥2 = flagged (informational — no score impact).{" "}
                     <a href="https://www.ip-alert.com/" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:opacity-80">
                       Check IP Complaint History
                     </a>
@@ -355,8 +355,8 @@ export default function BrandIntelligence() {
             <CardContent>
               <div className="grid sm:grid-cols-2 gap-3">
                 <ToggleField
-                  label="IP-Alert red flags (counterfeit risks)"
-                  hint="Check ip-alert.com — any red flags? (Yes = lose 5 pts)"
+                  label="IP-Alert red flags (counterfeit risks / Intellectual Property)"
+                  hint="Check ip-alert.com — any red flags? (Yes = lose 10 pts)"
                   checked={input.ipAlertRedFlags}
                   onChange={(v) => set("ipAlertRedFlags", v)}
                   danger={input.ipAlertRedFlags}
@@ -508,8 +508,9 @@ export default function BrandIntelligence() {
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground space-y-1.5">
               <p><span className="font-semibold text-destructive">Hard Reject (2):</span> Website · No mass takedowns</p>
-              <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · ≤1 IP complaint · No hazmat ≥10% · No adult/high-risk</p>
-              <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> No IP-Alert flags · FBA sellers 3–5 · Sales &gt;100/mo</p>
+              <p><span className="font-semibold text-foreground">High weight (10 pts):</span> Active brand (30d) · No IP-Alert flags (counterfeit / IP) · No hazmat ≥10% · No adult/high-risk</p>
+              <p><span className="font-semibold text-foreground">Medium weight (5 pts):</span> FBA sellers 3–5 · Sales &gt;100/mo</p>
+              <p><span className="font-semibold text-foreground">Info only (0 pts):</span> IP complaints (last 12 months)</p>
               <p className="pt-1 border-t border-border/40">Pass = all hard checks + ≥70% weighted points</p>
             </CardContent>
           </Card>

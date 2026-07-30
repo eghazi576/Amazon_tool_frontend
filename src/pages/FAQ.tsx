@@ -93,7 +93,7 @@ const categories = [
       },
       {
         q: "How do I check IP complaints for a brand?",
-        a: "Brand Intelligence includes an IP Complaints field. Research the brand's history of IP complaints, counterfeit claims, or cease-and-desist letters against Amazon sellers, then enter the number you find and WholesaleOS factors it into the score. Zero or one complaint in the last 12 months passes; two or more loses 10 points.",
+        a: "Brand Intelligence includes an IP Complaints field. Research the brand's history of IP complaints, counterfeit claims, or cease-and-desist letters against Amazon sellers and enter the number you find. The count is recorded for your reference; the scoring weight sits on the separate IP-Alert red-flag check (counterfeit / intellectual property risks), which is worth 10 points.",
       },
     ],
   },

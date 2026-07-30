@@ -47,8 +47,8 @@ export type BrandScoringConfig = {
     noAdultRisk:        number; // 10
     noTakedowns:        number; // 10
     brandActive:        number; // 10
-    noIPComplaints:     number; // 10
-    noCounterfeit:      number; // 5
+    noIPComplaints:     number; // 0  — informational, no scoring impact
+    noCounterfeit:      number; // 10
     fbaSellers:         number; // 5
     salesVelocity:      number; // 5
   };
@@ -60,7 +60,7 @@ export const DEFAULT_BRAND_CONFIG: BrandScoringConfig = {
   weights: {
     website: 10, registeredBusiness: 0, noHazmat: 10,
     noAdultRisk: 10, noTakedowns: 10, brandActive: 10,
-    noIPComplaints: 10, noCounterfeit: 5, fbaSellers: 5,
+    noIPComplaints: 0, noCounterfeit: 10, fbaSellers: 5,
     salesVelocity: 5,
   },
 };
@@ -169,8 +169,8 @@ export function scoreBrand(
 
     // ── MEDIUM weight ───────────────────────────────────────────────────
     {
-      key: "noCounterfeit",    criteriaNum: 6,  tier: "medium", weight: W.noCounterfeit,
-      label: "No counterfeit risks (IP-Alert)",  rejectIfFail: false,
+      key: "noCounterfeit",    criteriaNum: 6,  tier: "high",   weight: W.noCounterfeit,
+      label: "No counterfeit risks (IP-Alert / Intellectual Property)",  rejectIfFail: false,
       passCondition: "No red flags on IP-Alert.com",
       passed: !input.ipAlertRedFlags,
     },
