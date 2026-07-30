@@ -245,9 +245,9 @@ export default function BrandIntelligence() {
                 </Field>
 
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-medium">Business Registration Date *</Label>
+                  <Label className="text-xs font-medium">Business Registration (month / year) *</Label>
                   <Input
-                    type="date"
+                    type="month"
                     value={input.businessRegistrationDate}
                     onChange={(e) => set("businessRegistrationDate", e.target.value)}
                   />
