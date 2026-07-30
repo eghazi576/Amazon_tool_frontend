@@ -32,7 +32,7 @@ export const homepageFaqs: Faq[] = [
   },
   {
     q: "What is Brand Intelligence?",
-    a: "Brand Intelligence is WholesaleOS's wholesale brand vetting module. It scores a brand across 11 criteria including website verification, business registration, IP complaint history, hazmat catalogue size, FBA seller density, and sales velocity. The result is a clear APPROVED or REJECTED verdict before you invest time reaching out to a supplier.",
+    a: "Brand Intelligence is WholesaleOS's wholesale brand vetting module. It scores a brand across 11 criteria including Brand credibility, business registration, IP complaint history, hazmat catalogue size, FBA seller density, and sales velocity. The result is a clear APPROVED or REJECTED verdict before you invest time reaching out to a supplier.",
   },
   {
     q: "Can WholesaleOS auto-fill brand data from an ASIN?",
