@@ -824,7 +824,7 @@ const ProductResearch = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   <ToggleRow
                     label="IP Complaint on record"
-                    sub="Any IP complaint filed against this listing?"
+                    sub="counterfeit risks / Intellectual Property complaint filed against this listing?"
                     value={flags.ipComplaint}
                     onChange={(v) => updateFlag("ipComplaint", v)}
                     danger={flags.ipComplaint}
