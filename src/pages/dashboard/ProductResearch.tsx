@@ -522,8 +522,8 @@ const ProductResearch = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
                     <AutoStat label="Price trend (90d)" value={fmtPct(data.pricing.priceTrend90)} trend={data.pricing.priceTrend90} auto />
                     <AutoStat label="BSR trend (90d)" value={fmtPct(data.metrics.bsrTrend90)} trend={data.metrics.bsrTrend90 != null ? -data.metrics.bsrTrend90 : null} note="neg = improving" auto />
-                    <AutoStat label="Min price (90d)" value={fmtMoney(data.pricing.stats90.minBuyBox)} auto />
-                    <AutoStat label="Max price (90d)" value={fmtMoney(data.pricing.stats90.maxBuyBox)} auto />
+                    <AutoStat label="Min price (all-time)" value={fmtMoney(data.pricing.stats90.minBuyBox)} auto />
+                    <AutoStat label="Max price (all-time)" value={fmtMoney(data.pricing.stats90.maxBuyBox)} auto />
                   </div>
 
                   {/* Product attributes row */}
