@@ -44,7 +44,7 @@ export const ROUTES = [
     path: "/faq",
     title: "WholesaleOS FAQ | Amazon FBA Product & Brand Research",
     description:
-      "How the 15-criteria viability score works, how Brand Intelligence vets wholesale brands, where the live Keepa data comes from, and how accurate estimates are.",
+      "How the 15-criteria viability score works, how Brand Intelligence vets wholesale brands, where the live market data comes from, and how accurate estimates are.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.7" },

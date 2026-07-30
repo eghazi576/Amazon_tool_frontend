@@ -24,11 +24,11 @@ export const homepageFaqs: Faq[] = [
   },
   {
     q: "How accurate is the monthly sales estimate?",
-    a: "WholesaleOS first reads Amazon's own Bought in past month badge via Keepa, which is the most accurate signal available. If that is unavailable, it counts actual BSR drop events in the 30-day data series. As a last resort it extrapolates from the 90-day BSR average using a category-specific lookup table.",
+    a: "WholesaleOS first reads Amazon's own Bought in past month badge, which is the most accurate signal available. If that is unavailable, it counts actual BSR drop events in the 30-day data series. As a last resort it extrapolates from the 90-day BSR average using a category-specific lookup table.",
   },
   {
-    q: "What data sources does WholesaleOS use?",
-    a: "WholesaleOS pulls live data from the Keepa API, including price history, Best Seller Rank, review counts, FBA offer counts, and Amazon's sales badge. For brand research, it links to ip-alert.com for IP complaint history and who.is for domain and business registration verification.",
+    q: "What data does WholesaleOS use?",
+    a: "WholesaleOS uses live Amazon marketplace data, including price history, Best Seller Rank, review counts, FBA offer counts, and Amazon's sales badge. For brand research, it also factors in IP complaint history and business and domain registration checks.",
   },
   {
     q: "What is Brand Intelligence?",
