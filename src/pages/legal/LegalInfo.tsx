@@ -17,12 +17,12 @@ const DOCS = [
   {
     to: "/terms",
     title: "Terms of Service",
-    desc: "The legal agreement between you and Mentify LLC — user responsibilities, acceptable use, intellectual property, account management, liability limits, and disputes.",
+    desc: "The legal agreement between you and Mentify LLC: user responsibilities, acceptable use, intellectual property, account management, liability limits, and disputes.",
   },
   {
     to: "/cookies",
     title: "Cookie Policy",
-    desc: "How WholesaleOS uses cookies and similar technologies for functionality, security, and preferences — and why there is no tracking.",
+    desc: "How WholesaleOS uses cookies and similar technologies for functionality, security, and preferences, and why there is no tracking.",
   },
 ];
 
