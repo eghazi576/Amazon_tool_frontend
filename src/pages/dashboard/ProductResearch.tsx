@@ -39,6 +39,7 @@ const defaultFlags: ManualFlags = {
   sellerRotationStable: true,      // User checks: is seller rotation stable?
   // Cost inputs
   estCogs: 0,                      // User enters: Cost of Goods Sold ($)
+  estMisc: 0,                      // User enters: miscellaneous per-unit cost ($)
   mapPrice: null,                  // User enters: MAP price if enforced
 };
 
@@ -334,15 +335,12 @@ const ProductResearch = () => {
       if (keepaCat || title) {
         const detectedKey = detectCategory(keepaCat, title, price);
         const bestMatch   = AMAZON_CATEGORIES.find(c => c.key === detectedKey) ?? null;
-        if (bestMatch) {
-          setSelectedCategory(bestMatch.label);
-          setCategorySearch(bestMatch.label);
-          setManualRate(bestMatch.rate);
-        } else {
-          setCategorySearch(keepaCat);
-          setSelectedCategory("");
-          setManualRate(null);
-        }
+        // Show the detected category as a hint, but leave the referral rate to
+        // Keepa's own "Referral Fee %" (data.profitAnalysis.referralRate).
+        // Picking a category from the dropdown still sets a manual override.
+        setCategorySearch(bestMatch ? bestMatch.label : keepaCat);
+        setSelectedCategory("");
+        setManualRate(null);
       }
       toast({ title: "Product loaded", description: resp.title?.slice(0, 60) ?? target });
     } catch (err: any) {
@@ -558,13 +556,13 @@ const ProductResearch = () => {
                 <Badge variant="outline" className="text-[10px] ml-1">Amazon Revenue Calculator</Badge>
               </CardTitle>
               <CardDescription>
-                Net Profit = Item Price − Referral Fee − FBA Fee − Storage − Inbound Placement − COGS
+                Net Profit = Item Price − Referral Fee − FBA Fee − Storage − Inbound Placement − COGS − Misc
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
 
-              {/* ── Input row: Category + COGS + Weight ───────────────── */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* ── Input row: Category + COGS + Misc + Weight ────────── */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 
                 {/* Category search dropdown */}
                 <div className="relative sm:col-span-1">
@@ -634,6 +632,17 @@ const ProductResearch = () => {
                     type="number" step="0.01" min="0" placeholder="Your supplier cost"
                     value={flags.estCogs || ""}
                     onChange={(e) => updateFlag("estCogs", Number(e.target.value))}
+                    className="mt-1"
+                  />
+                </div>
+
+                {/* Miscellaneous cost — subtracted from net profit like any other cost */}
+                <div>
+                  <Label className="text-xs">Misc cost ($) <span className="text-muted-foreground">(prep, shipping…)</span></Label>
+                  <Input
+                    type="number" step="0.01" min="0" placeholder="Any extra per-unit cost"
+                    value={flags.estMisc || ""}
+                    onChange={(e) => updateFlag("estMisc", Number(e.target.value))}
                     className="mt-1"
                   />
                 </div>
@@ -720,7 +729,7 @@ const ProductResearch = () => {
                     const inbound    = data.profitAnalysis.inboundPlacementFee ?? 0;
                     const totalFees  = refFee + fbaFee + storage + inbound;
                     if (data.profitAnalysis.fbaFee == null) return "Enter weight ↑";
-                    return fmtMoney(price - totalFees - flags.estCogs);
+                    return fmtMoney(price - totalFees - flags.estCogs - flags.estMisc);
                   })()}
                   sub={(() => {
                     const price     = data.pricing.sellingPrice ?? data.pricing.medianBuyBox ?? 0;
@@ -731,9 +740,10 @@ const ProductResearch = () => {
                     const inbound   = data.profitAnalysis.inboundPlacementFee ?? 0;
                     const totalFees = refFee + fbaFee + storage + inbound;
                     if (data.profitAnalysis.fbaFee == null) return "Weight needed for FBA fee";
-                    const net    = price - totalFees - flags.estCogs;
+                    const net    = price - totalFees - flags.estCogs - flags.estMisc;
+                    const invest = flags.estCogs + flags.estMisc;
                     const margin = price > 0 ? ((net / price) * 100).toFixed(1) : "0";
-                    const roi    = flags.estCogs > 0 ? ((net / flags.estCogs) * 100).toFixed(0) : null;
+                    const roi    = invest > 0 ? ((net / invest) * 100).toFixed(0) : null;
                     return roi ? `Margin ${margin}% · ROI ${roi}%` : `Margin ${margin}%`;
                   })()}
                 />
@@ -768,7 +778,7 @@ const ProductResearch = () => {
                       const storage = data.profitAnalysis.storageFee ?? 0;
                       const inbound = data.profitAnalysis.inboundPlacementFee ?? 0;
                       return data.profitAnalysis.fbaFee != null
-                        ? fmtMoney(refFee + fbaFee + storage + inbound + flags.estCogs)
+                        ? fmtMoney(refFee + fbaFee + storage + inbound + flags.estCogs + flags.estMisc)
                         : "—";
                     })()}
                   </p>

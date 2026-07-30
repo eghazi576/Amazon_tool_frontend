@@ -110,6 +110,7 @@ export type ManualFlags = {
 
   // Cost inputs
   estCogs: number;                  // for profit & ROI calculation
+  estMisc: number;                  // miscellaneous per-unit cost (prep, shipping, etc.)
   mapPrice: number | null;          // #8 MAP price if enforced
 };
 
@@ -183,6 +184,7 @@ export function scoreProduct(
   const W = cfg.weights;
   const sellingPrice = metrics.sellingPrice ?? metrics.currentBuyBox ?? metrics.currentPrice ?? 0;
   const cogs         = flags.estCogs ?? 0;
+  const misc         = flags.estMisc ?? 0;
 
   // Profit calculation
   const referralFee = metrics.referralFee ?? 0;
@@ -190,10 +192,11 @@ export function scoreProduct(
   const storageFee  = metrics.storageFee ?? null;
   const totalFees   = metrics.totalFees ?? null;
 
-  const profit    = totalFees != null ? parseFloat((sellingPrice - totalFees - cogs).toFixed(2)) : null;
-  const roi       = profit != null && cogs > 0 ? parseFloat(((profit / cogs) * 100).toFixed(1)) : null;
+  const invested  = cogs + misc;
+  const profit    = totalFees != null ? parseFloat((sellingPrice - totalFees - cogs - misc).toFixed(2)) : null;
+  const roi       = profit != null && invested > 0 ? parseFloat(((profit / invested) * 100).toFixed(1)) : null;
   const margin    = profit != null && sellingPrice > 0 ? parseFloat(((profit / sellingPrice) * 100).toFixed(1)) : null;
-  const breakEven = totalFees != null ? parseFloat((totalFees + cogs).toFixed(2)) : null;
+  const breakEven = totalFees != null ? parseFloat((totalFees + cogs + misc).toFixed(2)) : null;
 
   // ── HARD REJECTION ──────────────────────────────────────────────────────────
   const rejectionReasons: string[] = [];
