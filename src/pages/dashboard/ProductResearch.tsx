@@ -917,31 +917,40 @@ const ProductResearch = () => {
           {/* ── Score Verdict ─────────────────────────────────────────────── */}
           {score && <VerdictPanel score={score} />}
 
-          {/* ── Price & Rank history — interactive, built from the live series.
-                 Buy Box price (left axis) and BSR (right axis, reversed) share
-                 one hover tooltip so you read both for any day. ── */}
-          <ChartCard title="Price & Rank History (Last 90 Days)" description="Buy Box price and Best Seller Rank together — hover for the value on any day.">
-            <ResponsiveContainer width="100%" height={300}>
+          {/* ── Keepa-style price & rank history. Built from the live series, so
+                 it is interactive: a crosshair cursor and one tooltip read every
+                 line for the hovered day. Stepped lines + Keepa's colour scheme
+                 (Amazon orange, New blue, Buy Box pink, Sales Rank green). ── */}
+          <ChartCard title="Price & Rank History (Last 90 Days)" description="Amazon, New and Buy Box price with Sales Rank. Hover for every value on a day.">
+            <ResponsiveContainer width="100%" height={330}>
               <LineChart
                 data={(() => {
-                  const m = new Map<number, { t: number; price?: number; rank?: number }>();
+                  const m = new Map<number, { t: number; amazon?: number; newp?: number; buybox?: number; rank?: number }>();
                   const day = (t: number) => Math.floor(t / 86400000);
-                  data.series.price.forEach((p) => { const k = day(p.t); m.set(k, { ...(m.get(k) ?? { t: p.t }), price: p.v }); });
-                  data.series.rank.forEach((p) => { const k = day(p.t); m.set(k, { ...(m.get(k) ?? { t: p.t }), rank: p.v }); });
-                  return Array.from(m.values()).sort((a, b) => a.t - b.t).map((d) => ({ date: fmtDate(d.t), price: d.price, rank: d.rank }));
+                  const add = (arr: { t: number; v: number }[] | undefined, key: "amazon" | "newp" | "buybox" | "rank") =>
+                    arr?.forEach((p) => { const k = day(p.t); m.set(k, { ...(m.get(k) ?? { t: p.t }), [key]: p.v }); });
+                  add(data.series.amazon,   "amazon");
+                  add(data.series.newPrice, "newp");
+                  add(data.series.price,    "buybox");
+                  add(data.series.rank,     "rank");
+                  return Array.from(m.values()).sort((a, b) => a.t - b.t)
+                    .map((d) => ({ date: fmtDate(d.t), amazon: d.amazon, newp: d.newp, buybox: d.buybox, rank: d.rank }));
                 })()}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={10} minTickGap={40} />
-                <YAxis yAxisId="price" stroke="hsl(var(--primary))" fontSize={10} width={46} tickFormatter={(v) => `$${v}`} />
-                <YAxis yAxisId="rank" orientation="right" reversed stroke="hsl(var(--accent))" fontSize={10} width={46} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
+                <YAxis yAxisId="price" stroke="hsl(var(--muted-foreground))" fontSize={10} width={48} tickFormatter={(v) => `$${v}`} />
+                <YAxis yAxisId="rank" orientation="right" reversed stroke="#22c55e" fontSize={10} width={48} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
                 <Tooltip
                   contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
-                  formatter={(v: any, name: any) => (name === "Price" ? [`$${Number(v).toFixed(2)}`, "Price"] : [Number(v).toLocaleString(), "BSR"])}
+                  cursor={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1, strokeDasharray: "4 4" }}
+                  formatter={(v: any, name: any) => (name === "Sales Rank" ? [`#${Number(v).toLocaleString()}`, name] : [`$${Number(v).toFixed(2)}`, name])}
                 />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line yAxisId="price" type="monotone" dataKey="price" name="Price" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} connectNulls />
-                <Line yAxisId="rank" type="monotone" dataKey="rank" name="BSR" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} connectNulls />
+                <Line yAxisId="price" type="stepAfter" dataKey="amazon" name="Amazon"     stroke="#ff9900" strokeWidth={1.8} dot={false} connectNulls />
+                <Line yAxisId="price" type="stepAfter" dataKey="newp"   name="New"        stroke="#4f8ef7" strokeWidth={1.8} dot={false} connectNulls />
+                <Line yAxisId="price" type="stepAfter" dataKey="buybox" name="Buy Box"    stroke="#e6399b" strokeWidth={2}   dot={false} connectNulls />
+                <Line yAxisId="rank"  type="stepAfter" dataKey="rank"   name="Sales Rank" stroke="#22c55e" strokeWidth={1.8} dot={false} connectNulls />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>

@@ -71,6 +71,8 @@ export type KeepaProductResponse = {
   };
   series: {
     price: PricePoint[];
+    amazon: PricePoint[];
+    newPrice: PricePoint[];
     rank: PricePoint[];
     reviews: PricePoint[];
     offerCount: PricePoint[];
