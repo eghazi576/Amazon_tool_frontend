@@ -35,7 +35,7 @@ export const ROUTES = [
     path: "/",
     title: "Amazon Product Research Tool for FBA Sellers | WholesaleOS",
     description:
-      "WholesaleOS is an Amazon product research tool that scores any ASIN with live Keepa data: price and BSR history, profit math, IP checks, and a buy or no-buy verdict in seconds.",
+      "WholesaleOS is an Amazon product research tool that scores any ASIN with live Amazon market data: price and BSR history, profit math, IP checks, and a buy or no-buy verdict in seconds.",
     index: true,
     prerender: true,
     sitemap: { changefreq: "weekly", priority: "1.0" },

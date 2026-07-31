@@ -95,8 +95,8 @@ const Hero = () => (
           style={{ animationDelay: "0.65s" }}
         >
           The Amazon product research tool for wholesale and FBA sellers. Score
-          any ASIN with live Keepa data, analyze profitability, and vet brands in
-          seconds.
+          any ASIN with live Amazon market data, analyze profitability, and vet
+          brands in seconds.
         </p>
 
         {/* CTAs */}
