@@ -11,13 +11,13 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import {
   Search, Loader2, CheckCircle2, XCircle, AlertTriangle,
-  TrendingUp, DollarSign, Star, Package, BarChart2, ShieldAlert,
+  TrendingUp, DollarSign, Star, Package, ShieldAlert,
   Weight, Tag, TrendingDown, Users, Award, Info,
 } from "lucide-react";
-import { fetchKeepaProduct, fetchKeepaGraph, type KeepaProductResponse } from "@/lib/keepaService";
+import { fetchKeepaProduct, type KeepaProductResponse } from "@/lib/keepaService";
 import { scoreProduct, type ManualFlags, type ScoreResult } from "@/lib/scoring";
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid,
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend,
   BarChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ReferenceLine,
 } from "recharts";
 
@@ -303,8 +303,6 @@ const ProductResearch = () => {
   const [asin, setAsin]       = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData]       = useState<KeepaProductResponse | null>(null);
-  const [keepaGraph, setKeepaGraph]       = useState<string | null>(null);
-  const [keepaGraphErr, setKeepaGraphErr] = useState(false);
   const [flags, setFlags]     = useState<ManualFlags>(defaultFlags);
   const [manualWeightLb, setManualWeightLb] = useState<string>("");
   const [score, setScore]          = useState<ScoreResult | null>(null);
@@ -424,20 +422,6 @@ const ProductResearch = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
-
-  // Load Keepa's rendered chart for the current ASIN (proxied via our backend).
-  useEffect(() => {
-    const asin = data?.asin;
-    if (!asin) { setKeepaGraph(null); return; }
-    let cancelled = false;
-    let objUrl = "";
-    setKeepaGraph(null);
-    setKeepaGraphErr(false);
-    fetchKeepaGraph(asin, 90)
-      .then((u) => { if (cancelled) URL.revokeObjectURL(u); else { objUrl = u; setKeepaGraph(u); } })
-      .catch(() => { if (!cancelled) setKeepaGraphErr(true); });
-    return () => { cancelled = true; if (objUrl) URL.revokeObjectURL(objUrl); };
-  }, [data?.asin]);
 
   const updateFlag = <K extends keyof ManualFlags>(k: K, v: ManualFlags[K]) =>
     setFlags((f) => ({ ...f, [k]: v }));
@@ -933,33 +917,34 @@ const ProductResearch = () => {
           {/* ── Score Verdict ─────────────────────────────────────────────── */}
           {score && <VerdictPanel score={score} />}
 
-          {/* ── Keepa chart (rendered by Keepa, proxied through our backend) ── */}
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base flex items-center gap-2">
-                <BarChart2 className="h-4 w-4 text-primary" /> Price &amp; Rank History
-              </CardTitle>
-              <CardDescription>Amazon, New and Buy Box price with Best Seller Rank, over 90 days.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {keepaGraph ? (
-                <img
-                  src={keepaGraph}
-                  alt="Price and sales rank history chart"
-                  className="w-full rounded-lg border border-border/50"
-                  loading="lazy"
+          {/* ── Price & Rank history — interactive, built from the live series.
+                 Buy Box price (left axis) and BSR (right axis, reversed) share
+                 one hover tooltip so you read both for any day. ── */}
+          <ChartCard title="Price & Rank History (Last 90 Days)" description="Buy Box price and Best Seller Rank together — hover for the value on any day.">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                data={(() => {
+                  const m = new Map<number, { t: number; price?: number; rank?: number }>();
+                  const day = (t: number) => Math.floor(t / 86400000);
+                  data.series.price.forEach((p) => { const k = day(p.t); m.set(k, { ...(m.get(k) ?? { t: p.t }), price: p.v }); });
+                  data.series.rank.forEach((p) => { const k = day(p.t); m.set(k, { ...(m.get(k) ?? { t: p.t }), rank: p.v }); });
+                  return Array.from(m.values()).sort((a, b) => a.t - b.t).map((d) => ({ date: fmtDate(d.t), price: d.price, rank: d.rank }));
+                })()}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={10} minTickGap={40} />
+                <YAxis yAxisId="price" stroke="hsl(var(--primary))" fontSize={10} width={46} tickFormatter={(v) => `$${v}`} />
+                <YAxis yAxisId="rank" orientation="right" reversed stroke="hsl(var(--accent))" fontSize={10} width={46} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
+                <Tooltip
+                  contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
+                  formatter={(v: any, name: any) => (name === "Price" ? [`$${Number(v).toFixed(2)}`, "Price"] : [Number(v).toLocaleString(), "BSR"])}
                 />
-              ) : keepaGraphErr ? (
-                <p className="py-10 text-center text-sm text-muted-foreground">
-                  Chart is not available for this product.
-                </p>
-              ) : (
-                <p className="py-10 text-center text-sm text-muted-foreground animate-pulse">
-                  Loading chart…
-                </p>
-              )}
-            </CardContent>
-          </Card>
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                <Line yAxisId="price" type="monotone" dataKey="price" name="Price" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} connectNulls />
+                <Line yAxisId="rank" type="monotone" dataKey="rank" name="BSR" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} connectNulls />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
 
           {/* ── Charts (90-day data) ──────────────────────────────────────── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
