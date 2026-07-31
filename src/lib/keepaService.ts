@@ -96,3 +96,19 @@ export async function fetchKeepaProduct(
   if (!resp.ok) throw new Error(json?.error || `HTTP ${resp.status}`);
   return json.data as KeepaProductResponse;
 }
+
+/**
+ * Fetch Keepa's rendered chart PNG (via our backend proxy, which keeps the API
+ * key server-side) and return an object URL for an <img>. `credentials:"include"`
+ * sends the auth cookie, which an <img src> would not under SameSite=Lax.
+ * The caller must URL.revokeObjectURL() the result when done.
+ */
+export async function fetchKeepaGraph(asin: string, range = 90): Promise<string> {
+  const resp = await fetch(
+    `${BACKEND_URL}/api/keepa/graph?asin=${encodeURIComponent(asin)}&range=${range}`,
+    { credentials: "include" }
+  );
+  if (!resp.ok) throw new Error("Keepa chart unavailable");
+  const blob = await resp.blob();
+  return URL.createObjectURL(blob);
+}

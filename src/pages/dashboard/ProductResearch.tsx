@@ -14,7 +14,7 @@ import {
   TrendingUp, DollarSign, Star, Package, BarChart2, ShieldAlert,
   Weight, Tag, TrendingDown, Users, Award, Info,
 } from "lucide-react";
-import { fetchKeepaProduct, type KeepaProductResponse } from "@/lib/keepaService";
+import { fetchKeepaProduct, fetchKeepaGraph, type KeepaProductResponse } from "@/lib/keepaService";
 import { scoreProduct, type ManualFlags, type ScoreResult } from "@/lib/scoring";
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid,
@@ -303,6 +303,8 @@ const ProductResearch = () => {
   const [asin, setAsin]       = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData]       = useState<KeepaProductResponse | null>(null);
+  const [keepaGraph, setKeepaGraph]       = useState<string | null>(null);
+  const [keepaGraphErr, setKeepaGraphErr] = useState(false);
   const [flags, setFlags]     = useState<ManualFlags>(defaultFlags);
   const [manualWeightLb, setManualWeightLb] = useState<string>("");
   const [score, setScore]          = useState<ScoreResult | null>(null);
@@ -422,6 +424,20 @@ const ProductResearch = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  // Load Keepa's rendered chart for the current ASIN (proxied via our backend).
+  useEffect(() => {
+    const asin = data?.asin;
+    if (!asin) { setKeepaGraph(null); return; }
+    let cancelled = false;
+    let objUrl = "";
+    setKeepaGraph(null);
+    setKeepaGraphErr(false);
+    fetchKeepaGraph(asin, 90)
+      .then((u) => { if (cancelled) URL.revokeObjectURL(u); else { objUrl = u; setKeepaGraph(u); } })
+      .catch(() => { if (!cancelled) setKeepaGraphErr(true); });
+    return () => { cancelled = true; if (objUrl) URL.revokeObjectURL(objUrl); };
+  }, [data?.asin]);
 
   const updateFlag = <K extends keyof ManualFlags>(k: K, v: ManualFlags[K]) =>
     setFlags((f) => ({ ...f, [k]: v }));
@@ -916,6 +932,34 @@ const ProductResearch = () => {
 
           {/* ── Score Verdict ─────────────────────────────────────────────── */}
           {score && <VerdictPanel score={score} />}
+
+          {/* ── Keepa chart (rendered by Keepa, proxied through our backend) ── */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <BarChart2 className="h-4 w-4 text-primary" /> Price &amp; Rank History
+              </CardTitle>
+              <CardDescription>Amazon, New and Buy Box price with Best Seller Rank, over 90 days.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {keepaGraph ? (
+                <img
+                  src={keepaGraph}
+                  alt="Price and sales rank history chart"
+                  className="w-full rounded-lg border border-border/50"
+                  loading="lazy"
+                />
+              ) : keepaGraphErr ? (
+                <p className="py-10 text-center text-sm text-muted-foreground">
+                  Chart is not available for this product.
+                </p>
+              ) : (
+                <p className="py-10 text-center text-sm text-muted-foreground animate-pulse">
+                  Loading chart…
+                </p>
+              )}
+            </CardContent>
+          </Card>
 
           {/* ── Charts (90-day data) ──────────────────────────────────────── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
