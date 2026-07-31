@@ -13,10 +13,12 @@
     <meta name="author" content="WholesaleOS" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#7c3aed" />
-    <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
-    <link rel="icon" type="image/png" href="/favicon.png?v=2" sizes="256x256" />
-    <link rel="shortcut icon" href="/favicon.ico?v=2" />
-    <link rel="apple-touch-icon" href="/favicon.png?v=2" />
+    <!-- Primary icon inlined so the browser paints our W instantly, with no
+         request to /favicon.ico (whose stale Cloudflare-cached heart caused a
+         flash). File-based icons follow for higher-res and non-HTML contexts. -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,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" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=3" sizes="256x256" />
+    <link rel="apple-touch-icon" href="/favicon.png?v=3" />
 
     <!-- Canonical -->
     <link rel="canonical" href="https://www.thewholesaleos.com/" />
