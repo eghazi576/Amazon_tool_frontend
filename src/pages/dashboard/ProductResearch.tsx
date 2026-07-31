@@ -304,6 +304,7 @@ const ProductResearch = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData]       = useState<KeepaProductResponse | null>(null);
   const [hiddenLines, setHiddenLines] = useState<Set<string>>(new Set()); // chart legend toggles
+  const [chartDays, setChartDays]     = useState(90); // main chart range; 0 = all-time
   const [flags, setFlags]     = useState<ManualFlags>(defaultFlags);
   const [manualWeightLb, setManualWeightLb] = useState<string>("");
   const [score, setScore]          = useState<ScoreResult | null>(null);
@@ -923,25 +924,51 @@ const ProductResearch = () => {
                  (like Keepa). Built from the live series — real units, and
                  no-data points are already dropped upstream. Merge is by exact
                  timestamp (not bucketed) so nothing is misplaced. ── */}
-          <ChartCard title="Price, Rank & Reviews (All-time)" description="Complete history — Buy Box and Amazon price, Sales Rank and review count. Hover for values; click a legend name to toggle a line.">
+          <ChartCard title="Price, Rank & Reviews" description="Buy Box and Amazon price, Sales Rank and review count. Hover for values; click a legend name to toggle a line.">
+            {/* Keepa-style range selector. Default 3M matches Keepa's default view. */}
+            <div className="mb-3 flex flex-wrap gap-1">
+              {[{ l: "1M", d: 30 }, { l: "3M", d: 90 }, { l: "6M", d: 180 }, { l: "1Y", d: 365 }, { l: "All", d: 0 }].map((r) => (
+                <button
+                  key={r.l}
+                  type="button"
+                  onClick={() => setChartDays(r.d)}
+                  className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${chartDays === r.d ? "bg-primary text-primary-foreground" : "bg-muted/50 text-muted-foreground hover:text-foreground"}`}
+                >
+                  {r.l}
+                </button>
+              ))}
+            </div>
             <ResponsiveContainer width="100%" height={340}>
               <LineChart
                 data={(() => {
+                  const S = data.series;
+                  // Latest timestamp across the plotted metrics (no spread — series can be large).
+                  const latest = [S.priceFull, S.amazonFull, S.rankFull, S.reviewsFull]
+                    .flat().reduce((mx, p) => (p.t > mx ? p.t : mx), 0);
+                  const minT = chartDays > 0 ? latest - chartDays * 86400000 : -Infinity;
+                  // Guard against Keepa sentinels/artifacts: drop prices wildly off the median.
+                  const pv = [...S.priceFull, ...S.amazonFull].map((p) => p.v).filter((v) => v > 0).sort((a, b) => a - b);
+                  const med = pv.length ? pv[Math.floor(pv.length / 2)] : 0;
+                  const priceOk = (v: number) => v > 0 && (med === 0 || v <= med * 12);
                   const m = new Map<number, { t: number; buybox?: number; amazon?: number; rank?: number; reviews?: number }>();
-                  const put = (arr: { t: number; v: number }[] | undefined, key: "buybox" | "amazon" | "rank" | "reviews") =>
-                    arr?.forEach((p) => { const e = m.get(p.t) ?? { t: p.t }; (e as Record<string, number>)[key] = p.v; m.set(p.t, e); });
-                  put(data.series.priceFull,   "buybox");
-                  put(data.series.amazonFull,  "amazon");
-                  put(data.series.rankFull,    "rank");
-                  put(data.series.reviewsFull, "reviews");
+                  const put = (arr: { t: number; v: number }[] | undefined, key: "buybox" | "amazon" | "rank" | "reviews", isPrice: boolean) =>
+                    arr?.forEach((p) => {
+                      if (p.t < minT) return;
+                      if (isPrice && !priceOk(p.v)) return;
+                      const e = m.get(p.t) ?? { t: p.t }; (e as Record<string, number>)[key] = p.v; m.set(p.t, e);
+                    });
+                  put(S.priceFull,   "buybox",  true);
+                  put(S.amazonFull,  "amazon",  true);
+                  put(S.rankFull,    "rank",    false);
+                  put(S.reviewsFull, "reviews", false);
                   return Array.from(m.values()).sort((a, b) => a.t - b.t);
                 })()}
                 margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="t" type="number" scale="time" domain={["dataMin", "dataMax"]} tickFormatter={(t) => fmtDate(Number(t))} stroke="hsl(var(--muted-foreground))" fontSize={10} minTickGap={44} />
-                <YAxis yAxisId="price" stroke="hsl(var(--muted-foreground))" fontSize={10} width={48} tickFormatter={(v) => `$${v}`} />
-                <YAxis yAxisId="rank" orientation="right" reversed stroke="#22c55e" fontSize={10} width={44} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
+                <YAxis yAxisId="price" domain={["auto", "auto"]} stroke="hsl(var(--muted-foreground))" fontSize={10} width={48} tickFormatter={(v) => `$${v}`} />
+                <YAxis yAxisId="rank" orientation="right" reversed domain={["auto", "auto"]} stroke="#22c55e" fontSize={10} width={44} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
                 <YAxis yAxisId="rev" hide domain={[0, "dataMax"]} />
                 <Tooltip
                   contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
