@@ -77,6 +77,11 @@ export type KeepaProductResponse = {
     reviews: PricePoint[];
     offerCount: PricePoint[];
     fbaCount: PricePoint[];
+    /** Complete (all-time) history for the main chart. */
+    priceFull: PricePoint[];
+    amazonFull: PricePoint[];
+    rankFull: PricePoint[];
+    reviewsFull: PricePoint[];
   };
   tokensLeft: number | null;
 };

@@ -923,17 +923,17 @@ const ProductResearch = () => {
                  (like Keepa). Built from the live series — real units, and
                  no-data points are already dropped upstream. Merge is by exact
                  timestamp (not bucketed) so nothing is misplaced. ── */}
-          <ChartCard title="Price, Rank & Reviews (Last 90 Days)" description="Buy Box and Amazon price, Sales Rank and review count. Hover for values; click a legend name to toggle a line.">
+          <ChartCard title="Price, Rank & Reviews (All-time)" description="Complete history — Buy Box and Amazon price, Sales Rank and review count. Hover for values; click a legend name to toggle a line.">
             <ResponsiveContainer width="100%" height={340}>
               <LineChart
                 data={(() => {
                   const m = new Map<number, { t: number; buybox?: number; amazon?: number; rank?: number; reviews?: number }>();
                   const put = (arr: { t: number; v: number }[] | undefined, key: "buybox" | "amazon" | "rank" | "reviews") =>
                     arr?.forEach((p) => { const e = m.get(p.t) ?? { t: p.t }; (e as Record<string, number>)[key] = p.v; m.set(p.t, e); });
-                  put(data.series.price,   "buybox");
-                  put(data.series.amazon,  "amazon");
-                  put(data.series.rank,    "rank");
-                  put(data.series.reviews, "reviews");
+                  put(data.series.priceFull,   "buybox");
+                  put(data.series.amazonFull,  "amazon");
+                  put(data.series.rankFull,    "rank");
+                  put(data.series.reviewsFull, "reviews");
                   return Array.from(m.values()).sort((a, b) => a.t - b.t);
                 })()}
                 margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
