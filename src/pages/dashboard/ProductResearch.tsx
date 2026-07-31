@@ -303,6 +303,7 @@ const ProductResearch = () => {
   const [asin, setAsin]       = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData]       = useState<KeepaProductResponse | null>(null);
+  const [hiddenLines, setHiddenLines] = useState<Set<string>>(new Set()); // chart legend toggles
   const [flags, setFlags]     = useState<ManualFlags>(defaultFlags);
   const [manualWeightLb, setManualWeightLb] = useState<string>("");
   const [score, setScore]          = useState<ScoreResult | null>(null);
@@ -917,40 +918,52 @@ const ProductResearch = () => {
           {/* ── Score Verdict ─────────────────────────────────────────────── */}
           {score && <VerdictPanel score={score} />}
 
-          {/* ── Keepa-style price & rank history. Built from the live series, so
-                 it is interactive: a crosshair cursor and one tooltip read every
-                 line for the hovered day. Stepped lines + Keepa's colour scheme
-                 (Amazon orange, New blue, Buy Box pink, Sales Rank green). ── */}
-          <ChartCard title="Price & Rank History (Last 90 Days)" description="Amazon, New and Buy Box price with Sales Rank. Hover for every value on a day.">
-            <ResponsiveContainer width="100%" height={330}>
+          {/* ── Price, rank & reviews. Interactive: hover reads every visible
+                 line at that moment; click a legend name to show/hide a line
+                 (like Keepa). Built from the live series — real units, and
+                 no-data points are already dropped upstream. Merge is by exact
+                 timestamp (not bucketed) so nothing is misplaced. ── */}
+          <ChartCard title="Price, Rank & Reviews (Last 90 Days)" description="Buy Box and Amazon price, Sales Rank and review count. Hover for values; click a legend name to toggle a line.">
+            <ResponsiveContainer width="100%" height={340}>
               <LineChart
                 data={(() => {
-                  const m = new Map<number, { t: number; amazon?: number; newp?: number; buybox?: number; rank?: number }>();
-                  const day = (t: number) => Math.floor(t / 86400000);
-                  const add = (arr: { t: number; v: number }[] | undefined, key: "amazon" | "newp" | "buybox" | "rank") =>
-                    arr?.forEach((p) => { const k = day(p.t); m.set(k, { ...(m.get(k) ?? { t: p.t }), [key]: p.v }); });
-                  add(data.series.amazon,   "amazon");
-                  add(data.series.newPrice, "newp");
-                  add(data.series.price,    "buybox");
-                  add(data.series.rank,     "rank");
-                  return Array.from(m.values()).sort((a, b) => a.t - b.t)
-                    .map((d) => ({ date: fmtDate(d.t), amazon: d.amazon, newp: d.newp, buybox: d.buybox, rank: d.rank }));
+                  const m = new Map<number, { t: number; buybox?: number; amazon?: number; rank?: number; reviews?: number }>();
+                  const put = (arr: { t: number; v: number }[] | undefined, key: "buybox" | "amazon" | "rank" | "reviews") =>
+                    arr?.forEach((p) => { const e = m.get(p.t) ?? { t: p.t }; (e as Record<string, number>)[key] = p.v; m.set(p.t, e); });
+                  put(data.series.price,   "buybox");
+                  put(data.series.amazon,  "amazon");
+                  put(data.series.rank,    "rank");
+                  put(data.series.reviews, "reviews");
+                  return Array.from(m.values()).sort((a, b) => a.t - b.t);
                 })()}
+                margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={10} minTickGap={40} />
+                <XAxis dataKey="t" type="number" scale="time" domain={["dataMin", "dataMax"]} tickFormatter={(t) => fmtDate(Number(t))} stroke="hsl(var(--muted-foreground))" fontSize={10} minTickGap={44} />
                 <YAxis yAxisId="price" stroke="hsl(var(--muted-foreground))" fontSize={10} width={48} tickFormatter={(v) => `$${v}`} />
-                <YAxis yAxisId="rank" orientation="right" reversed stroke="#22c55e" fontSize={10} width={48} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
+                <YAxis yAxisId="rank" orientation="right" reversed stroke="#22c55e" fontSize={10} width={44} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
+                <YAxis yAxisId="rev" hide domain={[0, "dataMax"]} />
                 <Tooltip
                   contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
                   cursor={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1, strokeDasharray: "4 4" }}
-                  formatter={(v: any, name: any) => (name === "Sales Rank" ? [`#${Number(v).toLocaleString()}`, name] : [`$${Number(v).toFixed(2)}`, name])}
+                  labelFormatter={(t) => fmtDate(Number(t))}
+                  formatter={(v: any, name: any) =>
+                    name === "Sales Rank" ? [`#${Number(v).toLocaleString()}`, name]
+                    : name === "Reviews"  ? [Number(v).toLocaleString(), name]
+                    : [`$${Number(v).toFixed(2)}`, name]}
                 />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line yAxisId="price" type="stepAfter" dataKey="amazon" name="Amazon"     stroke="#ff9900" strokeWidth={1.8} dot={false} connectNulls />
-                <Line yAxisId="price" type="stepAfter" dataKey="newp"   name="New"        stroke="#4f8ef7" strokeWidth={1.8} dot={false} connectNulls />
-                <Line yAxisId="price" type="stepAfter" dataKey="buybox" name="Buy Box"    stroke="#e6399b" strokeWidth={2}   dot={false} connectNulls />
-                <Line yAxisId="rank"  type="stepAfter" dataKey="rank"   name="Sales Rank" stroke="#22c55e" strokeWidth={1.8} dot={false} connectNulls />
+                <Legend
+                  wrapperStyle={{ fontSize: 11, cursor: "pointer" }}
+                  onClick={(e: any) => setHiddenLines((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(e.dataKey)) next.delete(e.dataKey); else next.add(e.dataKey);
+                    return next;
+                  })}
+                />
+                <Line yAxisId="price" type="stepAfter" dataKey="buybox"  name="Buy Box"    stroke="#e6399b" strokeWidth={2}   dot={false} connectNulls hide={hiddenLines.has("buybox")} />
+                <Line yAxisId="price" type="stepAfter" dataKey="amazon"  name="Amazon"     stroke="#ff9900" strokeWidth={1.8} dot={false} connectNulls hide={hiddenLines.has("amazon")} />
+                <Line yAxisId="rank"  type="monotone"  dataKey="rank"    name="Sales Rank" stroke="#22c55e" strokeWidth={1.8} dot={false} connectNulls hide={hiddenLines.has("rank")} />
+                <Line yAxisId="rev"   type="monotone"  dataKey="reviews" name="Reviews"    stroke="#a855f7" strokeWidth={1.8} dot={false} connectNulls hide={hiddenLines.has("reviews")} />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
