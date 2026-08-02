@@ -51,7 +51,7 @@ export type BrandScoringConfig = {
     noCounterfeit:      number; // 10
     fbaSellers:         number; // 5
     salesVelocity:      number; // 5
-    lowAmazonBuybox:    number; // 5  — Amazon Buy Box share > 50% loses these
+    lowAmazonBuybox:    number; // 20 — max points at stake for Amazon Buy Box share (tiered)
   };
 };
 
@@ -121,7 +121,7 @@ export function scoreBrand(
   const W = cfg.weights;
   const hasWebsite = !!input.brandWebsite.trim();
 
-  const raw: Omit<BrandCriterion, "earned">[] = [
+  const raw: (Omit<BrandCriterion, "earned"> & { earned?: number })[] = [
     // ── HARD REJECT ────────────────────────────────────────────────────────
     {
       key: "website",          criteriaNum: 1,  tier: "high",   weight: W.website,
@@ -148,9 +148,11 @@ export function scoreBrand(
       passed: !input.adultOrHighRisk,
     },
     {
+      // No longer a hard reject — a history of mass takedowns now deducts its
+      // weight (−10) instead of failing the brand outright.
       key: "noTakedowns",      criteriaNum: 12, tier: "high",   weight: W.noTakedowns,
-      label: "No history of mass account takedowns", rejectIfFail: true,
-      passCondition: "No history of mass seller account takedowns",
+      label: "No history of mass account takedowns", rejectIfFail: false,
+      passCondition: "No history of mass seller account takedowns (−10 if present)",
       passed: !input.massAccountTakedowns,
     },
 
@@ -188,17 +190,29 @@ export function scoreBrand(
       passed: input.monthlySalesPerAsin > cfg.minMonthlySales,
     },
     {
-      key: "lowAmazonBuybox",  criteriaNum: 11, tier: "medium", weight: W.lowAmazonBuybox,
-      label: "Amazon Buy Box share ≤ 50%", rejectIfFail: false,
-      passCondition: "Amazon holds 50% or less of the Buy Box",
-      passed: input.amazonBuyboxSharePct <= 50,
+      // Tiered by Amazon's Buy Box share: no penalty up to 50%, then a growing
+      // deduction, and a hard reject at 80%+ (Amazon dominates the Buy Box).
+      key: "lowAmazonBuybox",  criteriaNum: 11, tier: "high", weight: W.lowAmazonBuybox,
+      label: "Amazon Buy Box share",
+      rejectIfFail: true,
+      passCondition: "Amazon under 50% of the Buy Box (50–60 −10, 60–75 −15, 75–80 −20, ≥80 hard reject)",
+      passed: input.amazonBuyboxSharePct < 80, // ≥80% → hard reject
+      earned: (() => {
+        const s = input.amazonBuyboxSharePct;
+        if (s <= 50) return W.lowAmazonBuybox;      // no impact
+        if (s <= 60) return W.lowAmazonBuybox - 10; // −10
+        if (s <= 75) return W.lowAmazonBuybox - 15; // −15
+        return 0;                                    // 75–80 → −20 (≥80 hard-rejects)
+      })(),
     },
   ];
 
-  const criteria = raw.map((c) => ({
-    ...c,
-    earned: c.passed ? c.weight : 0,
-  })) as BrandCriterion[];
+  const criteria = raw.map((c) => {
+    // A criterion may set its own `earned` (e.g. a tiered penalty); otherwise it
+    // is the usual all-or-nothing weight on pass.
+    const override = (c as { earned?: number }).earned;
+    return { ...c, earned: override !== undefined ? Math.max(0, override) : (c.passed ? c.weight : 0) };
+  }) as BrandCriterion[];
 
   // Hard-fail check
   const failedRejects = criteria.filter((c) => c.rejectIfFail && !c.passed);

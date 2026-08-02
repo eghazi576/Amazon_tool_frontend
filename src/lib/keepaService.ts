@@ -53,6 +53,8 @@ export type KeepaProductResponse = {
     salesRankDrops90: number | null;
     rankSpike: boolean;
     bsrTrend90: number | null;
+    amazonBuyBoxSharePct: number | null;
+    otherBuyBoxSharePct: number | null;
   };
   profitAnalysis: {
     priceUsed: number;
