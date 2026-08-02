@@ -4,7 +4,10 @@ const rankPath  = "M0,30 Q50,35 100,45 T200,55 T300,50 T400,40";
 const rankArea  = `${rankPath} L400,100 L0,100 Z`;
 
 const DashboardMockup = () => (
-  <div className="glass-card relative w-full overflow-hidden rounded-2xl shadow-elegant">
+  // data-nosnippet: this is a decorative demo with example ASIN/product numbers.
+  // Without it Google was scraping "ASIN B07PXGQC1Q … BSR 2,441 … $29.99" into
+  // the search snippet instead of our meta description.
+  <div data-nosnippet className="glass-card relative w-full overflow-hidden rounded-2xl shadow-elegant">
     {/* Window chrome */}
     <div className="flex items-center justify-between border-b border-border/50 px-4 py-3">
       <div className="flex gap-1.5">
