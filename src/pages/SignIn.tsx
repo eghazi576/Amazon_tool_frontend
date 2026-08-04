@@ -69,7 +69,7 @@ const SignIn = () => {
   return (
     <AuthLayout
       title="Sign in"
-      subtitle="New here? Signing in creates an account for admin approval."
+      subtitle="Sign in to your account"
     >
       <Seo title={meta.title} description={meta.description} path={meta.path} noindex={!meta.index} />
 

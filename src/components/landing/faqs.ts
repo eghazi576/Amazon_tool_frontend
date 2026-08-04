@@ -8,7 +8,7 @@ import type { Faq } from "@/lib/jsonld";
 export const homepageFaqs: Faq[] = [
   {
     q: "What is WholesaleOS?",
-    a: "WholesaleOS is a web-based Amazon FBA research platform. Paste any ASIN and get a full 90-day price history, BSR trends, FBA seller count, profit analysis, and a scored buy/no-buy verdict in under 3 seconds.",
+    a: "WholesaleOS is a web-based Amazon FBA research platform. Paste any ASIN and get a full 90-day price history, BSR trends, FBA seller count, profit analysis, and a scored buy/no-buy verdict.",
   },
   {
     q: "Who is WholesaleOS built for?",
@@ -44,7 +44,7 @@ export const homepageFaqs: Faq[] = [
   },
   {
     q: "How do I get started?",
-    a: "Create a free account, paste an Amazon ASIN into the Product Research tool, and you will have a full market analysis ready in under 3 seconds. No credit card required.",
+    a: "Sign in with your email, and once an administrator approves your account, paste an Amazon ASIN into the Product Research tool for a full market analysis.",
   },
 ];
 

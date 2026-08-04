@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import DashboardMockup from "./DashboardMockup";
 
 const stats = [
-  { icon: Zap,        value: "< 3s",  label: "per lookup"       },
+  { icon: Zap,        value: "90d",   label: "price history"    },
   { icon: TrendingUp, value: "15",    label: "scoring criteria" },
   { icon: Shield,     value: "100%",  label: "Live market data"  },
 ];

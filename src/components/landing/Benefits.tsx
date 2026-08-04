@@ -1,7 +1,7 @@
 import { Clock, Database, Target, Trophy, CheckCircle2 } from "lucide-react";
 
 const benefits = [
-  { icon: Clock,    title: "Research in seconds, not hours", text: "Researching one product used to take 20 minutes of tab-switching. With WholesaleOS it takes 3 seconds." },
+  { icon: Clock,    title: "Research in one place, not ten tabs", text: "Researching one product used to take 20 minutes of tab-switching. WholesaleOS pulls it all into a single scored verdict." },
   { icon: Database, title: "Real data, not estimates",      text: "Every number is pulled live from the Amazon marketplace. You get 90 days of actual price and rank history, not a cached guess." },
   { icon: Target,   title: "Find products worth sourcing",  text: "Spot products with a healthy BSR, solid ROI, and no Amazon on the listing before you spend a penny." },
   { icon: Trophy,   title: "Vet brands before you call",   text: "Check IP complaints, hazmat risk, MAP enforcement, and seller count before you invest time in a supplier relationship." },
@@ -10,7 +10,7 @@ const benefits = [
 const metrics = [
   { value: "15",    label: "Scoring Criteria" },
   { value: "90d",   label: "Data Window" },
-  { value: "< 3s",  label: "Per Lookup" },
+  { value: "11",    label: "Brand Criteria" },
   { value: "100%",  label: "Live API Data" },
 ];
 
