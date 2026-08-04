@@ -47,8 +47,9 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const { user, isLoading } = useAuth();
   if (isLoading) return null;
   if (!user) return <Navigate to="/sign-in" replace />;
-  // Admins bypass; everyone else must be approved before using the tool.
-  if (!user.isAdmin && user.status !== "APPROVED") return <Navigate to="/pending" replace />;
+  // Admins bypass; everyone else must be approved before using the tool. Render
+  // the waiting screen inline (no dedicated /pending URL to 404 on hard refresh).
+  if (!user.isAdmin && user.status !== "APPROVED") return <PendingApproval />;
   return children;
 }
 
@@ -144,7 +145,6 @@ const App = () => (
             <Route path="/blog/:slug"      element={<BlogPost />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
             <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
-            <Route path="/pending"         element={<PendingApproval />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password"  element={<GuestOnly><ResetPassword /></GuestOnly>} />
             <Route

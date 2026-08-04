@@ -49,7 +49,7 @@ const SignUp = () => {
     try {
       await register(email.trim(), password);
       toast({ title: "Account created", description: "An admin will review and approve your account." });
-      navigate("/pending");
+      navigate("/dashboard");
     } catch (err: any) {
       toast({ title: "Sign up failed", description: err.message ?? "Try again.", variant: "destructive" });
     } finally {
