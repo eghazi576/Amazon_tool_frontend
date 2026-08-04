@@ -184,21 +184,13 @@ export const ROUTES = [
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.6" },
   },
-  {
-    path: "/sign-up",
-    title: "Create Your Free WholesaleOS Account | Amazon FBA Tool",
-    description:
-      "Create a free WholesaleOS account and run a full market analysis on your first Amazon ASIN in under three seconds. No credit card required to get started.",
-    index: true,
-    prerender: true,
-    sitemap: { changefreq: "monthly", priority: "0.8" },
-  },
+  // Public sign-up is disabled — accounts are provisioned by an admin. The
+  // /sign-up path now redirects to /sign-in (see App.tsx), so it is neither
+  // prerendered nor in the sitemap.
   // A login form has nothing to offer a searcher, and Google says so. Kept
   // prerendered (link previews, and a noindex only counts if it can be read)
-  // but marked noindex and dropped from the sitemap.
-  //
-  // /sign-up above stays indexable on purpose: it is a real landing page with
-  // unique copy, and it is where "wholesaleos sign up" should land.
+  // but marked noindex and dropped from the sitemap. Sign-in is the only entry
+  // point now that public sign-up is gone.
   {
     path: "/sign-in",
     title: "Sign In to WholesaleOS | Amazon FBA Product Research",

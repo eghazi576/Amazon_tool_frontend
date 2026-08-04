@@ -39,7 +39,7 @@ const categories = [
       },
       {
         q: "Is WholesaleOS free to use?",
-        a: "WholesaleOS currently offers access to registered users. Sign up to start researching products and evaluating brands. Pricing details are available after registration.",
+        a: "WholesaleOS is a private tool. Accounts are provisioned by an administrator — there is no public sign-up. Once your account is created, sign in to start researching products and evaluating brands.",
       },
     ],
   },
@@ -210,16 +210,10 @@ export default function FAQPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              to="/sign-up"
+              to="/sign-in"
               className="inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant transition-opacity hover:opacity-90"
             >
-              <Sparkles className="h-4 w-4" /> Get Started Free
-            </Link>
-            <Link
-              to="/sign-in"
-              className="inline-flex items-center rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Sign In
+              <Sparkles className="h-4 w-4" /> Sign In
             </Link>
           </div>
         </div>

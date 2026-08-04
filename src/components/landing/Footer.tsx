@@ -72,9 +72,6 @@ const Footer = () => {
                 <Link to="/sign-in" className="transition-colors hover:text-foreground">Sign in</Link>
               </li>
               <li>
-                <Link to="/sign-up" className="transition-colors hover:text-foreground">Create account</Link>
-              </li>
-              <li>
                 <Link to="/forgot-password" className="transition-colors hover:text-foreground">Reset password</Link>
               </li>
               <li>

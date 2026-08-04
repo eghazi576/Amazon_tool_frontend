@@ -195,7 +195,7 @@ const KEEPA: Post = {
   related: [
     { to: "/compare/wholesaleos-vs-keepa", label: "WholesaleOS vs Keepa" },
     { to: "/faq", label: "Where the data comes from (FAQ)" },
-    { to: "/sign-up", label: "Analyze your first ASIN free" },
+    { to: "/sign-in", label: "Sign in to WholesaleOS" },
   ],
 };
 

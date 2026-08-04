@@ -20,7 +20,8 @@ import {
   getAdminStats, getAdminSearches, getAdminBrandSearches,
   getScoringConfig, saveScoringConfig, resetScoringConfig,
   getBrandScoringConfig, saveBrandScoringConfig, resetBrandScoringConfig,
-  type AdminStats, type AdminSearch, type SearchFilters,
+  getAdminUsers, createAdminUser, deleteAdminUser,
+  type AdminStats, type AdminSearch, type SearchFilters, type AdminUser,
 } from "@/lib/adminClient";
 import { type BrandHistoryEntry } from "@/lib/brandHistoryClient";
 import { type ScoringConfig, DEFAULT_SCORING_CONFIG } from "@/lib/scoring";
@@ -55,8 +56,9 @@ export default function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="overview">
-        <TabsList className="grid w-full grid-cols-4 max-w-xl">
+        <TabsList className="grid w-full grid-cols-5 max-w-2xl">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="searches">Product Searches</TabsTrigger>
           <TabsTrigger value="brand-searches">Brand Searches</TabsTrigger>
           <TabsTrigger value="scoring">Scoring Config</TabsTrigger>
@@ -64,6 +66,9 @@ export default function AdminDashboard() {
 
         <TabsContent value="overview" className="mt-6">
           <OverviewTab />
+        </TabsContent>
+        <TabsContent value="users" className="mt-6">
+          <UsersTab toast={toast} />
         </TabsContent>
         <TabsContent value="searches" className="mt-6">
           <SearchesTab />
@@ -127,6 +132,108 @@ function OverviewTab() {
           </CardContent>
         </Card>
       ))}
+    </div>
+  );
+}
+
+// ─── Users Tab ────────────────────────────────────────────────────────────────
+
+function UsersTab({ toast }: { toast: any }) {
+  const [users, setUsers]     = useState<AdminUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [email, setEmail]     = useState("");
+  const [password, setPassword] = useState("");
+  const [creating, setCreating] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try { setUsers(await getAdminUsers()); }
+    catch (e: any) { toast({ title: "Failed to load users", description: e?.message, variant: "destructive" }); }
+    finally { setLoading(false); }
+  }, [toast]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const onCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || password.length < 8) {
+      toast({ title: "Check inputs", description: "A valid email and a password of at least 8 characters are required.", variant: "destructive" });
+      return;
+    }
+    setCreating(true);
+    try {
+      await createAdminUser(email.trim(), password);
+      toast({ title: "User created", description: `${email.trim()} can now sign in.` });
+      setEmail(""); setPassword("");
+      load();
+    } catch (e: any) {
+      toast({ title: "Could not create user", description: e?.message, variant: "destructive" });
+    } finally { setCreating(false); }
+  };
+
+  const onDelete = async (u: AdminUser) => {
+    if (!window.confirm(`Remove ${u.email}? This deletes the account and all of its saved research.`)) return;
+    try {
+      await deleteAdminUser(u.id);
+      toast({ title: "User removed", description: `${u.email} can no longer sign in.` });
+      setUsers((prev) => prev.filter((x) => x.id !== u.id));
+    } catch (e: any) {
+      toast({ title: "Could not remove user", description: e?.message, variant: "destructive" });
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> Provision a user</CardTitle>
+          <CardDescription>Public sign-up is off. Create an account here and share the credentials — the user signs in only.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onCreate} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Email</Label>
+              <Input type="email" placeholder="user@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Temporary password</Label>
+              <Input type="text" placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <Button type="submit" variant="hero" disabled={creating}>
+              {creating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Create user
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Users ({users.length})</CardTitle>
+          <CardDescription>Everyone who can sign in. Remove a user to revoke access.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Loading…</div>
+          ) : users.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">No users yet. Create one above.</p>
+          ) : (
+            <div className="divide-y divide-border/50">
+              {users.map((u) => (
+                <div key={u.id} className="flex items-center justify-between gap-3 py-3">
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{u.email}</p>
+                    <p className="text-xs text-muted-foreground">Added {new Date(u.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => onDelete(u)}>
+                    <X className="h-4 w-4" /> Remove
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

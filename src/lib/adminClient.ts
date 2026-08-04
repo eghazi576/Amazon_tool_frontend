@@ -42,6 +42,25 @@ export function getAdminStats(): Promise<AdminStats> {
   return adminFetch("/stats");
 }
 
+// ── User management ─────────────────────────────────────────────────────────
+export type AdminUser = {
+  id: string;
+  email: string;
+  createdAt: string;
+};
+
+export function getAdminUsers(): Promise<AdminUser[]> {
+  return adminFetch("/users");
+}
+
+export function createAdminUser(email: string, password: string): Promise<AdminUser> {
+  return adminFetch("/users", { method: "POST", body: JSON.stringify({ email, password }) });
+}
+
+export function deleteAdminUser(id: string): Promise<{ id: string }> {
+  return adminFetch(`/users/${id}`, { method: "DELETE" });
+}
+
 export type SearchFilters = {
   search?:   string;
   decision?: string;

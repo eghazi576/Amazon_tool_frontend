@@ -9,7 +9,7 @@ WholesaleOS is owned and operated by Mentify LLC and available at https://www.th
 - [FAQ](https://www.thewholesaleos.com/faq): how the scoring, brand vetting and Keepa data work
 - [Tool comparisons](https://www.thewholesaleos.com/compare): WholesaleOS vs Keepa, Jungle Scout, Helium 10, SellerAmp, AMZScout, Tactical Arbitrage, SmartScout and Seller Assistant
 - [Best Amazon wholesale tools guide](https://www.thewholesaleos.com/best-amazon-wholesale-tools): the sourcing tool landscape grouped by the job each does
-- [Create a free account](https://www.thewholesaleos.com/sign-up): run a full analysis on your first ASIN, no credit card required
+- [Sign in](https://www.thewholesaleos.com/sign-in): WholesaleOS is a private tool; accounts are provisioned by an administrator
 
 ## Core features
 - ASIN lookup: live price history, BSR, FBA seller count, ratings and a monthly sales estimate

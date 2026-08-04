@@ -47,3 +47,4 @@ export const homepageFaqs: Faq[] = [
     a: "Create a free account, paste an Amazon ASIN into the Product Research tool, and you will have a full market analysis ready in under 3 seconds. No credit card required.",
   },
 ];
+

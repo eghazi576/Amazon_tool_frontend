@@ -55,7 +55,7 @@ const SignIn = () => {
     <AuthLayout
       title="Welcome back"
       subtitle="Sign in to your account"
-      footer={<>Don't have an account?{" "}<Link to="/sign-up" className="font-medium text-primary hover:underline">Sign up</Link></>}
+      footer={<span className="text-xs">Accounts are provided by your administrator.</span>}
     >
       <Seo title={meta.title} description={meta.description} path={meta.path} noindex={!meta.index} />
 
