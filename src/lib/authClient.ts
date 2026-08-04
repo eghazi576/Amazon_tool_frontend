@@ -5,6 +5,7 @@ export type AuthUser = {
   email:     string;
   createdAt: string;
   isAdmin?:  boolean;
+  status?:   "PENDING" | "APPROVED" | "REJECTED";
 };
 
 // ─── Base fetch with auto-refresh on 401 ───────────────────────────────────

@@ -46,6 +46,7 @@ export function getAdminStats(): Promise<AdminStats> {
 export type AdminUser = {
   id: string;
   email: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
   createdAt: string;
 };
 
@@ -53,8 +54,12 @@ export function getAdminUsers(): Promise<AdminUser[]> {
   return adminFetch("/users");
 }
 
-export function createAdminUser(email: string, password: string): Promise<AdminUser> {
-  return adminFetch("/users", { method: "POST", body: JSON.stringify({ email, password }) });
+export function approveAdminUser(id: string): Promise<AdminUser> {
+  return adminFetch(`/users/${id}/approve`, { method: "PUT" });
+}
+
+export function rejectAdminUser(id: string): Promise<AdminUser> {
+  return adminFetch(`/users/${id}/reject`, { method: "PUT" });
 }
 
 export function deleteAdminUser(id: string): Promise<{ id: string }> {

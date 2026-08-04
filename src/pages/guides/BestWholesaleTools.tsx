@@ -192,8 +192,8 @@ const BestWholesaleTools = () => (
       <div className="mt-10 flex flex-col items-start gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-medium text-foreground">Score your next product or brand in seconds.</p>
         <Button asChild variant="hero">
-          <Link to="/sign-in">
-            Sign In
+          <Link to="/sign-up">
+            Get Started
             <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>

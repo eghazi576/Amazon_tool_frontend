@@ -20,7 +20,7 @@ import {
   getAdminStats, getAdminSearches, getAdminBrandSearches,
   getScoringConfig, saveScoringConfig, resetScoringConfig,
   getBrandScoringConfig, saveBrandScoringConfig, resetBrandScoringConfig,
-  getAdminUsers, createAdminUser, deleteAdminUser,
+  getAdminUsers, approveAdminUser, rejectAdminUser, deleteAdminUser,
   type AdminStats, type AdminSearch, type SearchFilters, type AdminUser,
 } from "@/lib/adminClient";
 import { type BrandHistoryEntry } from "@/lib/brandHistoryClient";
@@ -138,12 +138,16 @@ function OverviewTab() {
 
 // ─── Users Tab ────────────────────────────────────────────────────────────────
 
+const USER_STATUS_STYLE: Record<string, string> = {
+  PENDING:  "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
+  APPROVED: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  REJECTED: "bg-destructive/15 text-destructive border-destructive/30",
+};
+
 function UsersTab({ toast }: { toast: any }) {
   const [users, setUsers]     = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
-  const [email, setEmail]     = useState("");
-  const [password, setPassword] = useState("");
-  const [creating, setCreating] = useState(false);
+  const [busy, setBusy]       = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -154,80 +158,71 @@ function UsersTab({ toast }: { toast: any }) {
 
   useEffect(() => { load(); }, [load]);
 
-  const onCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || password.length < 8) {
-      toast({ title: "Check inputs", description: "A valid email and a password of at least 8 characters are required.", variant: "destructive" });
-      return;
-    }
-    setCreating(true);
+  const setStatus = async (u: AdminUser, action: "approve" | "reject") => {
+    setBusy(u.id);
     try {
-      await createAdminUser(email.trim(), password);
-      toast({ title: "User created", description: `${email.trim()} can now sign in.` });
-      setEmail(""); setPassword("");
-      load();
+      const updated = action === "approve" ? await approveAdminUser(u.id) : await rejectAdminUser(u.id);
+      setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, status: updated.status } : x)));
+      toast({ title: action === "approve" ? "User approved" : "User rejected", description: `${u.email} is now ${updated.status.toLowerCase()}.` });
     } catch (e: any) {
-      toast({ title: "Could not create user", description: e?.message, variant: "destructive" });
-    } finally { setCreating(false); }
+      toast({ title: "Action failed", description: e?.message, variant: "destructive" });
+    } finally { setBusy(null); }
   };
 
   const onDelete = async (u: AdminUser) => {
     if (!window.confirm(`Remove ${u.email}? This deletes the account and all of its saved research.`)) return;
+    setBusy(u.id);
     try {
       await deleteAdminUser(u.id);
-      toast({ title: "User removed", description: `${u.email} can no longer sign in.` });
       setUsers((prev) => prev.filter((x) => x.id !== u.id));
+      toast({ title: "User removed", description: `${u.email} can no longer sign in.` });
     } catch (e: any) {
       toast({ title: "Could not remove user", description: e?.message, variant: "destructive" });
-    }
+    } finally { setBusy(null); }
   };
+
+  const pending = users.filter((u) => u.status === "PENDING");
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> Provision a user</CardTitle>
-          <CardDescription>Public sign-up is off. Create an account here and share the credentials — the user signs in only.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={onCreate} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-            <div className="space-y-1.5">
-              <Label className="text-xs">Email</Label>
-              <Input type="email" placeholder="user@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Temporary password</Label>
-              <Input type="text" placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <Button type="submit" variant="hero" disabled={creating}>
-              {creating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create user
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Users ({users.length})</CardTitle>
-          <CardDescription>Everyone who can sign in. Remove a user to revoke access.</CardDescription>
+          <CardTitle className="text-base flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> Users ({users.length})</CardTitle>
+          <CardDescription>
+            Users sign up themselves and start as <span className="text-yellow-400">Pending</span>. Approve to grant access, reject to block. {pending.length > 0 && <span className="text-yellow-400 font-medium">{pending.length} awaiting review.</span>}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="flex items-center gap-2 py-8 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Loading…</div>
           ) : users.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">No users yet. Create one above.</p>
+            <p className="py-8 text-center text-sm text-muted-foreground">No users yet.</p>
           ) : (
             <div className="divide-y divide-border/50">
               {users.map((u) => (
-                <div key={u.id} className="flex items-center justify-between gap-3 py-3">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{u.email}</p>
-                    <p className="text-xs text-muted-foreground">Added {new Date(u.createdAt).toLocaleDateString()}</p>
+                <div key={u.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-foreground truncate">{u.email}</p>
+                      <Badge variant="outline" className={`text-[10px] ${USER_STATUS_STYLE[u.status] ?? ""}`}>{u.status}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Joined {new Date(u.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => onDelete(u)}>
-                    <X className="h-4 w-4" /> Remove
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    {u.status !== "APPROVED" && (
+                      <Button size="sm" variant="hero" disabled={busy === u.id} onClick={() => setStatus(u, "approve")}>
+                        {busy === u.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />} Approve
+                      </Button>
+                    )}
+                    {u.status !== "REJECTED" && (
+                      <Button size="sm" variant="outline" disabled={busy === u.id} onClick={() => setStatus(u, "reject")}>
+                        <XCircle className="h-4 w-4" /> Reject
+                      </Button>
+                    )}
+                    <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive" disabled={busy === u.id} onClick={() => onDelete(u)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>

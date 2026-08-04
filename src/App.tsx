@@ -19,6 +19,8 @@ import BestWholesaleTools from "./pages/guides/BestWholesaleTools.tsx";
 import BlogIndex from "./pages/blog/BlogIndex.tsx";
 import BlogPost from "./pages/blog/BlogPost.tsx";
 import SignIn from "./pages/SignIn.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import PendingApproval from "./pages/PendingApproval.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -45,6 +47,8 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const { user, isLoading } = useAuth();
   if (isLoading) return null;
   if (!user) return <Navigate to="/sign-in" replace />;
+  // Admins bypass; everyone else must be approved before using the tool.
+  if (!user.isAdmin && user.status !== "APPROVED") return <Navigate to="/pending" replace />;
   return children;
 }
 
@@ -139,8 +143,8 @@ const App = () => (
             <Route path="/blog"            element={<BlogIndex />} />
             <Route path="/blog/:slug"      element={<BlogPost />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
-            {/* Public sign-up is disabled; accounts are admin-provisioned. */}
-            <Route path="/sign-up"         element={<Navigate to="/sign-in" replace />} />
+            <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
+            <Route path="/pending"         element={<PendingApproval />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password"  element={<GuestOnly><ResetPassword /></GuestOnly>} />
             <Route
