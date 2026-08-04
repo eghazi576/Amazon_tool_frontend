@@ -86,24 +86,37 @@ export type KeepaProductResponse = {
     reviewsFull: PricePoint[];
   };
   tokensLeft: number | null;
+  usage?: SearchUsage;
 };
+
+export type UsageMetric = { used: number; limit: number | null; remaining: number | null };
+export type SearchUsage = { asin: UsageMetric; brand: UsageMetric; unlimited: boolean };
 
 export async function fetchKeepaProduct(
   asin: string,
   domain: number = 1,
   cogs: number = 0,
   manualWeightG: number = 0,
-  manualReferralRate: number | null = null
+  manualReferralRate: number | null = null,
+  context: "asin" | "brand" = "asin"
 ): Promise<KeepaProductResponse> {
   const resp = await fetch(`${BACKEND_URL}/api/keepa/product`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ asin, domain, cogs, manualWeightG, manualReferralRate }),
+    body: JSON.stringify({ asin, domain, cogs, manualWeightG, manualReferralRate, context }),
   });
   const json = await resp.json();
   if (!resp.ok) throw new Error(json?.error || `HTTP ${resp.status}`);
   return json.data as KeepaProductResponse;
+}
+
+/** Today's search usage and daily limits for the signed-in user. */
+export async function getKeepaUsage(): Promise<SearchUsage> {
+  const resp = await fetch(`${BACKEND_URL}/api/keepa/usage`, { credentials: "include" });
+  const json = await resp.json();
+  if (!resp.ok) throw new Error(json?.error || `HTTP ${resp.status}`);
+  return json.data as SearchUsage;
 }
 
 /**

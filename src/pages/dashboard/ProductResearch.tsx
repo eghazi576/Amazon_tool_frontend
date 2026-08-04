@@ -14,7 +14,7 @@ import {
   TrendingUp, DollarSign, Star, Package, ShieldAlert,
   Weight, Tag, TrendingDown, Users, Award, Info,
 } from "lucide-react";
-import { fetchKeepaProduct, type KeepaProductResponse } from "@/lib/keepaService";
+import { fetchKeepaProduct, getKeepaUsage, type KeepaProductResponse, type SearchUsage } from "@/lib/keepaService";
 import { scoreProduct, type ManualFlags, type ScoreResult } from "@/lib/scoring";
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend,
@@ -303,6 +303,7 @@ const ProductResearch = () => {
   const [asin, setAsin]       = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData]       = useState<KeepaProductResponse | null>(null);
+  const [usage, setUsage]     = useState<SearchUsage | null>(null);
   const [hiddenLines, setHiddenLines] = useState<Set<string>>(new Set()); // chart legend toggles
   const [chartDays, setChartDays]     = useState(90); // main chart range; 0 = all-time
   const [flags, setFlags]     = useState<ManualFlags>(defaultFlags);
@@ -326,8 +327,9 @@ const ProductResearch = () => {
     setData(null);
     try {
       const weightG = manualWeightLb ? parseFloat(manualWeightLb) * 453.592 : 0;
-      const resp = await fetchKeepaProduct(target, 1, flags.estCogs, weightG);
+      const resp = await fetchKeepaProduct(target, 1, flags.estCogs, weightG, null, "asin");
       setData(resp);
+      if (resp.usage) setUsage(resp.usage);
       setFlags((f) => ({ ...f, buyBoxExists: resp.hasBuyBox }));
       // Use ALL Keepa category levels + title for maximum accuracy
       // e.g. "Clothing, Shoes & Jewelry | Watches | Wrist Watches" gives "Wrist Watches"
@@ -425,6 +427,9 @@ const ProductResearch = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // Load today's search quota on mount.
+  useEffect(() => { getKeepaUsage().then(setUsage).catch(() => {}); }, []);
+
   const updateFlag = <K extends keyof ManualFlags>(k: K, v: ManualFlags[K]) =>
     setFlags((f) => ({ ...f, [k]: v }));
 
@@ -435,11 +440,24 @@ const ProductResearch = () => {
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold">Product Research</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Enter an Amazon ASIN to fetch 90-day market data and score FBA viability using the Product Hunting Tool criteria.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">Product Research</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Enter an Amazon ASIN to fetch 90-day market data and score FBA viability using the Product Hunting Tool criteria.
+          </p>
+        </div>
+        {usage && !usage.unlimited && (
+          <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-xs">
+            <p className="text-muted-foreground">ASIN searches today</p>
+            <p className={`font-semibold ${usage.asin.remaining === 0 ? "text-destructive" : "text-foreground"}`}>
+              {usage.asin.used} / {usage.asin.limit} used · {usage.asin.remaining} left
+            </p>
+          </div>
+        )}
+        {usage?.unlimited && (
+          <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">Unlimited (admin)</div>
+        )}
       </div>
 
       {/* ── ASIN Lookup ─────────────────────────────────────────────────── */}
@@ -961,7 +979,20 @@ const ProductResearch = () => {
                   put(S.amazonFull,  "amazon",  true);
                   put(S.rankFull,    "rank",    false);
                   put(S.reviewsFull, "reviews", false);
-                  return Array.from(m.values()).sort((a, b) => a.t - b.t);
+                  const rows = Array.from(m.values()).sort((a, b) => a.t - b.t) as Record<string, number>[];
+                  // Hold each series across gaps and out to both edges (prices are
+                  // step-held), so e.g. the Amazon line spans the full width instead
+                  // of stopping where Amazon last changed. Forward-fill then back-fill.
+                  const keys = ["buybox", "amazon", "rank", "reviews"] as const;
+                  const carry: Record<string, number | undefined> = {};
+                  for (const row of rows) for (const k of keys) {
+                    if (row[k] != null) carry[k] = row[k]; else if (carry[k] != null) row[k] = carry[k]!;
+                  }
+                  const head: Record<string, number | undefined> = {};
+                  for (let i = rows.length - 1; i >= 0; i--) for (const k of keys) {
+                    if (rows[i][k] != null) head[k] = rows[i][k]; else if (head[k] != null) rows[i][k] = head[k]!;
+                  }
+                  return rows;
                 })()}
                 margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
               >

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import {
   TrendingUp, RotateCcw, Loader2, Sparkles, Pencil,
 } from "lucide-react";
 import { scoreBrand, type BrandInput, type BrandScoreResult } from "@/lib/brandScoring";
-import { fetchKeepaProduct } from "@/lib/keepaService";
+import { fetchKeepaProduct, getKeepaUsage, type SearchUsage } from "@/lib/keepaService";
 import { saveBrandSearch } from "@/lib/brandHistoryClient";
 
 const defaultInput: BrandInput = {
@@ -45,6 +45,9 @@ export default function BrandIntelligence() {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [autoFilled, setAutoFilled] = useState<AutoFilledKeys>(new Set());
   const [brandNameOverride, setBrandNameOverride] = useState(false);
+  const [usage, setUsage]         = useState<SearchUsage | null>(null);
+
+  useEffect(() => { getKeepaUsage().then(setUsage).catch(() => {}); }, []);
 
   const set = <K extends keyof BrandInput>(k: K, v: BrandInput[K]) =>
     setInput((p) => ({ ...p, [k]: v }));
@@ -69,7 +72,8 @@ export default function BrandIntelligence() {
     setFetching(true);
     setFetchError(null);
     try {
-      const data = await fetchKeepaProduct(asin);
+      const data = await fetchKeepaProduct(asin, 1, 0, 0, null, "brand");
+      if (data.usage) setUsage(data.usage);
       const filled = new Set<keyof BrandInput>();
 
       const updates: Partial<BrandInput> = {};
@@ -148,6 +152,17 @@ export default function BrandIntelligence() {
             Enter an ASIN to auto fill brand data, then complete the remaining fields and evaluate.
           </p>
         </div>
+        {usage && !usage.unlimited && (
+          <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-xs">
+            <p className="text-muted-foreground">Brand searches today</p>
+            <p className={`font-semibold ${usage.brand.remaining === 0 ? "text-destructive" : "text-foreground"}`}>
+              {usage.brand.used} / {usage.brand.limit} used · {usage.brand.remaining} left
+            </p>
+          </div>
+        )}
+        {usage?.unlimited && (
+          <div className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">Unlimited (admin)</div>
+        )}
         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-primary shadow-elegant">
           <Boxes className="h-6 w-6 text-primary-foreground" />
         </div>
