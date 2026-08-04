@@ -39,7 +39,7 @@ const categories = [
       },
       {
         q: "Is WholesaleOS free to use?",
-        a: "You can create an account, but access is approved by an administrator. Sign up with your email, and once an admin approves your account you can sign in and start researching products and evaluating brands.",
+        a: "Access is approved by an administrator. There is no separate sign-up — sign in with your email and password, and a new email creates an account that an admin reviews. Once approved, you can start researching products and evaluating brands.",
       },
     ],
   },
@@ -210,10 +210,10 @@ export default function FAQPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              to="/sign-up"
+              to="/sign-in"
               className="inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant transition-opacity hover:opacity-90"
             >
-              <Sparkles className="h-4 w-4" /> Get Started
+              <Sparkles className="h-4 w-4" /> Sign In
             </Link>
           </div>
         </div>

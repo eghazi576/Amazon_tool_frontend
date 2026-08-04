@@ -27,7 +27,7 @@ const FinalCTA = () => (
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-              Create your account and run your first ASIN in under a minute. No spreadsheets, no guesswork.
+              Sign in and run your first ASIN in under a minute. No spreadsheets, no guesswork.
             </p>
 
             {/* Fake ASIN input teaser */}
@@ -40,8 +40,8 @@ const FinalCTA = () => (
 
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild variant="hero" size="xl" className="group animate-pulse-glow">
-                <Link to="/sign-up">
-                  Get Started
+                <Link to="/sign-in">
+                  Sign In
                   <ArrowRight className="transition-smooth group-hover:translate-x-1" />
                 </Link>
               </Button>

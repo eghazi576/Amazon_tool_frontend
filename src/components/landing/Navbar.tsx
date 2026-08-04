@@ -58,11 +58,8 @@ const Navbar = () => {
         {/* CTA buttons */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <Link to="/sign-in">Sign in</Link>
-          </Button>
           <Button asChild variant="hero" size="sm" className="rounded-lg shadow-elegant">
-            <Link to="/sign-up">Get Started</Link>
+            <Link to="/sign-in">Sign In</Link>
           </Button>
         </div>
       </nav>

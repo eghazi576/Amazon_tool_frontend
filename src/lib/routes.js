@@ -184,15 +184,8 @@ export const ROUTES = [
     prerender: true,
     sitemap: { changefreq: "monthly", priority: "0.6" },
   },
-  {
-    path: "/sign-up",
-    title: "Create Your WholesaleOS Account | Amazon Product Research",
-    description:
-      "Create a WholesaleOS account to research Amazon products and vet wholesale brands. New accounts are reviewed and approved by an administrator.",
-    index: true,
-    prerender: true,
-    sitemap: { changefreq: "monthly", priority: "0.6" },
-  },
+  // No public sign-up. /sign-up redirects to /sign-in (App.tsx); signing in
+  // creates a pending account that an admin approves. Not prerendered or listed.
   // A login form has nothing to offer a searcher, and Google says so. Kept
   // prerendered (link previews, and a noindex only counts if it can be read)
   // but marked noindex and dropped from the sitemap. Sign-in is the only entry

@@ -19,7 +19,6 @@ import BestWholesaleTools from "./pages/guides/BestWholesaleTools.tsx";
 import BlogIndex from "./pages/blog/BlogIndex.tsx";
 import BlogPost from "./pages/blog/BlogPost.tsx";
 import SignIn from "./pages/SignIn.tsx";
-import SignUp from "./pages/SignUp.tsx";
 import PendingApproval from "./pages/PendingApproval.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
@@ -144,7 +143,8 @@ const App = () => (
             <Route path="/blog"            element={<BlogIndex />} />
             <Route path="/blog/:slug"      element={<BlogPost />} />
             <Route path="/sign-in"         element={<GuestOnly><SignIn /></GuestOnly>} />
-            <Route path="/sign-up"         element={<GuestOnly><SignUp /></GuestOnly>} />
+            {/* No public sign-up: signing in creates a pending account. */}
+            <Route path="/sign-up"         element={<Navigate to="/sign-in" replace />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password"  element={<GuestOnly><ResetPassword /></GuestOnly>} />
             <Route

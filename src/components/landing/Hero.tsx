@@ -105,15 +105,10 @@ const Hero = () => (
           style={{ animationDelay: "0.75s" }}
         >
           <Button asChild variant="hero" size="xl" className="group w-full sm:w-auto shadow-elegant">
-            <Link to="/sign-up">
-              Get Started
-              <ArrowRight className="transition-smooth group-hover:translate-x-1" />
-            </Link>
-          </Button>
-          <Button asChild variant="glass" size="xl" className="w-full sm:w-auto">
             <Link to="/sign-in">
               <LogIn />
               Sign In
+              <ArrowRight className="transition-smooth group-hover:translate-x-1" />
             </Link>
           </Button>
         </div>

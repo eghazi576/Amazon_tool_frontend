@@ -22,7 +22,7 @@ const schema = z.object({
 const SignIn = () => {
   const { toast }  = useToast();
   const navigate   = useNavigate();
-  const { login }  = useAuth();
+  const { login, register } = useAuth();
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd]   = useState(false);
@@ -41,11 +41,26 @@ const SignIn = () => {
     setErrors({});
     setLoading(true);
     try {
-      await login(email.trim(), password);
-      toast({ title: "Welcome back!", description: "Signed in successfully." });
-      navigate("/dashboard");
-    } catch (err: any) {
-      toast({ title: "Sign in failed", description: err.message ?? "Check your credentials.", variant: "destructive" });
+      // There is no separate sign-up. Existing users sign in here; a brand-new
+      // email creates a pending account that an admin must approve. Routing then
+      // shows either the tool (approved) or the awaiting-approval screen.
+      try {
+        await login(email.trim(), password);
+        navigate("/dashboard");
+      } catch {
+        // Login failed: a new user, or a wrong password on an existing account.
+        try {
+          await register(email.trim(), password);
+          navigate("/dashboard");
+        } catch (regErr: any) {
+          const inUse = /in use/i.test(regErr?.message ?? "");
+          toast({
+            title: "Sign in failed",
+            description: inUse ? "Incorrect password." : (regErr?.message ?? "Please try again."),
+            variant: "destructive",
+          });
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -53,8 +68,8 @@ const SignIn = () => {
 
   return (
     <AuthLayout
-      title="Welcome back"
-      subtitle="Sign in to your account"
+      title="Sign in"
+      subtitle="New here? Signing in creates an account for admin approval."
     >
       <Seo title={meta.title} description={meta.description} path={meta.path} noindex={!meta.index} />
 
