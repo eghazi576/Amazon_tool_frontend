@@ -33,10 +33,12 @@ const PendingApproval = () => {
 
         <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
           {rejected ? (
-            <>Your account request was not approved. If you think this is a mistake, contact the administrator.</>
+            <>You are not a student of <span className="font-medium text-foreground">FBA Accelerator by Nomads University</span>.
+              If you think this is a mistake, contact the administrator.</>
           ) : (
-            <>Thanks for signing up. An administrator needs to approve your account before you can use WholesaleOS.
-              You'll be able to sign in and start once it's approved.</>
+            <>Thanks for signing in. An administrator needs to approve your account before you can use WholesaleOS.
+              If you are a student of <span className="font-medium text-foreground">FBA Accelerator by Nomads University</span>,
+              your account will be approved shortly.</>
           )}
         </p>
 
