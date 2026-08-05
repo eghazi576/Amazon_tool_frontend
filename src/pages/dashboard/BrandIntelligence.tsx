@@ -367,7 +367,7 @@ export default function BrandIntelligence() {
               <CardTitle className="text-sm flex items-center gap-2">
                 <Boxes className="h-4 w-4 text-primary" /> Buy Box Statistics
               </CardTitle>
-              <CardDescription>Share of the Buy Box over the last 90 days, per seller — Amazon and everyone else.</CardDescription>
+              <CardDescription>Share of the Buy Box over the last 90 days, per seller: Amazon and every other seller.</CardDescription>
             </CardHeader>
             <CardContent>
               {bbSellers.length === 0 ? (
@@ -390,7 +390,7 @@ export default function BrandIntelligence() {
                             {s.seller}
                             {s.isAmazon && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">Amazon</span>}
                           </td>
-                          <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct}%</td>
+                          <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct < 1 ? "<1" : s.sharePct}%</td>
                           <td className="p-2.5 text-muted-foreground">{s.isFBA == null ? "—" : s.isFBA ? "Yes" : "No"}</td>
                           <td className="p-2.5 text-right text-muted-foreground">{s.avgPrice != null ? `$${s.avgPrice.toFixed(2)}` : "—"}</td>
                         </tr>
