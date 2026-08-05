@@ -13,6 +13,8 @@ type AuthContextType = {
   logout:        () => Promise<void>;
   forgotPassword:(email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
+  /** Re-fetch the current user (e.g. poll for an admin approval). */
+  refreshUser:   () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -56,6 +58,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  // Re-check the account (used to poll for status changes). A transient failure
+  // keeps the current user rather than logging them out.
+  const refreshUser = async () => {
+    try {
+      const data = await apiMe();
+      setUser((prev) =>
+        prev && data.user && prev.id === data.user.id && prev.status === data.user.status
+          ? prev // unchanged — bail out so nothing re-renders on a quiet poll
+          : data.user,
+      );
+    } catch { /* transient failure: keep current */ }
+  };
+
   const forgotPassword = (email: string) => apiForgotPassword(email);
 
   const resetPassword = async (tkn: string, password: string) => {
@@ -65,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, login, register, logout, forgotPassword, resetPassword }}
+      value={{ user, isLoading, login, register, logout, forgotPassword, resetPassword, refreshUser }}
     >
       {children}
     </AuthContext.Provider>

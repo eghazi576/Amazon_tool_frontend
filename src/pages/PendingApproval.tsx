@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Clock, ShieldX, PartyPopper, LogOut, ArrowRight } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
@@ -12,8 +13,19 @@ import Seo from "@/components/Seo";
  *  - PENDING   → awaiting-approval message.
  */
 const PendingApproval = ({ onEnter }: { onEnter?: () => void }) => {
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
+
+  // While the account isn't approved yet, poll for the admin's decision so the
+  // screen flips to "granted" or "restricted" live, without a manual refresh.
+  const notApproved = !!user && !user.isAdmin && user.status !== "APPROVED";
+  useEffect(() => {
+    if (!notApproved) return;
+    const id = setInterval(() => { refreshUser(); }, 15000);
+    const onFocus = () => refreshUser();
+    window.addEventListener("focus", onFocus);
+    return () => { clearInterval(id); window.removeEventListener("focus", onFocus); };
+  }, [notApproved, refreshUser]);
 
   if (isLoading) return null;
   if (!user) return <Navigate to="/sign-in" replace />;
