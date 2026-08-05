@@ -43,7 +43,7 @@ const PendingApproval = ({ onEnter }: { onEnter?: () => void }) => {
             <p className="font-medium text-foreground">Access Granted to WholesaleOS</p>
             <p>Welcome to <span className="font-medium text-foreground">WholesaleOS by Nomads University</span>.</p>
             <p>Let's build your profitable wholesale business together!</p>
-            <p className="text-xs">— Team Nomads University</p>
+            <p className="text-xs">Team Nomads University</p>
           </div>
         ) : rejected ? (
           <div className="mt-5 space-y-3 text-sm leading-relaxed text-muted-foreground">
@@ -56,7 +56,7 @@ const PendingApproval = ({ onEnter }: { onEnter?: () => void }) => {
                 Nomads University
               </a>
             </p>
-            <p className="text-xs">— Team Nomads University</p>
+            <p className="text-xs">Team Nomads University</p>
           </div>
         ) : (
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground">

@@ -11,7 +11,7 @@ const metrics = [
   { value: "15",    label: "Scoring Criteria" },
   { value: "90d",   label: "Data Window" },
   { value: "11",    label: "Brand Criteria" },
-  { value: "100%",  label: "Live API Data" },
+  { value: "100%",  label: "Live Market Data" },
 ];
 
 const checks = [
