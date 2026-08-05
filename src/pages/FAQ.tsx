@@ -157,14 +157,17 @@ export default function FAQPage() {
 
         {/* Header */}
         <div className="mb-12 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary shadow-elegant">
-            <HelpCircle className="h-6 w-6 text-primary-foreground" />
+          <div className="relative mx-auto mb-5 inline-flex">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 blur-lg opacity-50" />
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow-elegant ring-1 ring-white/20">
+              <HelpCircle className="h-7 w-7 text-white" strokeWidth={2} />
+            </div>
           </div>
           <h1 className="font-display text-3xl font-bold sm:text-4xl">
             Frequently Asked Questions
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Everything you need to know about WholesaleOS — Amazon FBA product and brand research.
+            Everything you need to know about WholesaleOS: Amazon FBA product and brand research.
           </p>
         </div>
 
