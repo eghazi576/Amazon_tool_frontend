@@ -46,6 +46,7 @@ export default function BrandIntelligence() {
   const [autoFilled, setAutoFilled] = useState<AutoFilledKeys>(new Set());
   const [brandNameOverride, setBrandNameOverride] = useState(false);
   const [usage, setUsage]         = useState<SearchUsage | null>(null);
+  const [bbSellers, setBbSellers] = useState<{ seller: string; sharePct: number; isAmazon: boolean; isFBA: boolean | null; avgPrice: number | null }[]>([]);
 
   useEffect(() => { getKeepaUsage().then(setUsage).catch(() => {}); }, []);
 
@@ -74,6 +75,7 @@ export default function BrandIntelligence() {
     try {
       const data = await fetchKeepaProduct(asin, 1, 0, 0, null, "brand");
       if (data.usage) setUsage(data.usage);
+      setBbSellers(data.metrics.buyBoxSellers ?? []);
       const filled = new Set<keyof BrandInput>();
 
       const updates: Partial<BrandInput> = {};
@@ -356,6 +358,47 @@ export default function BrandIntelligence() {
                     placeholder="e.g. 0" onChange={(e) => set("ipComplaintsLast12Mo", parseFloat(e.target.value) || 0)} />
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* ── Buy Box Statistics (auto from the ASIN, 90-day) ──────────── */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Boxes className="h-4 w-4 text-primary" /> Buy Box Statistics
+              </CardTitle>
+              <CardDescription>Share of the Buy Box over the last 90 days, per seller — Amazon and everyone else.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {bbSellers.length === 0 ? (
+                <p className="py-6 text-center text-sm text-muted-foreground">Enter an ASIN above and submit to load Buy Box statistics.</p>
+              ) : (
+                <div className="overflow-x-auto rounded-lg border border-border/60">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-muted/40 text-left text-xs text-muted-foreground">
+                        <th className="p-2.5 font-medium">Seller</th>
+                        <th className="p-2.5 font-medium text-right">Buy Box %</th>
+                        <th className="p-2.5 font-medium">FBA</th>
+                        <th className="p-2.5 font-medium text-right">Avg price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bbSellers.map((s, i) => (
+                        <tr key={i} className={`border-t border-border/50 ${s.isAmazon ? "bg-primary/5" : ""}`}>
+                          <td className="p-2.5 font-medium text-foreground">
+                            {s.seller}
+                            {s.isAmazon && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">Amazon</span>}
+                          </td>
+                          <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct}%</td>
+                          <td className="p-2.5 text-muted-foreground">{s.isFBA == null ? "—" : s.isFBA ? "Yes" : "No"}</td>
+                          <td className="p-2.5 text-right text-muted-foreground">{s.avgPrice != null ? `$${s.avgPrice.toFixed(2)}` : "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </CardContent>
           </Card>
 

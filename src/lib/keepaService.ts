@@ -55,6 +55,7 @@ export type KeepaProductResponse = {
     bsrTrend90: number | null;
     amazonBuyBoxSharePct: number | null;
     otherBuyBoxSharePct: number | null;
+    buyBoxSellers?: { seller: string; sharePct: number; isAmazon: boolean; isFBA: boolean | null; avgPrice: number | null }[];
   };
   profitAnalysis: {
     priceUsed: number;
