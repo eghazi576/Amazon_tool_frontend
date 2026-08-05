@@ -999,7 +999,7 @@ const ProductResearch = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="t" type="number" scale="time" domain={["dataMin", "dataMax"]} tickFormatter={(t) => fmtDate(Number(t))} stroke="hsl(var(--muted-foreground))" fontSize={10} minTickGap={44} />
                 <YAxis yAxisId="price" domain={["auto", "auto"]} stroke="hsl(var(--muted-foreground))" fontSize={10} width={48} tickFormatter={(v) => `$${v}`} />
-                <YAxis yAxisId="rank" orientation="right" reversed domain={["auto", "auto"]} stroke="#22c55e" fontSize={10} width={44} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
+                <YAxis yAxisId="rank" orientation="right" domain={["auto", "auto"]} stroke="#22c55e" fontSize={10} width={44} tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`)} />
                 <YAxis yAxisId="rev" hide domain={[0, "dataMax"]} />
                 <Tooltip
                   contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
@@ -1052,12 +1052,12 @@ const ProductResearch = () => {
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="BSR / Sales Rank (Last 90 Days)" description="Lower = better rank. Negative trend = improving.">
+            <ChartCard title="BSR / Sales Rank (Last 90 Days)" description="The Best Seller Rank over time. A lower number is a better rank.">
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={data.series.rank.map((p) => ({ date: fmtDate(p.t), value: p.v }))}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={10} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} reversed tickFormatter={(v) => v.toLocaleString()} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickFormatter={(v) => v.toLocaleString()} />
                   <Tooltip
                     contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
                     formatter={(v: any) => [Number(v).toLocaleString(), "BSR"]}
