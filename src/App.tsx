@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
@@ -45,10 +45,17 @@ const queryClient = new QueryClient();
 function RequireAuth({ children }: { children: JSX.Element }) {
   const { user, isLoading } = useAuth();
   if (isLoading) return null;
+  const [, forceRender] = useState(0);
   if (!user) return <Navigate to="/sign-in" replace />;
   // Admins bypass; everyone else must be approved before using the tool. Render
   // the waiting screen inline (no dedicated /pending URL to 404 on hard refresh).
   if (!user.isAdmin && user.status !== "APPROVED") return <PendingApproval />;
+  // First entry after approval: show the one-time "access granted" welcome,
+  // remembered per user so each account sees it once.
+  const welcomeKey = `wos_welcomed_${user.id}`;
+  if (!user.isAdmin && localStorage.getItem(welcomeKey) !== "1") {
+    return <PendingApproval onEnter={() => { localStorage.setItem(welcomeKey, "1"); forceRender((n) => n + 1); }} />;
+  }
   return children;
 }
 
