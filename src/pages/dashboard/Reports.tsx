@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { BarChart3, Download, FileText, FileSpreadsheet, FileJson } from "lucide-react";
+import { BarChart3, FileText, FileSpreadsheet, FileJson } from "lucide-react";
 import { getHistory, toCSV, downloadFile, type HistoryEntry } from "@/lib/history";
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -22,7 +22,8 @@ const ReportsPage = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const refresh = () => setEntries(getHistory());
+    // getHistory() is async (backend-backed) — await it, don't put the Promise in state.
+    const refresh = () => { getHistory().then(setEntries).catch(() => setEntries([])); };
     refresh();
     window.addEventListener("asin_history_changed", refresh);
     return () => window.removeEventListener("asin_history_changed", refresh);
