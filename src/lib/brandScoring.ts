@@ -52,6 +52,7 @@ export type BrandScoringConfig = {
     fbaSellers:         number; // 5
     salesVelocity:      number; // 5
     lowAmazonBuybox:    number; // 20 — max points at stake for Amazon Buy Box share (tiered)
+    noSellerDominancy:  number; // 10 — deducted if one seller dominates the Buy Box
   };
 };
 
@@ -62,7 +63,7 @@ export const DEFAULT_BRAND_CONFIG: BrandScoringConfig = {
     website: 10, registeredBusiness: 0, noHazmat: 10,
     noAdultRisk: 10, noTakedowns: 10, brandActive: 10,
     noIPComplaints: 0, noCounterfeit: 10, fbaSellers: 5,
-    salesVelocity: 5, lowAmazonBuybox: 5,
+    salesVelocity: 5, lowAmazonBuybox: 5, noSellerDominancy: 10,
   },
 };
 
@@ -86,6 +87,7 @@ export type BrandInput = {
   adultOrHighRisk: boolean;      // adult/gambling/weapons etc. → REJECT
   massAccountTakedowns: boolean; // history of mass takedowns → REJECT
   lastSaleWithin30Days: boolean; // brand is active
+  sellerDominancy: boolean;      // one seller dominates the Buy Box → lose 10 pts
 };
 
 export type BrandCriterion = {
@@ -204,6 +206,14 @@ export function scoreBrand(
         if (s <= 75) return W.lowAmazonBuybox - 15; // −15
         return 0;                                    // 75–80 → −20 (≥80 hard-rejects)
       })(),
+    },
+    {
+      // Manual flag from the Buy Box table: if a single seller dominates the
+      // Buy Box, deduct 10 points (not a hard reject).
+      key: "noSellerDominancy", criteriaNum: 13, tier: "high", weight: W.noSellerDominancy,
+      label: "No single-seller Buy Box dominance", rejectIfFail: false,
+      passCondition: "No single seller dominates the Buy Box (−10 if present)",
+      passed: !input.sellerDominancy,
     },
   ];
 

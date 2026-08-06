@@ -33,6 +33,7 @@ const defaultInput: BrandInput = {
   adultOrHighRisk: false,
   massAccountTakedowns: false,
   lastSaleWithin30Days: false,
+  sellerDominancy: false,
 };
 
 // Fields that were auto-filled from API
@@ -399,6 +400,15 @@ export default function BrandIntelligence() {
                   </table>
                 </div>
               )}
+              <div className="mt-3">
+                <ToggleField
+                  label="Seller Dominancy"
+                  hint="Does a single seller dominate the Buy Box? (Yes = lose 10 pts)"
+                  checked={input.sellerDominancy}
+                  onChange={(v) => set("sellerDominancy", v)}
+                  danger={input.sellerDominancy}
+                />
+              </div>
             </CardContent>
           </Card>
 

@@ -564,6 +564,45 @@ const ProductResearch = () => {
             </CardContent>
           </Card>
 
+          {/* ── Buy Box Statistics (display only — no scoring impact) ─────── */}
+          {data.metrics.buyBoxSellers && data.metrics.buyBoxSellers.length > 0 && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Package className="h-4 w-4 text-primary" /> Buy Box Statistics
+                </CardTitle>
+                <CardDescription>Buybox share per seller over 90 days</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto rounded-lg border border-border/60">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-muted/40 text-left text-xs text-muted-foreground">
+                        <th className="p-2.5 font-medium">Seller</th>
+                        <th className="p-2.5 font-medium text-right">Buy Box %</th>
+                        <th className="p-2.5 font-medium">FBA</th>
+                        <th className="p-2.5 font-medium text-right">Avg price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.metrics.buyBoxSellers.map((s, i) => (
+                        <tr key={i} className={`border-t border-border/50 ${s.isAmazon ? "bg-primary/5" : ""}`}>
+                          <td className="p-2.5 font-medium text-foreground">
+                            {s.seller}
+                            {s.isAmazon && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">Amazon</span>}
+                          </td>
+                          <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct < 1 ? "<1" : s.sharePct}%</td>
+                          <td className="p-2.5 text-muted-foreground">{s.isFBA == null ? "—" : s.isFBA ? "Yes" : "No"}</td>
+                          <td className="p-2.5 text-right text-muted-foreground">{s.avgPrice != null ? `$${s.avgPrice.toFixed(2)}` : "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* ── Profit Analysis Card ─────────────────────────────────────── */}
           <Card className="border-primary/30">
             <CardHeader className="pb-2">

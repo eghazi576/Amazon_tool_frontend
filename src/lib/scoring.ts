@@ -151,6 +151,7 @@ export type ScoreCriterion = {
   source: "auto" | "manual";       // auto = from Keepa | manual = user enters
 };
 
+
 export type ScoreResult = {
   rejected: boolean;
   rejectionReasons: string[];
