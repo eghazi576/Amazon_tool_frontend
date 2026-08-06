@@ -49,7 +49,7 @@ const DashboardMockup = () => (
             </p>
             {/* Score badge */}
             <span className="shrink-0 rounded-md bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold text-emerald-400 uppercase tracking-wide">
-              EXCELLENT
+              HIGHLY VIABLE
             </span>
           </div>
 

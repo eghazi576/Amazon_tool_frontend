@@ -53,7 +53,7 @@ const PendingApproval = ({ onEnter }: { onEnter?: () => void }) => {
           <div className="mt-5 space-y-3 text-sm leading-relaxed text-muted-foreground">
             <p className="text-base font-semibold text-foreground">🎉 Congratulations! 🎉</p>
             <p className="font-medium text-foreground">Access Granted to WholesaleOS</p>
-            <p>Welcome to <span className="font-medium text-foreground">WholesaleOS by Nomads University</span>.</p>
+            <p>Welcome to <span className="font-medium text-foreground">WholesaleOS by Hussam Ansari</span>.</p>
             <p>Let's build your profitable wholesale business together!</p>
             <p className="text-xs">Team Nomads University</p>
           </div>

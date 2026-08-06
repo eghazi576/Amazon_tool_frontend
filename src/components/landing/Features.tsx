@@ -45,7 +45,7 @@ const features: Feature[] = [
       points: [
         "15 weighted criteria, from BSR and ROI to Buy Box stability",
         "Hard-reject checks: IP complaints, hazmat and authenticity",
-        "A clear EXCELLENT / GOOD / AVERAGE / BAD / REJECT verdict",
+        "A clear HIGHLY VIABLE / LIKELY VIABLE / SEEMS VIABLE / LOW VIABLE / NOT VIABLE verdict",
         "The reasons behind every score, not just a number",
         "Tune the thresholds to match your own buying rules",
       ],
@@ -77,7 +77,7 @@ const features: Feature[] = [
     details: {
       intro: "Vetting a wholesale brand is a different job from scoring one product. Brand Intelligence scores the brand itself so you avoid the ones that waste time or risk your account.",
       points: [
-        "An 11-criteria APPROVED or REJECTED brand verdict",
+        "An 11-criteria VIABLE or NOT VIABLE brand verdict",
         "IP complaint history and counterfeit red flags",
         "Hazmat catalogue share and MAP-policy signals",
         "FBA seller density and monthly sales velocity",

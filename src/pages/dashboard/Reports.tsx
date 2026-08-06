@@ -10,11 +10,11 @@ import {
 } from "recharts";
 
 const decisionColor: Record<HistoryEntry["decision"], string> = {
-  EXCELLENT: "hsl(142 71% 45%)",
-  GOOD: "hsl(199 89% 55%)",
-  AVERAGE: "hsl(38 92% 55%)",
-  BAD: "hsl(25 95% 60%)",
-  REJECT: "hsl(var(--destructive))",
+  "HIGHLY VIABLE": "hsl(142 71% 45%)",
+  "LIKELY VIABLE": "hsl(199 89% 55%)",
+  "SEEMS VIABLE": "hsl(38 92% 55%)",
+  "LOW VIABLE": "hsl(25 95% 60%)",
+  "NOT VIABLE": "hsl(var(--destructive))",
 };
 
 const ReportsPage = () => {
@@ -30,14 +30,14 @@ const ReportsPage = () => {
   }, []);
 
   const stats = useMemo(() => {
-    const counts: Record<string, number> = { EXCELLENT: 0, GOOD: 0, AVERAGE: 0, BAD: 0, REJECT: 0 };
+    const counts: Record<string, number> = { "HIGHLY VIABLE": 0, "LIKELY VIABLE": 0, "SEEMS VIABLE": 0, "LOW VIABLE": 0, "NOT VIABLE": 0 };
     let totalRoi = 0, scoredCount = 0, approvedCount = 0;
     entries.forEach((e) => {
       counts[e.decision] = (counts[e.decision] ?? 0) + 1;
-      if (e.decision !== "REJECT") {
+      if (e.decision !== "NOT VIABLE") {
         totalRoi += e.roi;
         scoredCount++;
-        if (e.decision === "EXCELLENT" || e.decision === "GOOD") approvedCount++;
+        if (e.decision === "HIGHLY VIABLE" || e.decision === "LIKELY VIABLE") approvedCount++;
       }
     });
     return {
@@ -48,13 +48,13 @@ const ReportsPage = () => {
     };
   }, [entries]);
 
-  const pieData = (["EXCELLENT", "GOOD", "AVERAGE", "BAD", "REJECT"] as const)
+  const pieData = (["HIGHLY VIABLE", "LIKELY VIABLE", "SEEMS VIABLE", "LOW VIABLE", "NOT VIABLE"] as const)
     .map((k) => ({ name: k, value: stats.counts[k] ?? 0 }))
     .filter((d) => d.value > 0);
 
   const recentBars = entries.slice(0, 10).reverse().map((e) => ({
     name: e.asin.slice(-4),
-    score: e.decision === "REJECT" ? 0 : e.total,
+    score: e.decision === "NOT VIABLE" ? 0 : e.total,
   }));
 
   const exportCSV = () => {
@@ -104,7 +104,7 @@ const ReportsPage = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <KpiCard label="Total lookups" value={stats.total.toString()} />
         <KpiCard label="Approved" value={stats.approvedCount.toString()} accent="text-emerald-400" />
-        <KpiCard label="Rejected" value={(stats.counts.REJECT ?? 0).toString()} accent="text-destructive" />
+        <KpiCard label="Not viable" value={(stats.counts["NOT VIABLE"] ?? 0).toString()} accent="text-destructive" />
         <KpiCard label="Avg ROI" value={`${stats.avgRoi.toFixed(0)}%`} />
       </div>
 

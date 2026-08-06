@@ -291,11 +291,11 @@ const AMAZON_CATEGORIES: AmazonCategory[] = [
 ];
 
 const decisionStyles = {
-  EXCELLENT: { bg: "bg-emerald-500/15", text: "text-emerald-400", border: "border-emerald-500/30", icon: CheckCircle2, label: "EXCELLENT" },
-  GOOD:      { bg: "bg-sky-500/15",     text: "text-sky-400",     border: "border-sky-500/30",     icon: CheckCircle2, label: "GOOD" },
-  AVERAGE:   { bg: "bg-amber-500/15",   text: "text-amber-400",   border: "border-amber-500/30",   icon: AlertTriangle, label: "AVERAGE" },
-  BAD:       { bg: "bg-orange-500/15",  text: "text-orange-400",  border: "border-orange-500/30",  icon: AlertTriangle, label: "BAD" },
-  REJECT:    { bg: "bg-destructive/15", text: "text-destructive", border: "border-destructive/30", icon: XCircle, label: "REJECT" },
+  "HIGHLY VIABLE": { bg: "bg-emerald-500/15", text: "text-emerald-400", border: "border-emerald-500/30", icon: CheckCircle2, label: "HIGHLY VIABLE" },
+  "LIKELY VIABLE": { bg: "bg-sky-500/15",     text: "text-sky-400",     border: "border-sky-500/30",     icon: CheckCircle2, label: "LIKELY VIABLE" },
+  "SEEMS VIABLE":  { bg: "bg-amber-500/15",   text: "text-amber-400",   border: "border-amber-500/30",   icon: AlertTriangle, label: "SEEMS VIABLE" },
+  "LOW VIABLE":    { bg: "bg-orange-500/15",  text: "text-orange-400",  border: "border-orange-500/30",  icon: AlertTriangle, label: "LOW VIABLE" },
+  "NOT VIABLE":    { bg: "bg-destructive/15", text: "text-destructive", border: "border-destructive/30", icon: XCircle, label: "NOT VIABLE" },
 } as const;
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -508,7 +508,7 @@ const ProductResearch = () => {
                     )}
                     {data.isHazmat && (
                       <Badge variant="destructive" className="gap-1">
-                        <ShieldAlert className="h-3 w-3" /> Hazmat — AUTO REJECT
+                        <ShieldAlert className="h-3 w-3" /> Hazmat — NOT VIABLE
                       </Badge>
                     )}
                     {data.isAdultProduct && (
@@ -1168,7 +1168,7 @@ const ToggleRow = ({
         {sub && <p className="text-[10px] text-muted-foreground mt-1 leading-snug">{sub}</p>}
         {rejectIf && (
           <span className="inline-block mt-1 text-[9px] rounded bg-destructive/15 text-destructive px-1.5 py-0.5 uppercase tracking-wide font-medium">
-            {invertLogic ? "No = REJECT" : "Yes = REJECT"}
+            {invertLogic ? "No = NOT VIABLE" : "Yes = NOT VIABLE"}
           </span>
         )}
       </div>

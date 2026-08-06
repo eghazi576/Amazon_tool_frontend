@@ -133,7 +133,7 @@ export default function BrandIntelligence() {
   };
 
   const resultColor = !result ? ""
-    : result.decision === "APPROVED"
+    : result.decision === "VIABLE"
     ? "border-emerald-500/40 bg-emerald-500/5"
     : "border-destructive/40 bg-destructive/5";
 
@@ -253,7 +253,7 @@ export default function BrandIntelligence() {
                   />
                 </div>
 
-                <Field label="Brand Website URL *" hint="Required — no website = REJECT">
+                <Field label="Brand Website URL *" hint="Required — no website = NOT VIABLE">
                   <Input
                     value={input.brandWebsite}
                     onChange={(e) => set("brandWebsite", e.target.value)}
@@ -367,7 +367,7 @@ export default function BrandIntelligence() {
               <CardTitle className="text-sm flex items-center gap-2">
                 <Boxes className="h-4 w-4 text-primary" /> Buy Box Statistics
               </CardTitle>
-              <CardDescription>Share of the Buy Box over the last 90 days, per seller: Amazon and every other seller.</CardDescription>
+              <CardDescription>Buybox share per seller over 90 days</CardDescription>
             </CardHeader>
             <CardContent>
               {bbSellers.length === 0 ? (
@@ -448,7 +448,7 @@ export default function BrandIntelligence() {
                 />
                 <ToggleField
                   label="History of mass account takedowns"
-                  hint="Brand caused mass seller account suspensions? (Yes = REJECT)"
+                  hint="Brand caused mass seller account suspensions? (Yes = NOT VIABLE)"
                   checked={input.massAccountTakedowns}
                   onChange={(v) => set("massAccountTakedowns", v)}
                   danger={input.massAccountTakedowns}
@@ -483,7 +483,7 @@ export default function BrandIntelligence() {
                 <div className="space-y-4">
                   <div className={`rounded-lg p-4 border ${resultColor}`}>
                     <div className="flex items-center gap-2 mb-2">
-                      {result.decision === "APPROVED"
+                      {result.decision === "VIABLE"
                         ? <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                         : <XCircle className="h-5 w-5 text-destructive" />}
                       <span className="font-display text-xl font-bold">{result.decision}</span>
@@ -499,7 +499,7 @@ export default function BrandIntelligence() {
                       </div>
                       <div className="h-2 rounded-full bg-muted overflow-hidden">
                         <div
-                          className={`h-full rounded-full transition-all ${result.decision === "APPROVED" ? "bg-emerald-500" : "bg-destructive"}`}
+                          className={`h-full rounded-full transition-all ${result.decision === "VIABLE" ? "bg-emerald-500" : "bg-destructive"}`}
                           style={{ width: `${Math.min(result.pct, 100)}%` }}
                         />
                       </div>
@@ -544,7 +544,7 @@ export default function BrandIntelligence() {
                               {c.label}
                             </span>
                             {c.rejectIfFail && !c.passed && (
-                              <Badge variant="outline" className="text-[9px] py-0 h-4 px-1 shrink-0 text-destructive border-destructive/30">REJECT</Badge>
+                              <Badge variant="outline" className="text-[9px] py-0 h-4 px-1 shrink-0 text-destructive border-destructive/30">NOT VIABLE</Badge>
                             )}
                           </div>
                           <span className="font-mono text-muted-foreground ml-2 shrink-0">{c.earned}/{c.weight}</span>
@@ -649,7 +649,7 @@ function ToggleField({ label, hint, checked, onChange, danger, rejectIfYes, reje
           {hint && <p className="text-[10px] text-muted-foreground mt-1 leading-snug">{hint}</p>}
           {(rejectIfYes || rejectIfNo) && (
             <span className="inline-block mt-1.5 text-[9px] rounded bg-destructive/15 text-destructive px-1.5 py-0.5 uppercase tracking-wide font-medium">
-              {rejectIfYes ? "Yes = REJECT" : "No = REJECT"}
+              {rejectIfYes ? "Yes = NOT VIABLE" : "No = NOT VIABLE"}
             </span>
           )}
         </div>

@@ -59,8 +59,8 @@ const Terms = () => (
           Amazon's actual charges may differ.
         </li>
         <li>
-          <strong>A score or verdict is an opinion produced by a model.</strong> "EXCELLENT" is not a
-          guarantee of profit, and "REJECT" is not proof of loss.
+          <strong>A score or verdict is an opinion produced by a model.</strong> "HIGHLY VIABLE" is not a
+          guarantee of profit, and "NOT VIABLE" is not proof of loss.
         </li>
         <li>
           <strong>Third-party data may be stale or incorrect.</strong> We display what Keepa returns.

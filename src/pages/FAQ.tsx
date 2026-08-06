@@ -48,7 +48,7 @@ const categories = [
     faqs: [
       {
         q: "How does the product viability score work?",
-        a: "WholesaleOS scores every product across 15+ weighted criteria grouped into hard-reject checks and scored criteria. Hard-reject checks (IP complaint, hazmat, authenticity complaints) immediately fail a product regardless of score. Scored criteria cover profitability, competition level, Buy Box stability, listing health, review sentiment, and more. The final score maps to one of five verdicts: EXCELLENT, GOOD, AVERAGE, BAD, or REJECT.",
+        a: "WholesaleOS scores every product across 15+ weighted criteria grouped into hard-reject checks and scored criteria. Hard-reject checks (IP complaint, hazmat, authenticity complaints) immediately fail a product regardless of score. Scored criteria cover profitability, competition level, Buy Box stability, listing health, review sentiment, and more. The final score maps to one of five verdicts: HIGHLY VIABLE, LIKELY VIABLE, SEEMS VIABLE, LOW VIABLE, or NOT VIABLE.",
       },
       {
         q: "How does WholesaleOS calculate monthly sales estimates?",
@@ -77,7 +77,7 @@ const categories = [
     faqs: [
       {
         q: "What is Brand Intelligence in WholesaleOS?",
-        a: "Brand Intelligence is WholesaleOS's wholesale brand vetting module. Before reaching out to a brand or distributor, you need to know: Does this brand have a real website? Are they a registered business? Do they have IP complaint history? Is their catalog hazmat-heavy? Brand Intelligence scores a brand across 11 criteria and produces an APPROVED or REJECTED verdict — helping you avoid brands that will waste your time or get your account suspended.",
+        a: "Brand Intelligence is WholesaleOS's wholesale brand vetting module. Before reaching out to a brand or distributor, you need to know: Does this brand have a real website? Are they a registered business? Do they have IP complaint history? Is their catalog hazmat-heavy? Brand Intelligence scores a brand across 11 criteria and produces a VIABLE or NOT VIABLE verdict — helping you avoid brands that will waste your time or get your account suspended.",
       },
       {
         q: "What are the 11 Brand Intelligence scoring criteria?",

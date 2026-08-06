@@ -23,7 +23,7 @@ export type BrandHistoryEntry = {
   brandName:     string;
   brandWebsite:  string | null;
   category:      string | null;
-  decision:      "APPROVED" | "REJECTED";
+  decision:      "VIABLE" | "NOT VIABLE";
   score:         number;
   maxScore:      number;
   scorePct:      number;

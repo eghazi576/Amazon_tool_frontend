@@ -3,7 +3,7 @@
  * ===========================
  * Exactly matches PDF spec: "Automated Product Hunting Tool for Amazon Wholesale FBA"
  *
- * ── HARD REJECTION (any one = REJECT, no scoring) ────────────────────────────
+ * ── HARD REJECTION (any one = NOT VIABLE, no scoring) ────────────────────────
  *  #1  BSR ≥ 50,000
  *  #14 IP Complaint = Yes
  *  #15 Authenticity Complaint = Yes
@@ -35,7 +35,7 @@
  *   #21 Selling price ≥ $8
  *
  * Max score: (7×10) + (6×5) + (2×2) = 70 + 30 + 4 = 104
- * Thresholds: ≥80% = EXCELLENT | ≥60% = GOOD | ≥40% = AVERAGE | <40% = BAD
+ * Thresholds: ≥80% = HIGHLY VIABLE | ≥60% = LIKELY VIABLE | ≥40% = SEEMS VIABLE | <40% = LOW VIABLE
  */
 
 // ─── Scoring Config (admin-configurable) ─────────────────────────────────────
@@ -157,7 +157,7 @@ export type ScoreResult = {
   total: number;
   maxTotal: number;
   pct: number;
-  decision: "EXCELLENT" | "GOOD" | "AVERAGE" | "BAD" | "REJECT";
+  decision: "HIGHLY VIABLE" | "LIKELY VIABLE" | "SEEMS VIABLE" | "LOW VIABLE" | "NOT VIABLE";
   explanation: string;
   criteria: ScoreCriterion[];
 
@@ -214,8 +214,8 @@ export function scoreProduct(
     return {
       rejected: true, rejectionReasons,
       total: 0, maxTotal: MAX_TOTAL, pct: 0,
-      decision: "REJECT",
-      explanation: `Rejected: ${rejectionReasons.join("; ")}.`,
+      decision: "NOT VIABLE",
+      explanation: `Not viable: ${rejectionReasons.join("; ")}.`,
       criteria: [],
       sellingPrice, referralFee, fbaFee, storageFee, totalFees,
       cogs, profit, roi, margin, breakEven,
@@ -349,19 +349,19 @@ export function scoreProduct(
   const pct      = parseFloat(((total / maxTotal) * 100).toFixed(1));
 
   let decision: ScoreResult["decision"];
-  if (pct >= cfg.excellentPct)      decision = "EXCELLENT";
-  else if (pct >= cfg.goodPct)      decision = "GOOD";
-  else if (pct >= cfg.averagePct)   decision = "AVERAGE";
-  else                              decision = "BAD";
+  if (pct >= cfg.excellentPct)      decision = "HIGHLY VIABLE";
+  else if (pct >= cfg.goodPct)      decision = "LIKELY VIABLE";
+  else if (pct >= cfg.averagePct)   decision = "SEEMS VIABLE";
+  else                              decision = "LOW VIABLE";
 
   const passedHigh = criteria.filter((c) => c.tier === "high" && c.passed).length;
 
   const explanation =
-    decision === "EXCELLENT"
+    decision === "HIGHLY VIABLE"
       ? `Strong FBA opportunity — ${passedHigh}/7 high-weight checks passed. Score: ${total}/${maxTotal} (${pct}%)`
-      : decision === "GOOD"
+      : decision === "LIKELY VIABLE"
       ? `Solid product — ${total}/${maxTotal} pts (${pct}%). Worth deeper sourcing.`
-      : decision === "AVERAGE"
+      : decision === "SEEMS VIABLE"
       ? `Marginal — ${total}/${maxTotal} pts (${pct}%). Only proceed with clear edge.`
       : `Weak signals — ${total}/${maxTotal} pts (${pct}%). Better opportunities exist.`;
 

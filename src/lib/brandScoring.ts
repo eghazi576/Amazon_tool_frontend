@@ -29,7 +29,7 @@
  *   8. Sales velocity > 100 units/month per ASIN
  *   11. No frequent listing suppressions
  *
- * Decision: APPROVED if all hard checks pass AND score ≥ 70% of max points.
+ * Decision: VIABLE if all hard checks pass AND score ≥ 70% of max points.
  */
 
 // ─── Brand Scoring Config (admin-configurable) ───────────────────────────────
@@ -106,7 +106,7 @@ export type BrandScoreResult = {
   total: number;
   maxTotal: number;
   pct: number;
-  decision: "APPROVED" | "REJECTED";
+  decision: "VIABLE" | "NOT VIABLE";
   explanation: string;
   criteria: BrandCriterion[];
 };
@@ -229,17 +229,17 @@ export function scoreBrand(
       total,
       maxTotal,
       pct,
-      decision: "REJECTED",
-      explanation: `Rejected on hard criteria: ${rejectionReasons.join("; ")}.`,
+      decision: "NOT VIABLE",
+      explanation: `Not viable on hard criteria: ${rejectionReasons.join("; ")}.`,
       criteria,
     };
   }
 
   const approved = pct >= cfg.approvalPct;
-  const decision: "APPROVED" | "REJECTED" = approved ? "APPROVED" : "REJECTED";
+  const decision: "VIABLE" | "NOT VIABLE" = approved ? "VIABLE" : "NOT VIABLE";
   const explanation = approved
-    ? `APPROVED — All hard checks passed. Score ${total}/${maxTotal} (${pct}%). Good to do business.`
-    : `REJECTED — Hard checks passed but score ${total}/${maxTotal} (${pct}%) is below the 70% threshold.`;
+    ? `VIABLE — All hard checks passed. Score ${total}/${maxTotal} (${pct}%). Good to do business.`
+    : `NOT VIABLE — Hard checks passed but score ${total}/${maxTotal} (${pct}%) is below the 70% threshold.`;
 
   return {
     rejected: !approved,

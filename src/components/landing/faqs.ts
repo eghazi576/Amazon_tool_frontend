@@ -20,7 +20,7 @@ export const homepageFaqs: Faq[] = [
   },
   {
     q: "How does the product viability score work?",
-    a: "WholesaleOS scores every product across 15+ weighted criteria. Hard-reject checks such as IP complaints, hazmat detection, and authenticity complaints immediately fail a product. Scored criteria cover profitability, competition level, Buy Box stability, and listing health. The final result is one of five verdicts: EXCELLENT, GOOD, AVERAGE, BAD, or REJECT.",
+    a: "WholesaleOS scores every product across 15+ weighted criteria. Hard-reject checks such as IP complaints, hazmat detection, and authenticity complaints immediately fail a product. Scored criteria cover profitability, competition level, Buy Box stability, and listing health. The final result is one of five verdicts: HIGHLY VIABLE, LIKELY VIABLE, SEEMS VIABLE, LOW VIABLE, or NOT VIABLE.",
   },
   {
     q: "How accurate is the monthly sales estimate?",
@@ -32,7 +32,7 @@ export const homepageFaqs: Faq[] = [
   },
   {
     q: "What is Brand Intelligence?",
-    a: "Brand Intelligence is WholesaleOS's wholesale brand vetting module. It scores a brand across 11 criteria including Brand credibility, business registration, IP complaint history, hazmat catalogue size, FBA seller density, and sales velocity. The result is a clear APPROVED or REJECTED verdict before you invest time reaching out to a supplier.",
+    a: "Brand Intelligence is WholesaleOS's wholesale brand vetting module. It scores a brand across 11 criteria including Brand credibility, business registration, IP complaint history, hazmat catalogue size, FBA seller density, and sales velocity. The result is a clear VIABLE or NOT VIABLE verdict before you invest time reaching out to a supplier.",
   },
   {
     q: "Can WholesaleOS auto-fill brand data from an ASIN?",

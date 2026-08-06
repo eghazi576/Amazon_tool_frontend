@@ -29,11 +29,11 @@ import { type BrandScoringConfig, DEFAULT_BRAND_CONFIG } from "@/lib/brandScorin
 import { useToast } from "@/hooks/use-toast";
 
 const decisionColor: Record<string, string> = {
-  EXCELLENT: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  GOOD:      "bg-sky-500/15 text-sky-400 border-sky-500/30",
-  AVERAGE:   "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
-  BAD:       "bg-orange-500/15 text-orange-400 border-orange-500/30",
-  REJECT:    "bg-destructive/15 text-destructive border-destructive/30",
+  "HIGHLY VIABLE": "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  "LIKELY VIABLE": "bg-sky-500/15 text-sky-400 border-sky-500/30",
+  "SEEMS VIABLE":  "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
+  "LOW VIABLE":    "bg-orange-500/15 text-orange-400 border-orange-500/30",
+  "NOT VIABLE":    "bg-destructive/15 text-destructive border-destructive/30",
 };
 
 export default function AdminDashboard() {
@@ -235,7 +235,7 @@ function UsersTab({ toast }: { toast: any }) {
 
 // ─── Searches Tab ─────────────────────────────────────────────────────────────
 
-const DECISIONS = ["EXCELLENT", "GOOD", "AVERAGE", "BAD", "REJECT"] as const;
+const DECISIONS = ["HIGHLY VIABLE", "LIKELY VIABLE", "SEEMS VIABLE", "LOW VIABLE", "NOT VIABLE"] as const;
 
 function SearchesTab() {
   const [data, setData]       = useState<{ entries: AdminSearch[]; total: number } | null>(null);
@@ -521,8 +521,8 @@ function BrandSearchesTab() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All decisions</SelectItem>
-              <SelectItem value="APPROVED">APPROVED</SelectItem>
-              <SelectItem value="REJECTED">REJECTED</SelectItem>
+              <SelectItem value="VIABLE">VIABLE</SelectItem>
+              <SelectItem value="NOT VIABLE">NOT VIABLE</SelectItem>
             </SelectContent>
           </Select>
           {hasFilters && (
@@ -585,10 +585,10 @@ function BrandSearchesTab() {
                     <td className="px-3 py-2 text-muted-foreground max-w-[120px] truncate">{s.category ?? "—"}</td>
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-1">
-                        {s.decision === "APPROVED"
+                        {s.decision === "VIABLE"
                           ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                           : <XCircle className="h-3.5 w-3.5 text-destructive shrink-0" />}
-                        <span className={`font-semibold text-[10px] uppercase ${s.decision === "APPROVED" ? "text-emerald-400" : "text-destructive"}`}>
+                        <span className={`font-semibold text-[10px] uppercase ${s.decision === "VIABLE" ? "text-emerald-400" : "text-destructive"}`}>
                           {s.decision}
                         </span>
                       </div>
@@ -689,7 +689,7 @@ function ScoringTab({ toast }: { toast: any }) {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-sm">Rejection Thresholds</CardTitle>
-          <CardDescription className="text-xs">Hard-reject limits — product fails these = REJECT instantly</CardDescription>
+          <CardDescription className="text-xs">Hard-reject limits — product fails these = NOT VIABLE instantly</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -709,13 +709,13 @@ function ScoringTab({ toast }: { toast: any }) {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-sm">Decision Thresholds (%)</CardTitle>
-          <CardDescription className="text-xs">Score percentage cutoffs for EXCELLENT / GOOD / AVERAGE / BAD</CardDescription>
+          <CardDescription className="text-xs">Score percentage cutoffs for HIGHLY / LIKELY / SEEMS / LOW VIABLE</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid sm:grid-cols-3 gap-4">
-            <NumInput label="EXCELLENT (% ≥)"  value={config.excellentPct} onChange={(v) => setField(["excellentPct"], v)} max={100} badge="emerald" />
-            <NumInput label="GOOD (% ≥)"       value={config.goodPct}      onChange={(v) => setField(["goodPct"], v)}      max={100} badge="sky" />
-            <NumInput label="AVERAGE (% ≥)"    value={config.averagePct}   onChange={(v) => setField(["averagePct"], v)}   max={100} badge="yellow" />
+            <NumInput label="HIGHLY VIABLE (% ≥)" value={config.excellentPct} onChange={(v) => setField(["excellentPct"], v)} max={100} badge="emerald" />
+            <NumInput label="LIKELY VIABLE (% ≥)" value={config.goodPct}      onChange={(v) => setField(["goodPct"], v)}      max={100} badge="sky" />
+            <NumInput label="SEEMS VIABLE (% ≥)"  value={config.averagePct}   onChange={(v) => setField(["averagePct"], v)}   max={100} badge="yellow" />
           </div>
         </CardContent>
       </Card>

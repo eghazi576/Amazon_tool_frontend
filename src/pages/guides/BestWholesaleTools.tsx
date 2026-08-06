@@ -70,7 +70,7 @@ const CATEGORIES: Category[] = [
     blurb: "Working at the brand level: discovering brands, and vetting whether a brand is a safe wholesale opportunity.",
     tools: [
       { name: "SmartScout", compareSlug: "wholesaleos-vs-smartscout", bestFor: "Discovering brands and exploring the catalogue" },
-      { name: "WholesaleOS", us: true, bestFor: "An 11-criteria APPROVED/REJECTED verdict on a wholesale brand" },
+      { name: "WholesaleOS", us: true, bestFor: "An 11-criteria VIABLE/NOT VIABLE verdict on a wholesale brand" },
     ],
   },
 ];
@@ -82,7 +82,7 @@ const FAQS = [
   },
   {
     q: "Which tool is best for vetting wholesale brands?",
-    a: "Wholesale brand vetting is a specific, underserved job. WholesaleOS is built for it: its Brand Intelligence module scores a brand across 11 criteria: website and business verification, IP complaint history, hazmat catalogue percentage, FBA seller density, sales velocity and more, and returns an APPROVED or REJECTED verdict before you invest time in a supplier.",
+    a: "Wholesale brand vetting is a specific, underserved job. WholesaleOS is built for it: its Brand Intelligence module scores a brand across 11 criteria: website and business verification, IP complaint history, hazmat catalogue percentage, FBA seller density, sales velocity and more, and returns a VIABLE or NOT VIABLE verdict before you invest time in a supplier.",
   },
   {
     q: "Do I need more than one Amazon tool?",
@@ -164,9 +164,9 @@ const BestWholesaleTools = () => (
         <h2 className="font-display text-xl font-bold tracking-tight">Where WholesaleOS fits</h2>
         <p className="mt-3 leading-relaxed text-muted-foreground">
           WholesaleOS is not trying to be an all-in-one suite. It does two focused jobs: it scores a specific
-          product with a weighted 15-criteria verdict (EXCELLENT to REJECT, with hard-reject checks for IP
-          complaints, hazmat and authenticity), and it vets a wholesale brand across 11 criteria with an
-          APPROVED or REJECTED result. Both run on live Keepa data. If your bottleneck is deciding on a deal or
+          product with a weighted 15-criteria verdict (HIGHLY VIABLE to NOT VIABLE, with hard-reject checks for IP
+          complaints, hazmat and authenticity), and it vets a wholesale brand across 11 criteria with a
+          VIABLE or NOT VIABLE result. Both run on live Keepa data. If your bottleneck is deciding on a deal or
           a brand, rather than discovering ideas or scanning at scale, that focus is the point.
         </p>
       </section>

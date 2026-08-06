@@ -42,7 +42,7 @@ const KEEPA: Comparison = {
     "This is a comparison people ask about often, and the honest answer is that they are not really rivals. WholesaleOS is built on top of the Keepa API, it uses Keepa's data. The difference is what each one does with that data: Keepa shows you the history; WholesaleOS reads the same history and returns a scored buy or no-buy verdict.",
   rows: [
     { dimension: "Core job", wholesaleos: "Scores a product and gives a buy/no-buy verdict", competitor: "Tracks and charts price and BSR history" },
-    { dimension: "Output", wholesaleos: "A 15-criteria score: EXCELLENT / GOOD / AVERAGE / BAD / REJECT", competitor: "Raw charts and data points you interpret yourself" },
+    { dimension: "Output", wholesaleos: "A 15-criteria score: HIGHLY VIABLE / LIKELY VIABLE / SEEMS VIABLE / LOW VIABLE / NOT VIABLE", competitor: "Raw charts and data points you interpret yourself" },
     { dimension: "Profit calculation", wholesaleos: "Built in: referral, FBA, storage fees, ROI, break-even", competitor: "Not its focus; data only" },
     { dimension: "Brand vetting", wholesaleos: "Brand Intelligence: 11-criteria wholesale brand score", competitor: "Not offered" },
     { dimension: "Data source", wholesaleos: "The Keepa API (the same data)", competitor: "Keepa's own data" },
@@ -75,7 +75,7 @@ const JUNGLE_SCOUT: Comparison = {
   rows: [
     { dimension: "Breadth", wholesaleos: "Focused: product and brand viability scoring", competitor: "Broad suite: discovery, keywords, listings, more" },
     { dimension: "Primary user", wholesaleos: "Wholesale and online-arbitrage sellers", competitor: "Largely private-label sellers" },
-    { dimension: "Verdict", wholesaleos: "Scored EXCELLENT → REJECT with reasons", competitor: "Metrics and estimates to interpret" },
+    { dimension: "Verdict", wholesaleos: "Scored HIGHLY VIABLE → NOT VIABLE with reasons", competitor: "Metrics and estimates to interpret" },
     { dimension: "Brand vetting", wholesaleos: "11-criteria Brand Intelligence", competitor: "Not a wholesale brand-vetting tool" },
     { dimension: "Approach", wholesaleos: "Analyse an ASIN or brand you already have", competitor: "Discover new product opportunities" },
   ],
@@ -153,7 +153,7 @@ const SELLERAMP: Comparison = {
   ],
   faqs: [
     { q: "Is WholesaleOS a SellerAmp alternative?", a: "Yes, both are sourcing-decision tools rather than broad suites. WholesaleOS differs in its structured scoring: a weighted 15-criteria product verdict and a separate 11-criteria Brand Intelligence score for wholesale brand vetting. Which fits depends on whether you want quick metrics or a scored verdict." },
-    { q: "Which is better for wholesale brand vetting?", a: "WholesaleOS is built specifically for it. Its Brand Intelligence module scores a brand across 11 criteria, website and business verification, IP complaint history, hazmat catalogue percentage, FBA seller density, sales velocity and more, and returns an APPROVED or REJECTED verdict before you contact a supplier." },
+    { q: "Which is better for wholesale brand vetting?", a: "WholesaleOS is built specifically for it. Its Brand Intelligence module scores a brand across 11 criteria, website and business verification, IP complaint history, hazmat catalogue percentage, FBA seller density, sales velocity and more, and returns a VIABLE or NOT VIABLE verdict before you contact a supplier." },
     { q: "Does WholesaleOS have a mobile scanner?", a: "WholesaleOS is a web-based tool centred on ASIN and brand analysis. If in-store mobile scanning is core to your sourcing, that is a workflow SellerAmp is well known for." },
   ],
 };
@@ -167,7 +167,7 @@ const AMZSCOUT: Comparison = {
     "AMZScout and WholesaleOS both touch product research, but from opposite ends. AMZScout is a discovery suite for finding product ideas and estimating demand. WholesaleOS is a focused instrument for scoring a specific product or wholesale brand you already have in front of you.",
   rows: [
     { dimension: "Core job", wholesaleos: "Score a product/brand you already have", competitor: "Discover new product opportunities" },
-    { dimension: "Output", wholesaleos: "Scored EXCELLENT → REJECT verdict", competitor: "Estimates and metrics to interpret" },
+    { dimension: "Output", wholesaleos: "Scored HIGHLY VIABLE → NOT VIABLE verdict", competitor: "Estimates and metrics to interpret" },
     { dimension: "Brand vetting", wholesaleos: "11-criteria Brand Intelligence", competitor: "Not a wholesale brand-vetting focus" },
     { dimension: "Model fit", wholesaleos: "Wholesale, online arbitrage", competitor: "Largely private-label discovery" },
     { dimension: "Data", wholesaleos: "Live Keepa API", competitor: "Amazon marketplace estimates" },
@@ -216,7 +216,7 @@ const TACTICAL_ARBITRAGE: Comparison = {
   faqs: [
     { q: "Is WholesaleOS a Tactical Arbitrage alternative?", a: "Not really, they solve different halves of sourcing. Tactical Arbitrage finds candidates by scanning many sources; WholesaleOS decides on a candidate with a scored verdict and brand vetting. Many sellers would use a scanner to build a shortlist and a scoring tool to decide, rather than one instead of the other." },
     { q: "Can WholesaleOS scan bulk product lists?", a: "No. WholesaleOS analyses one ASIN or brand at a time in depth. If bulk scanning across retailers and wholesale lists is your need, that is what a tool like Tactical Arbitrage is designed for." },
-    { q: "Which is better for wholesale brand vetting?", a: "WholesaleOS. Its Brand Intelligence module produces an APPROVED or REJECTED verdict on a brand across 11 criteria before you invest time in a supplier, which bulk product scanners are not built to do." },
+    { q: "Which is better for wholesale brand vetting?", a: "WholesaleOS. Its Brand Intelligence module produces a VIABLE or NOT VIABLE verdict on a brand across 11 criteria before you invest time in a supplier, which bulk product scanners are not built to do." },
   ],
 };
 
@@ -229,7 +229,7 @@ const SMARTSCOUT: Comparison = {
     "SmartScout and WholesaleOS both work at the brand level, which makes this a closer comparison than most. SmartScout helps you discover and explore brands across Amazon's catalogue. WholesaleOS takes a specific brand and scores its viability as a wholesale opportunity.",
   rows: [
     { dimension: "Brand angle", wholesaleos: "Score a specific brand's wholesale viability", competitor: "Discover and explore brands at scale" },
-    { dimension: "Output", wholesaleos: "APPROVED / REJECTED across 11 criteria", competitor: "Brand and category data to explore" },
+    { dimension: "Output", wholesaleos: "VIABLE / NOT VIABLE across 11 criteria", competitor: "Brand and category data to explore" },
     { dimension: "Risk checks", wholesaleos: "IP complaints, hazmat, MAP, seller density", competitor: "Catalogue and seller analytics" },
     { dimension: "Product scoring", wholesaleos: "15-criteria product verdict too", competitor: "Catalogue-level research focus" },
     { dimension: "Best for", wholesaleos: "Deciding whether to pursue a brand", competitor: "Finding brands worth looking at" },
@@ -278,7 +278,7 @@ const SELLER_ASSISTANT: Comparison = {
   faqs: [
     { q: "Is WholesaleOS a Seller Assistant alternative?", a: "For the sourcing decision, yes, both evaluate whether a product is worth buying. WholesaleOS differs in depth and form: a web app that returns a weighted 15-criteria score plus a dedicated 11-criteria brand verdict, versus an inline browser extension focused on per-product checks. Which fits depends on whether you prefer inline speed or structured scoring." },
     { q: "Does WholesaleOS work as a browser extension?", a: "No, WholesaleOS is a web app where you paste an ASIN or brand and get a full analysis. If inline checks on the Amazon page itself are core to how you source, an extension like Seller Assistant is designed for that." },
-    { q: "Which is better for wholesale brands?", a: "WholesaleOS is built specifically for wholesale brand vetting, scoring a brand across 11 criteria and returning an APPROVED or REJECTED verdict, a dedicated brand workflow beyond per-product sourcing checks." },
+    { q: "Which is better for wholesale brands?", a: "WholesaleOS is built specifically for wholesale brand vetting, scoring a brand across 11 criteria and returning a VIABLE or NOT VIABLE verdict, a dedicated brand workflow beyond per-product sourcing checks." },
   ],
 };
 

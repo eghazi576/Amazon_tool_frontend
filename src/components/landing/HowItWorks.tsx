@@ -25,7 +25,7 @@ const steps = [
     icon: Lightbulb,
     title: "Get a clear buy / no-buy verdict",
     description:
-      "See EXCELLENT, GOOD, AVERAGE, BAD, or REJECT with a full breakdown. Source with confidence, not guesswork.",
+      "See HIGHLY VIABLE, LIKELY VIABLE, SEEMS VIABLE, LOW VIABLE, or NOT VIABLE with a full breakdown. Source with confidence, not guesswork.",
     color: "from-accent/30 to-accent/5",
     glow: "bg-accent/20",
     ring: "border-accent/40",

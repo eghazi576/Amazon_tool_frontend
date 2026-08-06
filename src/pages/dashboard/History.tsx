@@ -19,11 +19,11 @@ import {
 // ─── Product Research History ─────────────────────────────────────────────────
 
 const productDecisionColor: Record<string, string> = {
-  EXCELLENT: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  GOOD:      "bg-sky-500/15 text-sky-400 border-sky-500/30",
-  AVERAGE:   "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  BAD:       "bg-orange-500/15 text-orange-400 border-orange-500/30",
-  REJECT:    "bg-destructive/15 text-destructive border-destructive/30",
+  "HIGHLY VIABLE": "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  "LIKELY VIABLE": "bg-sky-500/15 text-sky-400 border-sky-500/30",
+  "SEEMS VIABLE":  "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  "LOW VIABLE":    "bg-orange-500/15 text-orange-400 border-orange-500/30",
+  "NOT VIABLE":    "bg-destructive/15 text-destructive border-destructive/30",
 };
 
 function ProductHistoryTab() {
@@ -136,17 +136,17 @@ function ProductHistoryTab() {
                     <Badge variant="outline" className={productDecisionColor[e.decision]}>{e.decision}</Badge>
                   </TableCell>
                   <TableCell className="text-right font-mono text-xs">
-                    {e.decision === "REJECT" ? "—" : `${e.total}/${e.maxTotal}`}
-                    {e.pct != null && e.decision !== "REJECT" && (
+                    {e.decision === "NOT VIABLE" ? "—" : `${e.total}/${e.maxTotal}`}
+                    {e.pct != null && e.decision !== "NOT VIABLE" && (
                       <span className="text-muted-foreground ml-1">({e.pct}%)</span>
                     )}
                   </TableCell>
                   <TableCell className="text-right font-mono text-xs">${(e.sellingPrice ?? 0).toFixed(2)}</TableCell>
                   <TableCell className={`text-right font-mono text-xs ${(e.profit ?? 0) > 0 ? "text-emerald-400" : (e.profit ?? 0) < 0 ? "text-destructive" : ""}`}>
-                    {e.decision === "REJECT" ? "—" : `$${(e.profit ?? 0).toFixed(2)}`}
+                    {e.decision === "NOT VIABLE" ? "—" : `$${(e.profit ?? 0).toFixed(2)}`}
                   </TableCell>
                   <TableCell className={`text-right font-mono text-xs ${(e.roi ?? 0) >= 20 ? "text-emerald-400" : ""}`}>
-                    {e.decision === "REJECT" ? "—" : `${(e.roi ?? 0).toFixed(0)}%`}
+                    {e.decision === "NOT VIABLE" ? "—" : `${(e.roi ?? 0).toFixed(0)}%`}
                   </TableCell>
                   <TableCell className="text-right font-mono text-xs text-muted-foreground">
                     {e.avgRank90 ? e.avgRank90.toLocaleString() : "—"}
@@ -289,10 +289,10 @@ function BrandHistoryTab() {
                   {/* Verdict */}
                   <TableCell>
                     <div className="flex items-center gap-1.5">
-                      {e.decision === "APPROVED"
+                      {e.decision === "VIABLE"
                         ? <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
                         : <XCircle className="h-4 w-4 text-destructive shrink-0" />}
-                      <span className={`text-xs font-semibold ${e.decision === "APPROVED" ? "text-emerald-400" : "text-destructive"}`}>
+                      <span className={`text-xs font-semibold ${e.decision === "VIABLE" ? "text-emerald-400" : "text-destructive"}`}>
                         {e.decision}
                       </span>
                     </div>
@@ -397,7 +397,7 @@ const HistoryPage = () => (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Brand Evaluations</CardTitle>
-            <CardDescription>Brand intelligence checks — APPROVED / REJECTED with flag summary.</CardDescription>
+            <CardDescription>Brand intelligence checks — VIABLE / NOT VIABLE with flag summary.</CardDescription>
           </CardHeader>
           <CardContent>
             <BrandHistoryTab />

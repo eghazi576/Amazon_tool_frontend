@@ -57,7 +57,7 @@ function useOverviewData() {
         ).length;
 
         const scored = history.filter(
-          (e) => e.decision !== "REJECT" && e.pct != null
+          (e) => e.decision !== "NOT VIABLE" && e.pct != null
         );
         const avgScore =
           scored.length > 0
@@ -65,7 +65,7 @@ function useOverviewData() {
             : null;
 
         const brands = brandData.entries;
-        const brandsApproved = brands.filter((b) => b.decision === "APPROVED").length;
+        const brandsApproved = brands.filter((b) => b.decision === "VIABLE").length;
 
         setStats({ lookupsToday, avgScore, brandsApproved, brandsTracked: brands.length });
         setRecent(history.slice(0, 5));
@@ -154,11 +154,11 @@ function KpiCard({
 
 // ─── Recent product row ───────────────────────────────────────────────────────
 const decisionColor: Record<string, string> = {
-  EXCELLENT: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  GOOD:      "bg-sky-500/15 text-sky-400 border-sky-500/30",
-  AVERAGE:   "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  BAD:       "bg-orange-500/15 text-orange-400 border-orange-500/30",
-  REJECT:    "bg-destructive/15 text-destructive border-destructive/30",
+  "HIGHLY VIABLE": "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  "LIKELY VIABLE": "bg-sky-500/15 text-sky-400 border-sky-500/30",
+  "SEEMS VIABLE":  "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  "LOW VIABLE":    "bg-orange-500/15 text-orange-400 border-orange-500/30",
+  "NOT VIABLE":    "bg-destructive/15 text-destructive border-destructive/30",
 };
 
 function timeAgo(ts: number) {
@@ -344,12 +344,12 @@ const Overview = () => {
                         <p className="text-[10px] text-muted-foreground">{b.category ?? b.asin}</p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        {b.decision === "APPROVED" ? (
+                        {b.decision === "VIABLE" ? (
                           <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                         ) : (
                           <CheckCircle2 className="h-4 w-4 text-destructive" />
                         )}
-                        <span className={`text-[10px] font-semibold ${b.decision === "APPROVED" ? "text-emerald-400" : "text-destructive"}`}>
+                        <span className={`text-[10px] font-semibold ${b.decision === "VIABLE" ? "text-emerald-400" : "text-destructive"}`}>
                           {b.decision}
                         </span>
                         <span className="text-[10px] text-muted-foreground">{timeAgo(new Date(b.createdAt).getTime())}</span>
