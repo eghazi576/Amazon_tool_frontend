@@ -736,7 +736,7 @@ function ScoringTab({ toast }: { toast: any }) {
                 ["noRankSpikes", "No rank spikes (#4)"],
                 ["roi",          "ROI ≥ threshold (#5)"],
                 ["profit",       "Profit > $0 (#6)"],
-                ["bbRotates",    "Buy Box rotates (#10)"],
+                ["bbRotates",    "Buybox Dominancy (#10)"],
                 ["noAmazon",     "Amazon not seller (#11)"],
                 ["notGated",     "Not gated — category/brand (#22)"],
                 ["listingActive","Listing is active (#17)"],

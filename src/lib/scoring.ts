@@ -101,7 +101,7 @@ export type ManualFlags = {
 
   // High-weight scoring (user verifies manually)
   seasonal: boolean;                // #2
-  buyBoxRotates: boolean;           // #10
+  buyBoxDominant: boolean;          // #10 Buybox Dominancy — a single seller holds >70% of the Buy Box
 
   // Medium-weight scoring (user verifies manually)
   storageFeeLowOrMedium: boolean;   // #7
@@ -263,9 +263,9 @@ export function scoreProduct(
     },
     {
       key: "bbRotates",      criteriaNum: 10, tier: "high",   weight: W.bbRotates,     source: "manual",
-      label: "Stable Buy Box Rotation",
-      passCondition: "Buy Box rotates among sellers (not brand-locked)",
-      passed: flags.buyBoxRotates,
+      label: "Buybox Dominancy",
+      passCondition: "No single seller holds more than 70% of the Buy Box",
+      passed: !flags.buyBoxDominant,
     },
     {
       key: "noAmazon",       criteriaNum: 11, tier: "high",   weight: W.noAmazon,      source: "auto",

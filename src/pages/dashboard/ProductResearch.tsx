@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Search, Loader2, CheckCircle2, XCircle, AlertTriangle,
   TrendingUp, DollarSign, Star, Package, ShieldAlert,
-  Weight, Tag, TrendingDown, Users, Award, Info,
+  Weight, Tag, TrendingDown, Users, Award, Info, Check,
 } from "lucide-react";
 import { fetchKeepaProduct, getKeepaUsage, type KeepaProductResponse, type SearchUsage } from "@/lib/keepaService";
 import { scoreProduct, type ManualFlags, type ScoreResult } from "@/lib/scoring";
@@ -32,7 +32,7 @@ const defaultFlags: ManualFlags = {
   buyBoxExists: true,              // User checks: is there an active Buy Box?
   // High-weight scoring
   seasonal: false,                 // User checks: is demand highly seasonal?
-  buyBoxRotates: true,             // User checks: does Buy Box rotate among sellers?
+  buyBoxDominant: false,           // User checks: does any seller hold >70% of the Buy Box?
   // Medium-weight scoring
   storageFeeLowOrMedium: true,     // User checks: is storage fee impact low/medium?
   noAggressiveRepricers: true,     // User checks: no aggressive repricers present?
@@ -592,7 +592,13 @@ const ProductResearch = () => {
                             {s.isAmazon && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">Amazon</span>}
                           </td>
                           <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct < 1 ? "<1" : s.sharePct}%</td>
-                          <td className="p-2.5 text-muted-foreground">{s.isFBA == null ? "—" : s.isFBA ? "Yes" : "No"}</td>
+                          <td className="p-2.5">
+                            {s.isFBA == null
+                              ? <span className="text-muted-foreground">—</span>
+                              : s.isFBA
+                              ? <Check className="h-4 w-4 text-emerald-400" aria-label="Yes" />
+                              : <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/50" aria-label="No" />}
+                          </td>
                           <td className="p-2.5 text-right text-muted-foreground">{s.avgPrice != null ? `$${s.avgPrice.toFixed(2)}` : "—"}</td>
                         </tr>
                       ))}
@@ -939,12 +945,11 @@ const ProductResearch = () => {
                     danger={flags.seasonal}
                   />
                   <ToggleRow
-                    label="Stable Buy Box Rotation"
-                    sub="Does Buy Box rotate among multiple sellers?"
-                    value={flags.buyBoxRotates}
-                    onChange={(v) => updateFlag("buyBoxRotates", v)}
-                    danger={!flags.buyBoxRotates}
-                    invertLogic
+                    label="Buybox Dominancy"
+                    sub="Does any seller has more than 70% buybox?"
+                    value={flags.buyBoxDominant}
+                    onChange={(v) => updateFlag("buyBoxDominant", v)}
+                    danger={flags.buyBoxDominant}
                   />
                   <ToggleRow
                     label="No aggressive repricers"

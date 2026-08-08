@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   Boxes, CheckCircle2, XCircle, Building2, ShieldAlert,
-  TrendingUp, RotateCcw, Loader2, Sparkles, Pencil,
+  TrendingUp, RotateCcw, Loader2, Sparkles, Pencil, Check,
 } from "lucide-react";
 import { scoreBrand, type BrandInput, type BrandScoreResult } from "@/lib/brandScoring";
 import { fetchKeepaProduct, getKeepaUsage, type SearchUsage } from "@/lib/keepaService";
@@ -392,7 +392,13 @@ export default function BrandIntelligence() {
                             {s.isAmazon && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">Amazon</span>}
                           </td>
                           <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct < 1 ? "<1" : s.sharePct}%</td>
-                          <td className="p-2.5 text-muted-foreground">{s.isFBA == null ? "—" : s.isFBA ? "Yes" : "No"}</td>
+                          <td className="p-2.5">
+                            {s.isFBA == null
+                              ? <span className="text-muted-foreground">—</span>
+                              : s.isFBA
+                              ? <Check className="h-4 w-4 text-emerald-400" aria-label="Yes" />
+                              : <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/50" aria-label="No" />}
+                          </td>
                           <td className="p-2.5 text-right text-muted-foreground">{s.avgPrice != null ? `$${s.avgPrice.toFixed(2)}` : "—"}</td>
                         </tr>
                       ))}
