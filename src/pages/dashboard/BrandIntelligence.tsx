@@ -375,28 +375,28 @@ export default function BrandIntelligence() {
                 <p className="py-6 text-center text-sm text-muted-foreground">Enter an ASIN above and submit to load Buy Box statistics.</p>
               ) : (
                 <div className="overflow-x-auto rounded-lg border border-border/60">
-                  <table className="w-full text-sm">
+                  <table className="w-full text-sm table-fixed">
                     <thead>
                       <tr className="bg-muted/40 text-left text-xs text-muted-foreground">
-                        <th className="p-2.5 font-medium">Seller</th>
-                        <th className="p-2.5 font-medium text-right">Buy Box %</th>
-                        <th className="p-2.5 font-medium">FBA</th>
-                        <th className="p-2.5 font-medium text-right">Avg price</th>
+                        <th className="p-2.5 font-medium w-1/4">Seller</th>
+                        <th className="p-2.5 font-medium text-right w-1/4">Buy Box %</th>
+                        <th className="p-2.5 font-medium text-center w-1/4">FBA</th>
+                        <th className="p-2.5 font-medium text-right w-1/4">Avg price</th>
                       </tr>
                     </thead>
                     <tbody>
                       {bbSellers.map((s, i) => (
                         <tr key={i} className={`border-t border-border/50 ${s.isAmazon ? "bg-primary/5" : ""}`}>
-                          <td className="p-2.5 font-medium text-foreground">
+                          <td className="p-2.5 font-medium text-foreground truncate">
                             {s.seller}
                             {s.isAmazon && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">Amazon</span>}
                           </td>
                           <td className="p-2.5 text-right font-semibold text-foreground">{s.sharePct < 1 ? "<1" : s.sharePct}%</td>
-                          <td className="p-2.5">
+                          <td className="p-2.5 text-center">
                             {s.isFBA == null
                               ? <span className="text-muted-foreground">—</span>
                               : s.isFBA
-                              ? <Check className="h-4 w-4 text-emerald-400" aria-label="Yes" />
+                              ? <Check className="h-4 w-4 text-emerald-400 inline" aria-label="Yes" />
                               : <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/50" aria-label="No" />}
                           </td>
                           <td className="p-2.5 text-right text-muted-foreground">{s.avgPrice != null ? `$${s.avgPrice.toFixed(2)}` : "—"}</td>
